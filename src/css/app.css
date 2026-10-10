@@ -453,3 +453,49 @@ body.mode-table .pbody{gap:6px}
 .scratch-banner{margin:0 0 6px;padding:6px 12px}
 .campcard.none{border-style:dashed}
 .scratch-pill{background:#fbecc4;border:1px dashed var(--amber);border-radius:6px;padding:2px 8px;font-size:14px;white-space:nowrap}
+/* ---------- campaign art, NPC portraits, solo book ---------- */
+.artbox{position:relative;margin:0 0 12px;border:2px solid var(--brass);border-radius:10px;overflow:hidden;background:#2a1a10;box-shadow:0 2px 8px rgba(0,0,0,.25)}
+.artbox img{display:block;width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
+.artbox.noart img{display:none}
+.artbox .artph{display:none;aspect-ratio:16/9;align-items:center;justify-content:center;gap:10px;color:var(--parch-2);font-size:28px;text-align:center;background:repeating-linear-gradient(45deg,#3b2516 0 14px,#33200f 14px 28px)}
+.artbox .artph span{font-size:15px;line-height:1.3}
+.artbox.noart .artph,.artbox.noportrait .artph{display:flex}
+.artbox figcaption{position:absolute;left:0;right:0;bottom:0;padding:4px 10px;font-size:13px;color:#fff;background:linear-gradient(transparent,rgba(0,0,0,.75))}
+.artbox.beast{max-width:480px}
+.artbox.solo-art{max-width:640px}
+.npc-top{display:grid;grid-template-columns:minmax(220px,380px) 1fr;gap:16px;align-items:start;margin-bottom:8px}
+.npc-arts{display:flex;flex-direction:column;gap:8px}
+.npc-arts .artbox.guise{width:62%;align-self:flex-end;margin-top:-4px}
+.npc-ctl{display:flex;flex-direction:column;gap:6px;background:rgba(255,255,255,.35);border:1px solid var(--parch-3);border-radius:8px;padding:8px 12px;margin:8px 0}
+.tgl{display:flex;gap:8px;align-items:flex-start;cursor:pointer;line-height:1.3}
+.tgl input{margin-top:3px;width:18px;height:18px;flex:none}
+.tgl.on{color:var(--purple)}
+.tgl.warnl{color:var(--red)}
+.guise-line{background:#efe3fb;border-radius:6px;padding:6px 10px}
+.npc-blk{border-top:1px solid var(--parch-3);padding-top:6px;margin-top:8px}
+.npc-blk h4{margin:4px 0;color:var(--purple)}
+.npc-blk.secret{background:rgba(156,42,31,.06);border-left:4px solid var(--red);padding:6px 10px;border-radius:4px}
+.npc-blk .src{margin:2px 0 0}
+button.srdref{font:inherit;font-style:italic;background:none;border:0;border-bottom:1px dashed var(--purple);color:var(--purple);padding:0;cursor:pointer}
+button.srdref:hover{background:rgba(90,45,130,.1)}
+.solo-doors{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.door{display:flex;flex-direction:column;gap:2px;text-align:left;background:rgba(255,255,255,.4);border:1px solid var(--brass);border-radius:10px;padding:8px;cursor:pointer;color:var(--ink);font-size:15px}
+.door:hover{background:rgba(199,154,69,.25)}
+.door .artbox{margin:0 0 6px}
+.door small{color:var(--muted)}
+.solo-entries{display:flex;flex-wrap:wrap;gap:3px;padding:2px 4px 8px 18px}
+.solo-entries button.mini{background:rgba(255,255,255,.5);border:1px solid var(--parch-3);border-radius:5px;cursor:pointer;color:var(--ink)}
+.solo-entries button.mini.on{background:var(--purple);color:#fff}
+.ld.solo .ld-list{overflow:auto}
+.ld.solo .ld-list>label{padding:4px 6px 8px;border-bottom:1px solid var(--parch-3);margin-bottom:4px}
+.entry-num{display:inline-flex;align-items:center;justify-content:center;min-width:42px;height:42px;border-radius:50%;background:var(--purple);color:#fff;font-size:20px;margin-right:6px;padding:0 6px}
+.solo-page{font-size:18px;line-height:1.55}
+.solo-page .rich a.turnto{display:inline-block;font-weight:700;color:#fff;background:var(--purple);border-radius:6px;padding:0 8px;text-decoration:none;margin:1px 0}
+.solo-page .rich a.turnto:hover{background:var(--purple-2)}
+.rich li.hidden-ans{color:transparent;text-shadow:0 0 9px rgba(0,0,0,.55);cursor:pointer;user-select:none}
+.rich pre.asciimap,.rich pre{font:14px/1.25 ui-monospace,Consolas,monospace;background:rgba(255,255,255,.45);border:1px solid var(--parch-3);border-radius:6px;padding:8px;overflow:auto}
+.faces{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:14px;margin-bottom:14px}
+.face{background:rgba(255,255,255,.35);border:1px solid var(--parch-3);border-radius:10px;padding:10px}
+.face h4{margin:0 0 4px;color:var(--purple)}
+.face p{margin:0 0 6px}
+@media (max-width:1100px){.npc-top{grid-template-columns:1fr}}

@@ -171,7 +171,7 @@ function toast(msg, kind = 'info', ms = 3200) {
 /* ---------- HTML sanitizer (for imported campaign content) ---------- */
 const SAFE_TAGS = new Set(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'p', 'ul', 'ol', 'li', 'b', 'strong', 'i', 'em', 'u', 'blockquote', 'table', 'thead', 'tbody', 'tfoot', 'tr', 'th', 'td', 'br', 'hr', 'span', 'div', 'small', 'sup', 'sub', 'code', 'pre', 'dl', 'dt', 'dd', 'section', 'article', 'a', 'caption', 'mark', 's', 'figure', 'figcaption']);
 const DROP_TAGS = new Set(['script', 'style', 'iframe', 'object', 'embed', 'form', 'input', 'button', 'select', 'textarea', 'link', 'meta', 'base', 'svg', 'math', 'noscript', 'template', 'frame', 'frameset', 'applet', 'audio', 'video', 'canvas', 'img', 'picture', 'source', 'title', 'head', 'nav']);
-const SAFE_CLASSES = new Set(['readaloud', 'encounter', 'encounter-h', 'points', 'levelup', 'callout', 'knows', 'dm-warning', 'role', 'sub', 'letter', 'card', 'grid', 'icon', 'tagline', 'pill', 'steps', 'step', 'seal', 'sig', 'place', 'path', 'house', 'ember', 'tide', 'thorn', 'dusk', 'inc', 'lvl', 'spelltab', 'spellgroup', 'tablewrap', 'timeline', 'npc']);
+const SAFE_CLASSES = new Set(['readaloud', 'encounter', 'encounter-h', 'points', 'levelup', 'callout', 'knows', 'dm-warning', 'role', 'sub', 'letter', 'card', 'grid', 'icon', 'tagline', 'pill', 'steps', 'step', 'seal', 'sig', 'place', 'path', 'house', 'ember', 'tide', 'thorn', 'dusk', 'inc', 'lvl', 'spelltab', 'spellgroup', 'tablewrap', 'timeline', 'npc', 'asciimap', 'turnto', 'riddle-ans', 'hidden-ans', 'secret']);
 function sanitizeHTML(html) {
   const doc = new DOMParser().parseFromString('<!doctype html><body>' + String(html || '') + '</body>', 'text/html');
   const walk = node => {

@@ -100,7 +100,7 @@ VIEWS['guide/campaign'] = {
   title: 'Campaign', render(el, params) {
     const c = Store.campaign();
     if (!c) { el.innerHTML = noCampaignHTML(); bindNoCampaign(el); return; }
-    const tab = params.tab || 'overview'; const st = Store.state;
+    const tab = params.tab || 'overview'; const st = Store.state; const SL = c.sessionLabel || 'Session';
     let body = '';
     const sel = num(params.i);
     const listDetail = (items, label, renderItem, nameOf = x => x.name || x.title) => {
@@ -120,14 +120,15 @@ VIEWS['guide/campaign'] = {
     } else if (tab === 'sessions') {
       const ss = (c.sessions && c.sessions.length) ? c.sessions : campSections(c, 'session').map((s, k) => ({ number: k + 1, title: s.title, html: s.html, scenes: [] }));
       body = listDetail(ss, 'sessions', (s, i) => `
-        <div class="row between"><h2 class="deco">Session ${esc(s.number || i + 1)}: ${esc(s.title)}</h2>${st.currentSession === i ? '<span class="pill on">Current session</span>' : `<button data-cur="${i}">Set as current session</button>`}</div>
+        <div class="row between"><h2 class="deco">${esc(SL)} ${esc(s.number || i + 1)}: ${esc(s.title)}</h2>${st.currentSession === i ? `<span class="pill on">Current ${esc(SL.toLowerCase())}</span>` : `<button data-cur="${i}">Set as current ${esc(SL.toLowerCase())}</button>`}</div>
         ${s.summary ? `<p class="lead">${esc(s.summary)}</p>` : ''}
         ${(s.scenes || []).map((sc, k) => `<section class="scene"><h3>${esc(sc.title)}</h3>
           ${(sc.encounters || []).map((en, e) => `<div class="enc"><b>⚔ Encounter:</b> ${esc(en.enemies || '')}${en.difficulty ? ` <span class="pill">${esc(en.difficulty)}</span>` : ''}${en.foes && en.foes.length ? ` <button class="primary" data-foes="${i}:${k}:${e}">Add to Initiative Tracker</button>` : ''}${en.tactics ? `<div class="muted">${esc(en.tactics)}</div>` : ''}</div>`).join('')}
           ${richHTML(sc.html || '')}</section>`).join('')}
-        ${s.html && !(s.scenes || []).length ? richHTML(s.html) : ''}`, s => 'Session ' + (s.number || '') + ': ' + s.title);
+        ${s.html && !(s.scenes || []).length ? richHTML(s.html) : ''}`, s => SL + ' ' + (s.number || '') + ': ' + s.title);
     } else if (tab === 'npcs') {
       const items = (c.npcs && c.npcs.length) ? c.npcs : campSections(c, 'npc').map(s => ({ name: s.title, html: s.html }));
+      if (items.some(n => n.blocks)) body = listDetail(items, 'NPCs', n => npcDetailHTML(n, c, st)); else
       body = listDetail(items, 'NPCs', n => `<h2 class="deco">${esc(n.name)} ${dmBadge()}</h2>${n.role ? `<p class="muted">${esc(n.role)}</p>` : ''}
         <dl class="npc-dl">${[['Look', n.look], ['Voice', n.voice], ['Wants', n.wants], ['Secret', n.secret], ['Knows', n.knows]].filter(x => x[1]).map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('')}</dl>${n.html ? richHTML(n.html) : ''}`);
     } else if (tab === 'locations') {
@@ -135,6 +136,7 @@ VIEWS['guide/campaign'] = {
       body = listDetail(items, 'locations', n => `<h2 class="deco">${esc(n.name)} ${dmBadge()}</h2>${richHTML(n.html || esc(n.text || ''))}<div class="btnrow"><button data-loc="${esc(n.name)}">Set as party location</button></div>`);
     } else if (tab === 'bestiary') {
       const items = (c.bestiary && c.bestiary.length) ? c.bestiary : campSections(c, 'bestiary').map(s => ({ name: s.title, html: s.html }));
+      if (items.length > 12) body = bestiaryHTML(c, items, params); else
       body = listDetail(items, 'creatures', (b, i) => `${b.ac !== undefined ? renderStatBlock(b) : `<h2 class="deco">${esc(b.name)}</h2>${richHTML(b.html)}`}${b.ac !== undefined ? `<div class="btnrow"><button class="primary" data-addbeast="${i}">Add to Initiative Tracker</button></div>` : ''}`);
     } else if (tab === 'items') {
       const items = (c.items && c.items.length) ? c.items : campSections(c, 'item').map(s => ({ name: s.title, html: s.html }));
@@ -145,13 +147,16 @@ VIEWS['guide/campaign'] = {
     } else if (tab === 'secrets') {
       const items = (c.secrets && c.secrets.length) ? c.secrets : campSections(c, 'secret').map(s => ({ title: s.title, html: s.html }));
       body = `<div class="callout warn">🔒 Secrets are for the Dungeon Master only. They never appear in the player handbook window.</div>` + listDetail(items, 'secrets', s => `<h2 class="deco">${esc(s.title)} ${dmBadge()}</h2>${richHTML(s.html)}`, s => s.title);
+    } else if (tab === 'solo') {
+      body = soloHTML(c, params, st);
     } else if (tab === 'handbook') {
       const hb = c.handbook;
       body = `<div class="parch pad scrolly" data-keep-scroll="hb"><div class="row between"><h2 class="deco">${esc(hb ? hb.title : 'Player handbook')}</h2><button class="primary" data-player>👁 Show player handbook (new window)</button></div>
         <p>The player handbook window shows only player-facing material — no DM secrets, NPC secrets, sessions or bestiary. Drag it to a monitor or TV the players can see.</p>
         ${hb && hb.sections && hb.sections.length ? `<ol class="toc">${hb.sections.map(s => `<li>${esc(s.title)}</li>`).join('')}</ol>` : '<p class="muted">This campaign has no player-facing handbook. When you import an HTML or Markdown file, mark it as “Player handbook” to fill this.</p>'}</div>`;
     }
-    el.innerHTML = `<div class="camp-wrap"><div class="tabs">${CAMP_TABS.map(([k, t]) => `<button class="${k === tab ? 'on' : ''}" data-tab="${k}">${t}</button>`).join('')}</div><div class="camp-body">${body}</div></div>`;
+    const tabs = CAMP_TABS.slice(); if (c.solo) tabs.splice(tabs.length - 1, 0, ['solo', 'Solo Book']); if (c.sessionLabel) tabs[1] = ['sessions', c.sessionLabel + 's'];
+    el.innerHTML = `<div class="camp-wrap"><div class="tabs">${tabs.map(([k, t]) => `<button class="${k === tab ? 'on' : ''}" data-tab="${k}">${t}</button>`).join('')}</div><div class="camp-body">${body}</div></div>`;
     $$('[data-tab]', el).forEach(b => b.onclick = () => go('guide/campaign', { tab: b.dataset.tab }));
     $$('.ld-list button', el).forEach(b => b.onclick = () => go('guide/campaign', { tab, i: b.dataset.i }));
     $$('[data-cur]', el).forEach(b => b.onclick = () => { Store.mutate(s => { s.currentSession = Number(b.dataset.cur); }); renderView(); toast('Current session updated'); });
@@ -160,8 +165,113 @@ VIEWS['guide/campaign'] = {
     $$('[data-addbeast]', el).forEach(b => b.onclick = () => Combat.addFoes([{ count: 1, name: c.bestiary[Number(b.dataset.addbeast)].name }]));
     $$('[data-rolltable]', el).forEach(b => b.onclick = () => { const r = rollExpr('1' + b.dataset.rolltable); b.nextElementSibling.textContent = 'Rolled ' + r.total; });
     const pb = $('[data-player]', el); if (pb) pb.onclick = openPlayerHandbook;
+    if (tab === 'npcs') bindNpcControls(el, c);
+    if (tab === 'bestiary') bindBestiary(el, c, params);
+    if (tab === 'solo') bindSolo(el, c, params);
+    linkSRD(el, c); ArtStore.hydrate(el, c);
   }
 };
+/* ---------- rich NPCs (portraits, guises, reveal) ---------- */
+function npcDetailHTML(n, c, st) {
+  const v = npcView(n.slug, st); const g = n.guise && n.guise.alias ? n.guise : null;
+  const dmKey = npcArtKey(n, 'dm', st), plKey = npcArtKey(n, 'player', st);
+  const altLabel = n.hasSpicy ? (v.std ? 'standard portrait' : 'alternate (pin-up) portrait') : '';
+  const playerSees = v.hidden ? 'nothing (hidden from players)' : `<b>${esc(g && !v.revealed ? g.alias : n.name)}</b> with the ${!plKey ? 'no portrait' : plKey.startsWith('guise/') ? 'human-guise portrait' : plKey.startsWith('spicy/') ? 'alternate (pin-up) portrait' : 'true-form portrait'}`;
+  return `<div class="npc-rich"><div class="npc-top">
+      <div class="npc-arts">${dmKey ? artBox(dmKey, n.name, 'portrait', esc(g ? 'True form' : 'Portrait') + (altLabel ? ' · ' + altLabel : '')) : '<div class="artbox noportrait"><div class="artph">No portrait</div></div>'}
+      ${g && n.hasGuise ? artBox('guise/' + n.slug, g.alias, 'portrait guise', 'Human guise: ' + esc(g.alias)) : ''}</div>
+      <div class="npc-id"><h2 class="deco">${esc(n.name)} ${dmBadge()}</h2><p class="muted">${esc(n.dmRole || n.role || '')}</p>
+        ${g ? `<p class="guise-line">In Vesperine as <b>${esc(g.alias)}</b> — ${esc(g.cover)}. <span class="pill">Glamour DC ${esc(g.dc)}</span></p>` : ''}
+        <div class="npc-ctl">
+          ${g ? `<label class="tgl ${v.revealed ? 'on' : ''}"><input type="checkbox" data-nv="revealed" ${v.revealed ? 'checked' : ''}> <b>Revealed</b> to players (switches the player portrait from human guise to true form)</label>` : ''}
+          ${n.hasSpicy ? `<label class="tgl"><input type="checkbox" data-nv="std" ${v.std ? 'checked' : ''}> Use the standard portrait on my screen (default: alternate pin-up)</label>
+          <label class="tgl warnl"><input type="checkbox" data-nv="spicyPlayer" ${v.spicyPlayer ? 'checked' : ''}> Show the alternate (pin-up) portrait in the player window${g ? ' once revealed' : ''}</label>` : ''}
+          <label class="tgl"><input type="checkbox" data-nv="hidden" ${v.hidden ? 'checked' : ''}> Hide from the player window</label>
+        </div>
+        <p class="small">Player window shows: ${playerSees}.</p>
+        ${n.publicText ? `<details><summary class="small">Public description (what players see)</summary><p class="small">${esc(g && v.revealed ? n.revealedText || n.publicText : n.publicText)}</p></details>` : ''}
+      </div></div>
+    ${(n.blocks || []).map(b => `<section class="npc-blk ${b.secret ? 'secret' : ''}"><h4>${esc(b.label)} ${b.dm ? dmBadge() : ''}</h4>${richHTML(b.html)}<p class="src small">${esc(b.source || '')}</p></section>`).join('')}
+  </div>`;
+}
+function bindNpcControls(el, c) {
+  $$('[data-nv]', el).forEach(cb => cb.onchange = async () => {
+    const i = num(App.params.i) || 0; const n = c.npcs[i]; const k = cb.dataset.nv;
+    if (k === 'spicyPlayer' && cb.checked && !(await confirmBox('Show the pin-up portrait to players?', `<p>The player window will show the alternate (pin-up) portrait of <b>${esc(n.name)}</b>${n.guise ? ' after you reveal them' : ''}. You can switch it off again at any time.</p>`, 'Show it'))) { cb.checked = false; return; }
+    setNpcView(n.slug, { [k]: cb.checked });
+    if (k === 'revealed') toast(cb.checked ? `${n.name} revealed: the player window now shows their true form.` : `${n.name} is back in human guise for players.`, 'good');
+    renderView();
+  });
+}
+/* ---------- big bestiaries: search + collection filter ---------- */
+function bestiaryHTML(c, items, params) {
+  const q = (params.q || '').toLowerCase(); const col = params.col || '';
+  const cols = (c.bestiaryInfo && c.bestiaryInfo.collections) || [];
+  const list = items.map((b, i) => [b, i]).filter(([b]) => (!q || (b.name + ' ' + (b.meta || '') + ' ' + (b.collectionName || '')).toLowerCase().includes(q)) && (!col || String(b.collection) === col));
+  const sel = num(params.i); const cur = items[sel !== null && items[sel] ? sel : (list[0] ? list[0][1] : 0)];
+  const ci = cur && cols.find(x => x.num === cur.collection);
+  return `<div class="ld"><div class="ld-list wide"><div class="ld-head">${items.length} creatures${c.bestiaryInfo ? ' · ' + esc(c.bestiaryInfo.title) : ''} ${dmBadge()}</div>
+    <div class="filters"><input type="search" id="bq" placeholder="Search creatures…" value="${esc(params.q || '')}" data-allow-refresh="1"><select id="bcol"><option value="">All collections</option>${cols.map(x => `<option value="${x.num}" ${String(x.num) === col ? 'selected' : ''}>${x.num}. ${esc(x.name)}</option>`).join('')}</select></div>
+    <div class="slist" data-keep-scroll="bl">${list.map(([b, i]) => `<button class="srow ${b === cur ? 'on' : ''}" data-bi="${i}"><b>${esc(b.name)}</b><span class="tags">CR ${esc(b.cr || '')}</span><small>${esc(b.meta || '')}${b.collectionName ? ' · ' + esc(b.collectionName) : ''}</small></button>`).join('') || '<p class="muted pad">No matches.</p>'}</div></div>
+    <div class="ld-detail parch" data-keep-scroll="bd">${cur ? beastDetailHTML(cur, items.indexOf(cur), ci) : ''}</div></div>`;
+}
+function beastDetailHTML(b, i, ci) {
+  return `${b.art ? artBox(b.art, b.name, 'beast') : ''}${renderStatBlock(b)}
+    <div class="btnrow"><button class="primary" data-addbeast="${i}">Add to Initiative Tracker</button><button data-addbeast="${i}" data-n="2">Add 2</button><button data-addbeast="${i}" data-n="4">Add 4</button></div>
+    ${b.round && b.round.length ? `<p><b>Typical round:</b> ${esc(b.round.join(', '))}</p>` : ''}
+    ${b.lore ? `<h4>Lore</h4><p>${esc(b.lore)}</p>` : ''}${b.where ? `<p><b>Where it fits:</b> ${esc(b.where)}</p>` : ''}
+    ${b.tactics ? `<h4>Tactics</h4><p>${esc(b.tactics)}</p>` : ''}${b.hooks && b.hooks.length ? `<h4>Adventure hooks</h4><ul>${b.hooks.map(h => `<li>${esc(h)}</li>`).join('')}</ul>` : ''}
+    <p class="src">${esc(b.source || 'Campaign bestiary')}${ci ? ' · Collection ' + ci.num + ': ' + esc(ci.name) + ' (' + esc(ci.region) + ')' : ''} · D&amp;D 2024 rules</p>`;
+}
+function bindBestiary(el, c, params) {
+  const inp = $('#bq', el); if (!inp) return;
+  const upd = debounce(() => go('guide/campaign', Object.assign({}, params, { q: inp.value, i: '' })), 250);
+  inp.oninput = upd; if (params.q) { inp.focus(); inp.setSelectionRange(inp.value.length, inp.value.length); }
+  $('#bcol', el).onchange = e => go('guide/campaign', Object.assign({}, params, { col: e.target.value, i: '' }));
+  $$('[data-bi]', el).forEach(b => b.onclick = () => go('guide/campaign', Object.assign({}, params, { i: b.dataset.bi })));
+  $$('[data-addbeast][data-n]', el).forEach(b => { b.onclick = () => Combat.addFoes([{ count: Number(b.dataset.n), name: c.bestiary[Number(b.dataset.addbeast)].name }]); });
+}
+/* ---------- solo gamebook reader ---------- */
+function soloHTML(c, params, st) {
+  const S = c.solo; const ai = num(params.adv); const a = ai !== null ? S.adventures[ai] : null;
+  const group = st.soloGroup !== false;
+  const hideDM = html => group ? html.replace(/<li class="riddle-ans">/g, '<li class="riddle-ans hidden-ans">') : html;
+  let main;
+  if (!a) main = `<h2 class="deco">${esc(S.title)}</h2><p class="muted">${esc(S.subtitle)}</p><p class="callout">${esc(S.note)}</p>${S.intro.map(x => (x.title ? `<h3>${esc(x.title)}</h3>` : '') + richHTML(x.html)).join('')}
+    <h3>Choose a door</h3><div class="solo-doors">${S.adventures.map((d, k) => `<button class="door" data-adv="${k}">${d.img ? artBox(d.img, d.gateway, 'door-art') : ''}<b>${k + 1}. ${esc(d.title)}</b><small>${esc(d.gateway)}</small></button>`).join('')}</div>`;
+  else {
+    const e = a.entries.find(x => x.anchor === params.e);
+    const secIdx = params.e && params.e.startsWith('sec') ? num(params.e.slice(3)) : null;
+    if (e) main = `<div class="row between"><h2 class="deco"><span class="entry-num">${esc(e.num)}</span> ${esc(e.title)}</h2><span class="muted small">${esc(a.title)}</span></div>${e.img ? artBox(e.img, e.imgAlt, 'solo-art') : ''}${richHTML(hideDM(e.html))}`;
+    else if (secIdx !== null && a.sections[secIdx]) { const s = a.sections[secIdx]; main = `<h2 class="deco">${esc(s.title)} ${s.dm ? dmBadge() : ''}</h2>${s.dm && group && !App.soloShow ? `<div class="callout warn">🔒 Group table mode: ${esc(s.title.toLowerCase())} are hidden so players at the table don't see them. <button data-solo-show>Show (DM)</button></div>` : richHTML(hideDM(s.html))}`; }
+    else main = `${a.img ? artBox(a.img, a.gateway, 'solo-art wide') : ''}<h2 class="deco">Adventure ${a.num}: ${esc(a.title)}</h2><p class="muted">Gateway: ${esc(a.gateway)}</p>${richHTML(a.pitch)}
+      ${a.sections.filter(s => !s.after).map(s => `<h3>${esc(s.title)}</h3>${richHTML(hideDM(s.html))}`).join('')}
+      ${a.entries.length ? `<div class="btnrow"><button class="primary" data-goto="${esc(a.entries[0].anchor)}">Begin: turn to 1 →</button></div>` : ''}`;
+  }
+  const hist = App.soloHist || [];
+  return `<div class="ld solo"><div class="ld-list wide" data-keep-scroll="sl">
+      <div class="ld-head">${esc(S.title)}</div>
+      <label class="tgl small"><input type="checkbox" id="sologroup" ${group ? 'checked' : ''}> Group table mode (hide endings &amp; riddle answers)</label>
+      <button class="${!a ? 'on' : ''}" data-adv="">How to use this book</button>
+      ${S.adventures.map((d, k) => `<button class="${ai === k && !params.e ? 'on' : ''}" data-adv="${k}"><b>${k + 1}. ${esc(d.title)}</b> <small>${esc(d.gateway)}</small></button>${ai === k ? `<div class="solo-entries">${d.entries.map(x => `<button class="mini ${params.e === x.anchor ? 'on' : ''}" data-goto="${esc(x.anchor)}">${esc(x.num)}</button>`).join('')}${d.sections.map((s, si) => s.after ? `<button class="mini ${params.e === 'sec' + si ? 'on' : ''}" data-sec="${si}">${esc(s.title)}${s.dm ? ' 🔒' : ''}</button>` : '').join('')}</div>` : ''}`).join('')}
+    </div><div class="ld-detail parch solo-page" data-keep-scroll="sp">${a && hist.length ? `<button class="mini" data-back>← Back</button>` : ''}${main}</div></div>`;
+}
+function bindSolo(el, c, params) {
+  const S = c.solo; const ai = num(params.adv);
+  const nav = (p, push = true) => { if (push) { App.soloHist = (App.soloHist || []).concat([{ adv: params.adv, e: params.e }]).slice(-50); } App.soloShow = false; go('guide/campaign', Object.assign({ tab: 'solo' }, p)); };
+  $$('[data-adv]', el).forEach(b => b.onclick = () => { App.soloHist = []; nav({ adv: b.dataset.adv }, false); });
+  $$('[data-goto]', el).forEach(b => b.onclick = () => nav({ adv: ai, e: b.dataset.goto }));
+  $$('[data-sec]', el).forEach(b => b.onclick = () => nav({ adv: ai, e: 'sec' + b.dataset.sec }));
+  $$('.solo-page a.turnto', el).forEach(a => a.onclick = ev => {
+    ev.preventDefault(); const id = a.getAttribute('href').slice(1);
+    const k = S.adventures.findIndex(d => d.entries.some(x => x.anchor === id));
+    if (k >= 0) nav({ adv: k, e: id });
+  });
+  const back = $('[data-back]', el); if (back) back.onclick = () => { const h = (App.soloHist || []).pop(); if (h) nav({ adv: h.adv, e: h.e }, false); };
+  const sh = $('[data-solo-show]', el); if (sh) sh.onclick = () => { App.soloShow = true; renderView(); };
+  $$('.hidden-ans', el).forEach(li => { li.title = 'Riddle answer hidden (group table mode). Click to show.'; li.onclick = () => li.classList.remove('hidden-ans'); });
+  $('#sologroup', el).onchange = e => { Store.mutate(s => { s.soloGroup = e.target.checked; }); renderView(); };
+}
 function renderStatBlock(b) {
   const ab = b.abilities || [];
   const secs = (b.sections || []).map(s => `<h4>${esc(s.title)}</h4>${s.entries.map(e => `<p><b><i>${esc(e.name)}.</i></b> ${esc(e.text)}</p>`).join('')}`).join('');
@@ -184,11 +294,21 @@ VIEWS.handbook = {
     const secs = hb.sections.filter(s => s.audience !== 'dm');
     const cur = secs.find(s => s.id === params.s) || secs[0];
     const places = (c.locations_player || []);
-    el.innerHTML = `<div class="hb"><nav class="hb-nav">${secs.map(s => `<button class="${s === cur ? 'on' : ''}" data-s="${esc(s.id)}">${esc(s.title)}</button>`).join('')}${places.length ? `<button class="${params.s === '_places' ? 'on' : ''}" data-s="_places">Places to Know</button>` : ''}</nav>
-      <article class="parch pad scrolly hb-body">${params.s === '_places' ? `<h2 class="deco">Places to Know</h2>${places.map(p => `<h3>${esc(p.name)}</h3><p>${esc(p.text)}</p>`).join('')}` : `${cur === secs[0] ? `<p class="kicker">${esc(hb.kicker || '')}</p><h1 class="deco">${esc(hb.title)}</h1><p class="lead">${esc(hb.lead || '')}</p>` : ''}<h2 class="deco">${esc(cur.title)}</h2>${richHTML(cur.html)}`}</article></div>`;
+    const faces = (c.npcs_player || []).filter(n => !npcView(n.slug).hidden);
+    el.innerHTML = `<div class="hb"><nav class="hb-nav">${secs.map(s => `<button class="${s === cur && !String(params.s || '').startsWith('_') ? 'on' : ''}" data-s="${esc(s.id)}">${esc(s.title)}</button>`).join('')}${places.length ? `<button class="${params.s === '_places' ? 'on' : ''}" data-s="_places">Places to Know</button>` : ''}${faces.length ? `<button class="${params.s === '_faces' ? 'on' : ''}" data-s="_faces">${esc(hb.facesTitle || 'Faces You May Meet')}</button>` : ''}</nav>
+      <article class="parch pad scrolly hb-body">${params.s === '_faces' ? facesHTML(hb, faces) : params.s === '_places' ? `<h2 class="deco">Places to Know</h2>${places.map(p => `<h3>${esc(p.name)}</h3><p>${esc(p.text)}</p>`).join('')}` : `${cur === secs[0] ? `<p class="kicker">${esc(hb.kicker || '')}</p><h1 class="deco">${esc(hb.title)}</h1><p class="lead">${esc(hb.lead || '')}</p>` : ''}<h2 class="deco">${esc(cur.title)}</h2>${richHTML(cur.html)}`}</article></div>`;
     $$('[data-s]', el).forEach(b => b.onclick = () => go('handbook', { s: b.dataset.s }));
+    ArtStore.hydrate(el, c);
   }
 };
+/* Player-safe NPC cards: only the computed portrait key and public text are written into the page. */
+function facesHTML(hb, faces) {
+  const groups = [...new Set(faces.map(n => n.group || ''))];
+  return `<h2 class="deco">${esc(hb.facesTitle || 'Faces You May Meet')}</h2>${groups.map(g => `${g ? `<h3>${esc(g)}</h3>` : ''}<div class="faces">${faces.filter(n => (n.group || '') === g).map(n => {
+    const v = npcView(n.slug); const masked = n.guise && !v.revealed;
+    return `<div class="face" data-face="${esc(n.slug)}">${artBox(npcArtKey(n, 'player'), masked ? n.name : (n.revealedName || n.name), 'portrait')}<div><h4>${esc(masked ? n.name : (n.revealedName || n.name))}</h4><p>${esc(masked ? n.text : (n.revealedText || n.text))}</p>${!masked && n.guise && n.revealHTML ? `<details open><summary>${esc(n.revealTitle || 'Revealed')}</summary>${richHTML(n.revealHTML)}</details>` : ''}</div></div>`;
+  }).join('')}</div>`).join('')}`;
+}
 
 /* ---------- Lessons ---------- */
 VIEWS['guide/lessons'] = {

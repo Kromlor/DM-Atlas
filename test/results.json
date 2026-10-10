@@ -1,6 +1,6 @@
 {
-  "when": "2026-10-10T23:15:52.623Z",
-  "pass": 209,
+  "when": "2026-10-10T23:35:30.097Z",
+  "pass": 244,
   "fail": 0,
   "results": [
     {
@@ -1002,6 +1002,181 @@
       "group": "Player handbook window never shows DM secrets",
       "ok": true,
       "msg": "No JavaScript errors during the http test run"
+    },
+    {
+      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "ok": true,
+      "msg": "Fresh start is still \"No campaign selected\""
+    },
+    {
+      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "ok": true,
+      "msg": "Vesperine is listed in the campaign library and not auto-selected"
+    },
+    {
+      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "ok": true,
+      "msg": "Switching to Vesperine shows an empty, separate party"
+    },
+    {
+      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "ok": true,
+      "msg": "Hollowmere and Vesperine keep separate saved data"
+    },
+    {
+      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "ok": true,
+      "msg": "Art pack import stores 180 images in IndexedDB (25 portraits, 8 guises, 3 alternates, 128 monsters, 16 solo)"
+    },
+    {
+      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "ok": true,
+      "msg": "Campaign card shows the art status"
+    },
+    {
+      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "ok": true,
+      "msg": "Overview shows Carnelia, the Oathless Glass, The Black Kiss and the 2024 / SRD 5.2.1 rules note"
+    },
+    {
+      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "ok": true,
+      "msg": "Chapters tab lists 12 chapters/parts"
+    },
+    {
+      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "ok": true,
+      "msg": "Chapter text renders (SRD creature links where names match)"
+    },
+    {
+      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "ok": true,
+      "msg": "Locations tab lists 20 places"
+    },
+    {
+      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "ok": true,
+      "msg": "NPCs tab lists 40 NPCs"
+    },
+    {
+      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "ok": true,
+      "msg": "DM sees the true form and the human guise (from the imported pack)"
+    },
+    {
+      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "ok": true,
+      "msg": "Bestiary tab has 128 creatures"
+    },
+    {
+      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "ok": true,
+      "msg": "Bestiary search filters (2 match \"wax\")"
+    },
+    {
+      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "ok": true,
+      "msg": "Stat block with actions, lore and tactics shows"
+    },
+    {
+      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "ok": true,
+      "msg": "Wax Cherub added to the tracker with AC 12, HP 5, initiative +2 and its Wax Arrow attack"
+    },
+    {
+      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "ok": true,
+      "msg": "Attack flow hits the Vesperine monster and applies damage (Longsword 1 + 3 → 5 to 1 HP)"
+    },
+    {
+      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "ok": true,
+      "msg": "The monster's own attack opens in the attack flow"
+    },
+    {
+      "group": "Vesperine solo gamebook reader",
+      "ok": true,
+      "msg": "Solo Book lists 5 adventures"
+    },
+    {
+      "group": "Vesperine solo gamebook reader",
+      "ok": true,
+      "msg": "Begin opens entry 1"
+    },
+    {
+      "group": "Vesperine solo gamebook reader",
+      "ok": true,
+      "msg": "Clicking a \"go to 2\" link turns to entry 2 (lys-2)"
+    },
+    {
+      "group": "Vesperine solo gamebook reader",
+      "ok": true,
+      "msg": "Back returns to the previous entry"
+    },
+    {
+      "group": "Vesperine solo gamebook reader",
+      "ok": true,
+      "msg": "Group table mode hides the endings until the DM chooses to show them"
+    },
+    {
+      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "ok": true,
+      "msg": "Player window shows 14 player sections (incl. Faces and Places)"
+    },
+    {
+      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "ok": true,
+      "msg": "No secret agendas, murder solution, Parts 6–8 secrets or bestiary text in the player window (checked 133 passages)"
+    },
+    {
+      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "ok": true,
+      "msg": "Player faces show human guises for all 8 fey and no true-form or pin-up portraits (25 portraits)"
+    },
+    {
+      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "ok": true,
+      "msg": "Disguised fey appear under their alias"
+    },
+    {
+      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "ok": true,
+      "msg": "Reveal toggle switches the player portrait to true form and shows the reveal read-aloud"
+    },
+    {
+      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "ok": true,
+      "msg": "Other fey stay disguised"
+    },
+    {
+      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "ok": true,
+      "msg": "DM default is the alternate (pin-up) portrait; players see the standard one"
+    },
+    {
+      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "ok": true,
+      "msg": "DM can toggle to the standard portrait"
+    },
+    {
+      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "ok": true,
+      "msg": "Pin-up reaches the player window only after the DM explicitly chooses it (with confirmation)"
+    },
+    {
+      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "ok": true,
+      "msg": "Turning it off removes it from the player window"
+    },
+    {
+      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "ok": true,
+      "msg": "Hide toggle removes an NPC from the player window"
+    },
+    {
+      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "ok": true,
+      "msg": "No JavaScript errors in the Vesperine run"
     },
     {
       "group": "file:// (opened straight from disk)",

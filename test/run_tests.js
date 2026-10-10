@@ -377,6 +377,8 @@ async function fresh(p) { await ev(p, () => { localStorage.clear(); }); await p.
     await hbp.screenshot({ path: path.join(SHOTS, 'shot-handbook.png') }); await hbp.close();
     ok(p._errors.length === 0, 'No JavaScript errors during the http test run' + (p._errors.length ? ': ' + p._errors.slice(0, 3).join(' | ') : ''));
 
+    await require('./vesperine_group')({ H, browser, ok, group, ev, txt, clickSel, shot, sleep, fs, path, openAttack, fillAttack, closeModals });
+
     group('file:// (opened straight from disk)');
     const f1 = await H.page(browser, H.FILE); await ev(f1, () => localStorage.clear()); await f1.reload({ waitUntil: 'load' }); await sleep(300);
     for (const r of ['screen', 'rules/spells', 'combat/party', 'tools/save', 'campaigns']) { await H.go(f1, r); ok((await txt(f1, '#view')).length > 40, 'file:// route #/' + r + ' renders'); }

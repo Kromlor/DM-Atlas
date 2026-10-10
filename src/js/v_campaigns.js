@@ -145,17 +145,19 @@ function importPreview(docs) {
 VIEWS.campaigns = {
   title: 'Campaigns', render(el) {
     const all = Library.all(); const act = Store.cid;
-    el.innerHTML = `<div class="camps scrolly" data-keep-scroll="camps"><div class="row between"><h2 class="deco">Choose your campaign</h2><div class="btnrow"><button class="primary" data-imjson>⬆ Import campaign (.json)</button><button class="primary" data-imhtml>⬆ Import HTML / Markdown</button><button data-tpl>⬇ Download campaign template</button></div></div>
+    el.innerHTML = `<div class="camps scrolly" data-keep-scroll="camps"><div class="row between"><h2 class="deco">Choose your campaign</h2><div class="btnrow"><button class="primary" data-imjson>⬆ Import campaign (.json)</button><button class="primary" data-imhtml>⬆ Import HTML / Markdown</button><button data-imart>🖼 Import art pack</button><button data-tpl>⬇ Download campaign template</button></div></div>
       <p class="muted">Each campaign keeps its own party, combat, notes and saves. Switching never mixes them.</p>
       <div class="campgrid">${(() => { const s = LS.get(K.camp(null), null); return `<article class="campcard parch none ${!act ? 'active' : ''}"><h3 class="deco">No campaign</h3><p class="muted small">Empty scratch table</p><p>Run without a campaign: lessons, rules, references and tools all work. Characters and fights you add are kept on a separate scratch table that never mixes with a campaign.</p><p class="small">${s && s.party.length ? 'Scratch table: ' + s.party.length + ' characters' : 'Scratch table is empty'}</p><div class="btnrow">${!act ? '<span class="pill on">▶ Selected now</span>' : '<button data-none>Use no campaign</button>'}<button data-blank>✚ Start a blank campaign</button></div></article>`; })()}${all.map(c => { const s = LS.get(K.camp(c.id), null); return `<article class="campcard parch ${c.id === act ? 'active' : ''}"><h3 class="deco">${esc(c.title)}</h3><p class="muted small">${c.bundled ? 'Bundled with DM Atlas' : 'Imported ' + (c.importedAt ? new Date(c.importedAt).toLocaleDateString() : '')}${c.system ? ' · ' + esc(c.system) : ''}</p>
         <p>${esc((c.summary || '').slice(0, 260))}</p>
         <div class="facts small">${['sessions', 'npcs', 'locations', 'bestiary'].map(k => `<div><span>${k}</span><b>${(c[k] || []).length}</b></div>`).join('')}<div><span>handbook</span><b>${c.handbook && c.handbook.sections ? c.handbook.sections.length : 0}</b></div></div>
+        ${c.art ? `<p class="small artstat" data-artc="${esc(c.id)}">🖼 Art: checking…</p>` : ''}
         <p class="small">${s ? `Your progress: ${s.party.length} characters · last played ${fmtTime(s.updatedAt)}` : 'Not started yet'}</p>
         <div class="btnrow">${c.id === act ? '<span class="pill on">▶ Running now</span><button data-open>Open guide</button>' : `<button class="primary" data-run="${esc(c.id)}">Run this campaign</button>`}<button data-exp="${esc(c.id)}">⬇ Export</button>${c.handbook ? `<button data-hb="${esc(c.id)}">👁 Player handbook</button>` : ''}${c.bundled ? '' : `<button class="danger" data-rm="${esc(c.id)}">Remove</button>`}</div></article>`; }).join('')}</div>
       <details class="parch pad"><summary><b>How campaign import works</b></summary>
         <ul><li><b>DM Atlas campaign JSON</b> (<code>"format": "dm-atlas-campaign"</code>): full structure — sessions with scenes and encounters, NPCs, locations, bestiary stat blocks, items, tables, secrets and an optional player handbook. Download the template to start one.</li>
         <li><b>HTML or Markdown</b> (.html, .htm, .md): DM Atlas splits the document by its headings and guesses each section's type from its title (Session…, Cast/NPCs, Places, Bestiary, Items, Secrets). You review and adjust before anything is saved. All scripts, event handlers, styles, forms, images and embedded content are removed.</li>
         <li>Mark a file as <b>Player handbook</b> to make it available in the “Show player handbook” window. Everything else is treated as DM-only.</li>
+        <li><b>Art packs</b> (<code>.dmatlas-art.json</code>, <code>"format": "dm-atlas-art"</code>): portraits and monster art for a campaign, kept out of the main HTML. Import once; the images are stored in this browser (IndexedDB) and work from a file on a jump drive. When DM Atlas is served over http(s) (for example GitHub Pages), it also finds images automatically in an <code>art/&lt;campaign-id&gt;/</code> folder next to the HTML.</li>
         <li>Imported campaigns are stored in this browser. Use Export to keep a copy on your jump drive.</li></ul></details></div>`;
     $$('[data-run]', el).forEach(b => b.onclick = () => switchCampaign(b.dataset.run));
     const nb = $('[data-none]', el); if (nb) nb.onclick = () => switchCampaign(null);
@@ -167,6 +169,14 @@ VIEWS.campaigns = {
     $('[data-tpl]', el).onclick = () => download('dm-atlas-campaign-template.dmatlas.json', JSON.stringify(CAMPAIGN_TEMPLATE, null, 2));
     $('[data-imjson]', el).onclick = () => pickFiles('.json,application/json', false, async files => importCampaignJSON(await readFileText(files[0]), files[0].name));
     $('[data-imhtml]', el).onclick = () => pickFiles('.html,.htm,.md,.markdown,.txt,text/html,text/markdown', true, async files => importDocs(files));
+    $('[data-imart]', el).onclick = pickArtPack;
+    $$('[data-artc]', el).forEach(async p => {
+      const c = Library.get(p.dataset.artc); const n = await ArtStore.count(c.id);
+      const f = !n && location.protocol.startsWith('http') && await ArtStore.folderAvailable(c);
+      p.innerHTML = n ? `🖼 Art: ${n} images stored in this browser <button class="mini" data-artclear="${esc(c.id)}">Remove art</button>` : f ? `🖼 Art: loaded from the <code>${esc(ArtStore.folder(c))}</code> folder` : `🖼 Art not loaded — <button class="mini" data-artpick>Import art pack</button> <span class="muted">(${esc((c.art.pack || '').split('/').pop())})</span>`;
+      const pk = $('[data-artpick]', p); if (pk) pk.onclick = pickArtPack;
+      const cl = $('[data-artclear]', p); if (cl) cl.onclick = async () => { if (await confirmBox('Remove stored art?', '<p>This removes the imported images for this campaign from this browser. Your campaign progress is not touched. You can import the art pack again at any time.</p>', 'Remove art', true)) { await ArtStore.clear(c.id); Sync.post({ t: 'art', cid: c.id }); renderView(); } };
+    });
   }
 };
 function importCampaignChooser() {
@@ -187,6 +197,7 @@ function pickFiles(accept, multiple, cb) { const i = document.createElement('inp
 async function importDocs(files) { try { const docs = []; for (const f of files) docs.push(await parseImportFile(f)); return importPreview(docs); } catch (e) { openModal({ title: 'Import failed', html: `<p>${esc(e.message)}</p><p>Nothing was changed.</p>` }); } }
 async function importCampaignJSON(text, fname) {
   let d; try { d = JSON.parse(text); } catch (e) { openModal({ title: 'Not imported', html: `<p>${esc(fname)} is not valid JSON. Nothing was changed.</p>` }); return null; }
+  if (d && d.format === ART_FORMAT) return importArtPack(d, fname);
   const { errs, doc } = validateCampaignDoc(d);
   if (errs.length) { openModal({ title: 'Not imported', html: `<ul class="errs">${errs.map(e => `<li>${esc(e)}</li>`).join('')}</ul><p>Nothing was changed.</p>` }); return null; }
   const exists = Library.get(doc.id);

@@ -44,7 +44,8 @@ const Combat = {
     const sing = n.replace(/ies$/, 'y').replace(/s$/, '');
     const b = c && (c.bestiary || []).find(x => x.ac !== undefined && [n, sing].includes(x.name.toLowerCase()));
     if (b) return { name: b.name, ac: b.ac, hp: b.hp, init: b.init, res: b.res || '', vul: b.vul || '', imm: b.imm || '', attacks: this.parseAttacks((b.sections || []).flatMap(s => s.entries.map(e => e.name + '. ' + e.text))), src: 'campaign' };
-    const m = SRD.monsters.find(x => [n, sing].includes(x.name.toLowerCase()));
+    const alias = c && c.srdRefs && (c.srdRefs[n] || c.srdRefs[sing]);
+    const m = SRD.monsters.find(x => [n, sing, String(alias || '').toLowerCase()].includes(x.name.toLowerCase()));
     if (m) return { name: m.name, ac: m.ac, hp: m.hp, init: m.init, res: m.res, vul: m.vul, imm: m.imm, attacks: this.parseAttacks(m.lines), src: 'srd' };
     return null;
   },

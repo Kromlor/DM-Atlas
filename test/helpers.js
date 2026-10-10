@@ -1,6 +1,6 @@
 const puppeteer = require('puppeteer-core');
-const BASE = process.env.DMA_BASE || 'http://127.0.0.1:8765/DM_Atlas_5_5e.html';
-const FILE = 'file:///workspace/dm-atlas/DM_Atlas_5_5e.html';
+const BASE = process.env.DMA_BASE || 'http://127.0.0.1:8765/index.html';
+const FILE = 'file:///workspace/dm-atlas/index.html';
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 async function launch() { return puppeteer.launch({ executablePath: '/usr/bin/google-chrome', headless: 'new', protocolTimeout: 60000, args: ['--no-sandbox', '--allow-file-access-from-files'] }); }
 async function page(browser, url = BASE, vp = { width: 1366, height: 768 }) {
