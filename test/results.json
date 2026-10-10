@@ -1,0 +1,1053 @@
+{
+  "when": "2026-10-10T23:15:52.623Z",
+  "pass": 209,
+  "fail": 0,
+  "results": [
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "No JavaScript errors on load ()"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "SRD spells: 339"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "SRD cantrips: 27"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "SRD weapons: 38"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Mini-lessons: 38"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "12-step course with feedback for every answer"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Guided adventure scenes: 5"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Exact SRD 5.2.1 CC-BY-4.0 attribution present"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/screen renders (1 Guide the Game ↗ Pop out No campaign s…)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/guide/campaign renders (🗺 No campaign selected  Pick one from y…)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/guide/lessons renders (38 lessons · 0 read THE DM'S JOB What a …)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/guide/course renders (12-step beginner sequence 1What a Dungeo…)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/guide/adventure renders (The Lantern of Brindle Ford Before you s…)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/guide/roll renders (What Do I Roll? Could this action reason…)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/rules/spells renders (339 of 339 spells (SRD 5.2.1) All levels…)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/rules/cantrips renders (27 of 27 cantrips (SRD 5.2.1) All classe…)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/rules/weapons renders (38 weapons (SRD 5.2.1) All Simple Melee …)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/rules/glossary renders (88 SRD 5.2.1 rules entries All Condition…)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/rules/rulings renders (Quick Rulings — 2024 rules  Short DM Atl…)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/rules/monsters renders (330 SRD 5.2.1 stat blocks (read-only) Ab…)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/rules/credits renders (Sources & License Attribution This work …)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/combat/party renders (No campaign — scratch table Pick a campa…)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/combat/tracker renders (No campaign selected — scratch table. Ch…)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/combat/log renders (Encounter Log 0 entries ⬇ Export as text…)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/tools/dice renders (Dice Roller  For your own quick or secre…)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/tools/events renders (Event Generator  Use when the players go…)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/tools/npcs renders (NPC & Captain Generator  Give every NPC …)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/tools/notes renders (No campaign selected — scratch table. Ch…)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/tools/save renders (No campaign selected — scratch table. Ch…)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "Route #/campaigns renders (Choose your campaign ⬆ Import campaign (…)"
+    },
+    {
+      "group": "Load, JS syntax and navigation (http://localhost)",
+      "ok": true,
+      "msg": "No JavaScript errors after visiting every section"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Fresh load: no campaign is active"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Fresh load: empty party, no combatants, empty notes/recap/log"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Header campaign selector says “No campaign selected”"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "DM Screen shows the empty state (no campaign, no party)"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Guide the Game campaign area: friendly empty state with Pick / Import / Start blank buttons"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Works with no campaign: #/guide/lessons"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Works with no campaign: #/guide/course"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Works with no campaign: #/guide/adventure"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Works with no campaign: #/guide/roll"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Works with no campaign: #/rules/spells"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Works with no campaign: #/rules/weapons"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Works with no campaign: #/rules/glossary"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Works with no campaign: #/rules/monsters"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Works with no campaign: #/tools/dice"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Works with no campaign: #/tools/events"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Works with no campaign: #/tools/npcs"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Works with no campaign: #/tools/notes"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Works with no campaign: #/tools/save"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Works with no campaign: #/combat/party"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Works with no campaign: #/combat/tracker"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Works with no campaign: #/campaigns"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Party screen explains the separate scratch table"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Picker has an explicit “No campaign” option, selected"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Picking Hollowmere activates it (header updated)"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Scratch characters/notes do not leak into Hollowmere"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Guide the Game shows Hollowmere content"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Reload keeps Hollowmere selected"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Switching back to “No campaign” restores the empty state (scratch table only)"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Reload keeps “No campaign” selected"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Hollowmere kept its own saved party through the switches"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Start a blank campaign creates and activates an empty campaign"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Existing saved Hollowmere progress from older versions still loads as active"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Header has search, Full Screen, Monitor Setup, Pop Out, Save/Resume and Learning/Table toggle"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "DM Screen shows the four panels"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Table mode hides learning tips"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Global search finds Fireball"
+    },
+    {
+      "group": "First run: no campaign until the DM picks one",
+      "ok": true,
+      "msg": "Search result opens the spell card"
+    },
+    {
+      "group": "Spell & weapon reference",
+      "ok": true,
+      "msg": "Level filter: 42 of 339 spells (SRD 5.2.1)"
+    },
+    {
+      "group": "Spell & weapon reference",
+      "ok": true,
+      "msg": "Class + Concentration filters: 13 of 339 spells (SRD 5.2.1)"
+    },
+    {
+      "group": "Spell & weapon reference",
+      "ok": true,
+      "msg": "Spell card: summary, DM guidance, full text, scaling, official links"
+    },
+    {
+      "group": "Spell & weapon reference",
+      "ok": true,
+      "msg": "Cantrip list: 27 of 27 cantrips (SRD 5.2.1)"
+    },
+    {
+      "group": "Spell & weapon reference",
+      "ok": true,
+      "msg": "Weapon card: damage, properties, mastery, weight, cost, resolution"
+    },
+    {
+      "group": "Lessons, course, adventure, What Do I Roll?",
+      "ok": true,
+      "msg": "38 lessons listed"
+    },
+    {
+      "group": "Lessons, course, adventure, What Do I Roll?",
+      "ok": true,
+      "msg": "Wrong practice answer shows explanatory feedback"
+    },
+    {
+      "group": "Lessons, course, adventure, What Do I Roll?",
+      "ok": true,
+      "msg": "Answering all correctly completes the step"
+    },
+    {
+      "group": "Lessons, course, adventure, What Do I Roll?",
+      "ok": true,
+      "msg": "Adventure scene 3 renders with monsters"
+    },
+    {
+      "group": "Lessons, course, adventure, What Do I Roll?",
+      "ok": true,
+      "msg": "Roll guide: routine action → no roll"
+    },
+    {
+      "group": "Lessons, course, adventure, What Do I Roll?",
+      "ok": true,
+      "msg": "Roll guide: impossible action → no roll can make it possible"
+    },
+    {
+      "group": "Weapon autofill and bonus math",
+      "ok": true,
+      "msg": "Selecting Longsword autofills 1d8 Slashing, Versatile (1d10), mastery Sap"
+    },
+    {
+      "group": "Weapon autofill and bonus math",
+      "ok": true,
+      "msg": "Missing ability/level info → attack +0, damage +0"
+    },
+    {
+      "group": "Weapon autofill and bonus math",
+      "ok": true,
+      "msg": "Level 5, STR +3, martial proficiency → +6 to hit, +3 damage (PB not added to damage)"
+    },
+    {
+      "group": "Weapon autofill and bonus math",
+      "ok": true,
+      "msg": "Not proficient → no Proficiency Bonus (+3)"
+    },
+    {
+      "group": "Weapon autofill and bonus math",
+      "ok": true,
+      "msg": "Finesse uses the better of STR/DEX (DEX +4 → +6/+4)"
+    },
+    {
+      "group": "Weapon autofill and bonus math",
+      "ok": true,
+      "msg": "Finesse ability can be chosen (STR → +3/+1)"
+    },
+    {
+      "group": "Weapon autofill and bonus math",
+      "ok": true,
+      "msg": "Thrown melee weapon (Handaxe) uses STR even when DEX is higher"
+    },
+    {
+      "group": "Weapon autofill and bonus math",
+      "ok": true,
+      "msg": "Thrown + Finesse (Dagger) may use DEX"
+    },
+    {
+      "group": "Weapon autofill and bonus math",
+      "ok": true,
+      "msg": "Ranged weapon uses DEX"
+    },
+    {
+      "group": "Weapon autofill and bonus math",
+      "ok": true,
+      "msg": "Versatile two-handed grip uses the larger die"
+    },
+    {
+      "group": "Weapon autofill and bonus math",
+      "ok": true,
+      "msg": "Manual magic bonus kept separate from automatic bonus"
+    },
+    {
+      "group": "Weapon autofill and bonus math",
+      "ok": true,
+      "msg": "Proficiency override “No” removes PB"
+    },
+    {
+      "group": "Weapon autofill and bonus math",
+      "ok": true,
+      "msg": "Proficiency Bonus by level 1-4:+2 … 17-20:+6"
+    },
+    {
+      "group": "Party dashboard and popup editing",
+      "ok": true,
+      "msg": "Edit modal has every spec field"
+    },
+    {
+      "group": "Party dashboard and popup editing",
+      "ok": true,
+      "msg": "Edit modal lists the 15 conditions"
+    },
+    {
+      "group": "Party dashboard and popup editing",
+      "ok": true,
+      "msg": "Adding a Warhammer autofills and shows auto bonus (+5, 1d8 +3)"
+    },
+    {
+      "group": "Party dashboard and popup editing",
+      "ok": true,
+      "msg": "Saving the modal updates the character"
+    },
+    {
+      "group": "Party dashboard and popup editing",
+      "ok": true,
+      "msg": "Card shows two weapon buttons plus “All Weapons (4)”"
+    },
+    {
+      "group": "Party dashboard and popup editing",
+      "ok": true,
+      "msg": "All Weapons popup lists every weapon"
+    },
+    {
+      "group": "Guided attacks: hit/miss/crit/advantage",
+      "ok": true,
+      "msg": "d20 12 + 5 = 17 vs AC 15 → HIT"
+    },
+    {
+      "group": "Guided attacks: hit/miss/crit/advantage",
+      "ok": true,
+      "msg": "Target AC autofilled from combatant (15)"
+    },
+    {
+      "group": "Guided attacks: hit/miss/crit/advantage",
+      "ok": true,
+      "msg": "9 + 5 = 14 vs AC 15 → MISS"
+    },
+    {
+      "group": "Guided attacks: hit/miss/crit/advantage",
+      "ok": true,
+      "msg": "Meeting AC exactly (15) hits"
+    },
+    {
+      "group": "Guided attacks: hit/miss/crit/advantage",
+      "ok": true,
+      "msg": "Natural 1 misses even vs AC 2"
+    },
+    {
+      "group": "Guided attacks: hit/miss/crit/advantage",
+      "ok": true,
+      "msg": "Natural 20 crits even vs AC 99"
+    },
+    {
+      "group": "Guided attacks: hit/miss/crit/advantage",
+      "ok": true,
+      "msg": "Critical Hit doubles the damage dice (1d8 → 2d8)"
+    },
+    {
+      "group": "Guided attacks: hit/miss/crit/advantage",
+      "ok": true,
+      "msg": "Crit damage adds the modifier once (9 + 3 = 12)"
+    },
+    {
+      "group": "Guided attacks: hit/miss/crit/advantage",
+      "ok": true,
+      "msg": "Advantage + Disadvantage cancel → one d20"
+    },
+    {
+      "group": "Guided attacks: hit/miss/crit/advantage",
+      "ok": true,
+      "msg": "Advantage keeps the higher d20 (3, 15 → 15)"
+    },
+    {
+      "group": "Guided attacks: hit/miss/crit/advantage",
+      "ok": true,
+      "msg": "Disadvantage keeps the lower d20 (3, 15 → 3)"
+    },
+    {
+      "group": "Damage: resistance, vulnerability, immunity, preview, apply, duplicates",
+      "ok": true,
+      "msg": "Resistance auto-selected from stat block"
+    },
+    {
+      "group": "Damage: resistance, vulnerability, immunity, preview, apply, duplicates",
+      "ok": true,
+      "msg": "Resistance halves rounded down: (7+3)=10 → 5; preview 40 → 35"
+    },
+    {
+      "group": "Damage: resistance, vulnerability, immunity, preview, apply, duplicates",
+      "ok": true,
+      "msg": "Preview does not change HP before confirmation"
+    },
+    {
+      "group": "Damage: resistance, vulnerability, immunity, preview, apply, duplicates",
+      "ok": true,
+      "msg": "Vulnerability doubles: (4+1)=5 → 10; Skeleton 13 → 3"
+    },
+    {
+      "group": "Damage: resistance, vulnerability, immunity, preview, apply, duplicates",
+      "ok": true,
+      "msg": "Immunity prevents damage (40 → 40)"
+    },
+    {
+      "group": "Damage: resistance, vulnerability, immunity, preview, apply, duplicates",
+      "ok": true,
+      "msg": "Preview: Goblin 10 → 3 (4 + 3 = 7)"
+    },
+    {
+      "group": "Damage: resistance, vulnerability, immunity, preview, apply, duplicates",
+      "ok": true,
+      "msg": "Damage applied only after clicking Apply (HP 3)"
+    },
+    {
+      "group": "Damage: resistance, vulnerability, immunity, preview, apply, duplicates",
+      "ok": true,
+      "msg": "Attack recorded in the encounter log"
+    },
+    {
+      "group": "Damage: resistance, vulnerability, immunity, preview, apply, duplicates",
+      "ok": true,
+      "msg": "Apply button disabled after applying"
+    },
+    {
+      "group": "Damage: resistance, vulnerability, immunity, preview, apply, duplicates",
+      "ok": true,
+      "msg": "Re-applying the same attack is blocked (no double damage)"
+    },
+    {
+      "group": "Damage: resistance, vulnerability, immunity, preview, apply, duplicates",
+      "ok": true,
+      "msg": "After applying, the preview shows the applied result (10 → 3), not a new one"
+    },
+    {
+      "group": "Damage: resistance, vulnerability, immunity, preview, apply, duplicates",
+      "ok": true,
+      "msg": "A miss can be recorded in the log"
+    },
+    {
+      "group": "Concentration prompt and 0 HP reminder",
+      "ok": true,
+      "msg": "Preview warns of the Concentration save (7 damage → DC 10)"
+    },
+    {
+      "group": "Concentration prompt and 0 HP reminder",
+      "ok": true,
+      "msg": "After damage: Concentration save prompt, DC 10"
+    },
+    {
+      "group": "Concentration prompt and 0 HP reminder",
+      "ok": true,
+      "msg": "Concentration DC = max(10, half damage), capped at 30 (7→10, 22→11, 45→22, 100→30)"
+    },
+    {
+      "group": "Concentration prompt and 0 HP reminder",
+      "ok": true,
+      "msg": "0 HP reminder shown for the monster"
+    },
+    {
+      "group": "Concentration prompt and 0 HP reminder",
+      "ok": true,
+      "msg": "Monster at 0 HP is not removed or marked dead automatically"
+    },
+    {
+      "group": "Concentration prompt and 0 HP reminder",
+      "ok": true,
+      "msg": "PC at 0 HP: death-save reminder, never auto-killed"
+    },
+    {
+      "group": "Initiative tracker and linked party/combat HP",
+      "ok": true,
+      "msg": "Party added to tracker as linked combatants (4)"
+    },
+    {
+      "group": "Initiative tracker and linked party/combat HP",
+      "ok": true,
+      "msg": "Sort by Initiative orders highest first"
+    },
+    {
+      "group": "Initiative tracker and linked party/combat HP",
+      "ok": true,
+      "msg": "Start combat + Next turn advances the turn"
+    },
+    {
+      "group": "Initiative tracker and linked party/combat HP",
+      "ok": true,
+      "msg": "Wrapping past the last combatant starts round 2"
+    },
+    {
+      "group": "Initiative tracker and linked party/combat HP",
+      "ok": true,
+      "msg": "Previous turn goes back"
+    },
+    {
+      "group": "Initiative tracker and linked party/combat HP",
+      "ok": true,
+      "msg": "Damage in the tracker updates the linked party card (31 → 25)"
+    },
+    {
+      "group": "Initiative tracker and linked party/combat HP",
+      "ok": true,
+      "msg": "Party card shows the tracker change"
+    },
+    {
+      "group": "Initiative tracker and linked party/combat HP",
+      "ok": true,
+      "msg": "Healing on the party card shows in the tracker (29)"
+    },
+    {
+      "group": "Two windows: BroadcastChannel sync and stale-HP re-review (http)",
+      "ok": true,
+      "msg": "New character appears in the second window without reload"
+    },
+    {
+      "group": "Two windows: BroadcastChannel sync and stale-HP re-review (http)",
+      "ok": true,
+      "msg": "Second window received the change over BroadcastChannel"
+    },
+    {
+      "group": "Two windows: BroadcastChannel sync and stale-HP re-review (http)",
+      "ok": true,
+      "msg": "Window A previews Bandit 11 → 6"
+    },
+    {
+      "group": "Two windows: BroadcastChannel sync and stale-HP re-review (http)",
+      "ok": true,
+      "msg": "Window A warns that HP changed in window B"
+    },
+    {
+      "group": "Two windows: BroadcastChannel sync and stale-HP re-review (http)",
+      "ok": true,
+      "msg": "Preview recalculated from the new HP (8 → 3)"
+    },
+    {
+      "group": "Two windows: BroadcastChannel sync and stale-HP re-review (http)",
+      "ok": true,
+      "msg": "First Apply after a remote change does not apply — fresh review required"
+    },
+    {
+      "group": "Two windows: BroadcastChannel sync and stale-HP re-review (http)",
+      "ok": true,
+      "msg": "Second Apply (after review) applies to the new HP (8 → 3)"
+    },
+    {
+      "group": "Two windows: BroadcastChannel sync and stale-HP re-review (http)",
+      "ok": true,
+      "msg": "Window B shows the applied damage"
+    },
+    {
+      "group": "Two windows: BroadcastChannel sync and stale-HP re-review (http)",
+      "ok": true,
+      "msg": "Saving the edit modal keeps HP changed meanwhile in another window"
+    },
+    {
+      "group": "Pop-out windows",
+      "ok": true,
+      "msg": "Pop Out opens the same route in a new window: /rules/weapons?popout=1"
+    },
+    {
+      "group": "Pop-out windows",
+      "ok": true,
+      "msg": "Pop-out window renders compact chrome and the view"
+    },
+    {
+      "group": "Pop-out windows",
+      "ok": true,
+      "msg": "Pop-out route #/rules/spells works"
+    },
+    {
+      "group": "Pop-out windows",
+      "ok": true,
+      "msg": "Pop-out route #/combat/tracker works"
+    },
+    {
+      "group": "Pop-out windows",
+      "ok": true,
+      "msg": "Pop-out route #/combat/party works"
+    },
+    {
+      "group": "Pop-out windows",
+      "ok": true,
+      "msg": "Pop-out route #/guide/lessons works"
+    },
+    {
+      "group": "Pop-out windows",
+      "ok": true,
+      "msg": "Pop-out route #/rules/rulings works"
+    },
+    {
+      "group": "Pop-out windows",
+      "ok": true,
+      "msg": "Pop-out route #/tools/events works"
+    },
+    {
+      "group": "Pop-out windows",
+      "ok": true,
+      "msg": "Pop-out route #/tools/npcs works"
+    },
+    {
+      "group": "Pop-out windows",
+      "ok": true,
+      "msg": "Pop-out route #/tools/dice works"
+    },
+    {
+      "group": "Pop-out windows",
+      "ok": true,
+      "msg": "Pop-out route #/tools/notes works"
+    },
+    {
+      "group": "Pop-out windows",
+      "ok": true,
+      "msg": "Pop-out route #/screen works"
+    },
+    {
+      "group": "Pop-out windows",
+      "ok": true,
+      "msg": "Monitor Setup explains the file:// sync limitation"
+    },
+    {
+      "group": "Pop-out windows",
+      "ok": true,
+      "msg": "Blocked pop-up shows help"
+    },
+    {
+      "group": "Campaign save: export, import, validation",
+      "ok": true,
+      "msg": "Export Campaign Save downloads a file: dm-atlas-save-campaign-2026-10-10.json"
+    },
+    {
+      "group": "Campaign save: export, import, validation",
+      "ok": true,
+      "msg": "Save has {\"app\":\"DM Atlas\",\"format\":\"dm-atlas-campaign-save\",\"version\":1}"
+    },
+    {
+      "group": "Campaign save: export, import, validation",
+      "ok": true,
+      "msg": "Save includes party, weapons, combat, log, location and recap"
+    },
+    {
+      "group": "Campaign save: export, import, validation",
+      "ok": true,
+      "msg": "Import shows a summary and asks for confirmation"
+    },
+    {
+      "group": "Campaign save: export, import, validation",
+      "ok": true,
+      "msg": "Confirmed import restores the saved party and location"
+    },
+    {
+      "group": "Campaign save: export, import, validation",
+      "ok": true,
+      "msg": "Unknown extra fields are preserved"
+    },
+    {
+      "group": "Campaign save: export, import, validation",
+      "ok": true,
+      "msg": "Invalid save rejected without changing data: broken JSON"
+    },
+    {
+      "group": "Campaign save: export, import, validation",
+      "ok": true,
+      "msg": "Invalid save rejected without changing data: wrong format"
+    },
+    {
+      "group": "Campaign save: export, import, validation",
+      "ok": true,
+      "msg": "Invalid save rejected without changing data: party not a list"
+    },
+    {
+      "group": "Campaign save: export, import, validation",
+      "ok": true,
+      "msg": "Invalid save rejected without changing data: newer version"
+    },
+    {
+      "group": "Campaign save: export, import, validation",
+      "ok": true,
+      "msg": "Invalid save rejected without changing data: damaged character"
+    },
+    {
+      "group": "Campaign save: export, import, validation",
+      "ok": true,
+      "msg": "Cancelling an import changes nothing"
+    },
+    {
+      "group": "Campaign save: export, import, validation",
+      "ok": true,
+      "msg": "End Night & Save stores a snapshot and downloads a save"
+    },
+    {
+      "group": "Campaign save: export, import, validation",
+      "ok": true,
+      "msg": "Resume lists snapshots"
+    },
+    {
+      "group": "Layout: party cards fit with no page scroll, text ≥ 14px",
+      "ok": true,
+      "msg": "4 characters at 1366×768: 2×2 grid, no page scroll, no clipped cards"
+    },
+    {
+      "group": "Layout: party cards fit with no page scroll, text ≥ 14px",
+      "ok": true,
+      "msg": "4 characters at 1366×768: smallest text 14px (lbl)"
+    },
+    {
+      "group": "Layout: party cards fit with no page scroll, text ≥ 14px",
+      "ok": true,
+      "msg": "6 characters at 1366×768: 3×2 grid, no page scroll, no clipped cards"
+    },
+    {
+      "group": "Layout: party cards fit with no page scroll, text ≥ 14px",
+      "ok": true,
+      "msg": "6 characters at 1366×768: smallest text 14px (lbl)"
+    },
+    {
+      "group": "Layout: party cards fit with no page scroll, text ≥ 14px",
+      "ok": true,
+      "msg": "4 characters at 1920×1080: 2×2 grid, no page scroll, no clipped cards"
+    },
+    {
+      "group": "Layout: party cards fit with no page scroll, text ≥ 14px",
+      "ok": true,
+      "msg": "4 characters at 1920×1080: smallest text 14px (ed)"
+    },
+    {
+      "group": "Layout: party cards fit with no page scroll, text ≥ 14px",
+      "ok": true,
+      "msg": "6 characters at 1920×1080: 3×2 grid, no page scroll, no clipped cards"
+    },
+    {
+      "group": "Layout: party cards fit with no page scroll, text ≥ 14px",
+      "ok": true,
+      "msg": "6 characters at 1920×1080: smallest text 14px (ed)"
+    },
+    {
+      "group": "Layout: party cards fit with no page scroll, text ≥ 14px",
+      "ok": true,
+      "msg": "DM Screen fits 1366×768 without page scroll"
+    },
+    {
+      "group": "Layout: party cards fit with no page scroll, text ≥ 14px",
+      "ok": true,
+      "msg": "Mobile layout: menu button and single-column panels"
+    },
+    {
+      "group": "Campaign library: import JSON, HTML, Markdown; switching",
+      "ok": true,
+      "msg": "Picker lists the bundled Hollowmere campaign as active"
+    },
+    {
+      "group": "Campaign library: import JSON, HTML, Markdown; switching",
+      "ok": true,
+      "msg": "Template JSON imports and becomes the active campaign (header updated)"
+    },
+    {
+      "group": "Campaign library: import JSON, HTML, Markdown; switching",
+      "ok": true,
+      "msg": "New campaign starts with its own empty party (saves are per campaign)"
+    },
+    {
+      "group": "Campaign library: import JSON, HTML, Markdown; switching",
+      "ok": true,
+      "msg": "Imported campaign sessions show in Guide the Game"
+    },
+    {
+      "group": "Campaign library: import JSON, HTML, Markdown; switching",
+      "ok": true,
+      "msg": "Invalid campaign JSON rejected"
+    },
+    {
+      "group": "Campaign library: import JSON, HTML, Markdown; switching",
+      "ok": true,
+      "msg": "HTML import preview: sections listed, handbook detected as player-facing"
+    },
+    {
+      "group": "Campaign library: import JSON, HTML, Markdown; switching",
+      "ok": true,
+      "msg": "Imported both HTML files: 5 sessions, 11 NPCs, 8 locations, 4 items, 1 secrets, handbook 11 sections"
+    },
+    {
+      "group": "Campaign library: import JSON, HTML, Markdown; switching",
+      "ok": true,
+      "msg": "Imported HTML contains no scripts, event handlers or javascript: links"
+    },
+    {
+      "group": "Campaign library: import JSON, HTML, Markdown; switching",
+      "ok": true,
+      "msg": "Preview reports stripped scripts/event handlers"
+    },
+    {
+      "group": "Campaign library: import JSON, HTML, Markdown; switching",
+      "ok": true,
+      "msg": "Malicious HTML sanitized: no script ran, no handlers/iframes/forms kept"
+    },
+    {
+      "group": "Campaign library: import JSON, HTML, Markdown; switching",
+      "ok": true,
+      "msg": "HTML + Markdown split by headings into sessions and NPCs: The Drowned Village / Beneath the Waves / The Market Theft / Into the Sewers"
+    },
+    {
+      "group": "Campaign library: import JSON, HTML, Markdown; switching",
+      "ok": true,
+      "msg": "Rendering imported content runs no scripts"
+    },
+    {
+      "group": "Campaign library: import JSON, HTML, Markdown; switching",
+      "ok": true,
+      "msg": "Exported campaigns/hollowmere-year-one.dmatlas.json re-imports as a DM Atlas campaign (5 sessions, 11 NPCs, 7 creatures, 10 handbook sections)"
+    },
+    {
+      "group": "Campaign library: import JSON, HTML, Markdown; switching",
+      "ok": true,
+      "msg": "Switching back to Hollowmere restores its own party"
+    },
+    {
+      "group": "Player handbook window never shows DM secrets",
+      "ok": true,
+      "msg": "Player handbook window shows 11 player sections"
+    },
+    {
+      "group": "Player handbook window never shows DM secrets",
+      "ok": true,
+      "msg": "No DM secrets, sessions or bestiary in the player window"
+    },
+    {
+      "group": "Player handbook window never shows DM secrets",
+      "ok": true,
+      "msg": "Player window has no DM navigation or search"
+    },
+    {
+      "group": "Player handbook window never shows DM secrets",
+      "ok": true,
+      "msg": "No JavaScript errors during the http test run"
+    },
+    {
+      "group": "file:// (opened straight from disk)",
+      "ok": true,
+      "msg": "file:// route #/screen renders"
+    },
+    {
+      "group": "file:// (opened straight from disk)",
+      "ok": true,
+      "msg": "file:// route #/rules/spells renders"
+    },
+    {
+      "group": "file:// (opened straight from disk)",
+      "ok": true,
+      "msg": "file:// route #/combat/party renders"
+    },
+    {
+      "group": "file:// (opened straight from disk)",
+      "ok": true,
+      "msg": "file:// route #/tools/save renders"
+    },
+    {
+      "group": "file:// (opened straight from disk)",
+      "ok": true,
+      "msg": "file:// route #/campaigns renders"
+    },
+    {
+      "group": "file:// (opened straight from disk)",
+      "ok": true,
+      "msg": "file:// party dashboard works with local storage"
+    },
+    {
+      "group": "file:// (opened straight from disk)",
+      "ok": true,
+      "msg": "file:// attack flow works"
+    },
+    {
+      "group": "file:// (opened straight from disk)",
+      "ok": true,
+      "info": true,
+      "msg": "file:// cross-window sync observed: worked here (not guaranteed)"
+    },
+    {
+      "group": "file:// (opened straight from disk)",
+      "ok": true,
+      "msg": "No JavaScript errors on file://"
+    }
+  ]
+}

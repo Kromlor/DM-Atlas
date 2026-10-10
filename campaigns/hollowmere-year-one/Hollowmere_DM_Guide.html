@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hollowmere Year One DM Guide</title>
+<style>
+:root{
+  --bg:#0f1117; --panel:#1c2230; --panel2:#232b3d; --ink:#e9ecf4; --muted:#9aa4bd;
+  --gold:#e6b653; --gold2:#c9963a; --line:#2c3346; --ember:#d8674a; --tide:#3fa7a3;
+  --radius:16px;
+  --serif:"Iowan Old Style","Palatino Linotype","Book Antiqua",Palatino,Georgia,serif;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  --sbbg:#f6efdf; --sbink:#241c12; --sbred:#7a2418; --sbline:#b5895a;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);font-family:var(--sans);line-height:1.6;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(1200px 600px at 80% -10%,rgba(230,182,83,.10),transparent 60%),
+  radial-gradient(900px 500px at -10% 20%,rgba(216,103,74,.08),transparent 55%),var(--bg)}
+a{color:var(--gold)}
+h1,h2,h3,h4,h5{font-family:var(--serif);line-height:1.15}
+header.top{position:sticky;top:0;z-index:50;background:rgba(15,17,23,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.top-inner{max-width:1000px;margin:0 auto;display:flex;align-items:center;gap:12px;padding:10px 16px;flex-wrap:wrap}
+.crest{width:38px;height:38px;border-radius:10px;flex:0 0 auto;background:linear-gradient(145deg,var(--gold),var(--gold2));
+  display:grid;place-items:center;color:#20160a;font-family:var(--serif);font-weight:800;font-size:20px}
+.brand{font-family:var(--serif);font-weight:700}
+.brand small{display:block;font-family:var(--sans);color:var(--muted);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase;font-weight:500}
+.back{margin-left:auto;font-size:.88rem;text-decoration:none;border:1px solid var(--line);padding:7px 13px;border-radius:999px;color:var(--ink)}
+.printbtn{font:inherit;font-size:.88rem;background:linear-gradient(145deg,var(--gold),var(--gold2));color:#20160a;border:0;padding:8px 14px;border-radius:999px;font-weight:700;cursor:pointer}
+main{max-width:1000px;margin:0 auto;padding:22px 16px 80px}
+.hero{border:1px solid var(--line);border-radius:var(--radius);padding:36px 26px;
+  background:linear-gradient(180deg,rgba(28,34,48,.5),rgba(22,26,36,.95)),repeating-linear-gradient(135deg,rgba(255,255,255,.02) 0 12px,transparent 12px 24px)}
+.hero h1{font-size:clamp(1.9rem,5.5vw,3rem);margin:4px 0 8px}
+.hero .lead{color:var(--muted);font-size:1.06rem;max-width:66ch;margin:0}
+.kicker{color:var(--gold);letter-spacing:.16em;text-transform:uppercase;font-size:.75rem;font-weight:700}
+.facts{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.facts span{background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:.85rem;color:var(--muted)}
+.facts b{color:var(--ink);margin-right:4px}
+.spoiler{margin-top:14px;border:1px solid rgba(216,103,74,.5);background:rgba(216,103,74,.1);border-radius:12px;padding:12px 16px;font-size:.95rem}
+.toc{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 6px}
+.toc a{text-decoration:none;font-size:.86rem;color:var(--ink);background:var(--panel);border:1px solid var(--line);padding:6px 12px;border-radius:999px}
+.toc a:hover{border-color:var(--gold)}
+section{margin-top:50px;scroll-margin-top:72px}
+section > h2{font-size:clamp(1.6rem,4vw,2.1rem);margin:0 0 4px;display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;
+  border-bottom:1px solid var(--line);padding-bottom:8px}
+section > h2 .num{color:var(--gold);font-size:.62em;letter-spacing:.12em;text-transform:uppercase;font-family:var(--sans);font-weight:700}
+.sub{color:var(--muted);margin:8px 0 18px;max-width:72ch}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);padding:18px}
+.card h3{margin:0 0 8px;font-size:1.15rem}
+.card p{margin:0 0 8px}
+.card p:last-child{margin-bottom:0}
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.role{font-size:.74rem;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;margin-bottom:2px}
+.npc p{font-size:.93rem;color:var(--muted)} .npc p b{color:var(--ink)}
+.npc .knows{border-top:1px dashed var(--line);padding-top:8px;color:var(--ink)}
+.npc .knows b{color:var(--gold)}
+.secretcard p{max-width:74ch}
+.tl{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:14px}
+.tl div{background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px;font-size:.85rem;position:relative}
+.tl b{display:block;color:var(--gold);font-family:var(--serif)}
+.tl span{color:var(--muted)}
+h4.scene{font-size:1.3rem;margin:30px 0 10px;color:var(--ink);display:flex;gap:10px;align-items:center}
+h4.scene::before{content:"";width:10px;height:10px;transform:rotate(45deg);background:var(--gold);flex:0 0 auto}
+section > p{max-width:76ch}
+blockquote.ra{margin:12px 0 14px;background:#f3ead4;color:#2a2116;border-left:5px solid var(--gold2);border-radius:6px;
+  padding:14px 18px 14px;font-family:var(--serif);font-size:1.05rem;font-style:italic;max-width:76ch;position:relative}
+blockquote.ra span{display:block;font-family:var(--sans);font-style:normal;font-size:.68rem;font-weight:800;letter-spacing:.14em;
+  text-transform:uppercase;color:#8a5a12;margin-bottom:4px}
+.enc{border:1px solid rgba(216,103,74,.45);background:linear-gradient(135deg,rgba(216,103,74,.10),rgba(216,103,74,.02));
+  border-radius:12px;padding:12px 16px;margin:14px 0;max-width:76ch}
+.enc-h{font-weight:800;color:var(--ember);letter-spacing:.08em;text-transform:uppercase;font-size:.78rem;margin-bottom:4px}
+.enc p{margin:4px 0;font-size:.95rem}
+.pts{background:rgba(230,182,83,.08);border:1px solid rgba(230,182,83,.3);border-radius:10px;padding:8px 12px;font-size:.93rem;max-width:76ch}
+.lvl-up{margin:18px 0;background:linear-gradient(145deg,var(--gold),var(--gold2));color:#20160a;border-radius:12px;padding:10px 16px;font-weight:600;max-width:76ch}
+.lvl-up b{color:#20160a}
+table.pt{width:100%;border-collapse:collapse;font-size:.92rem}
+table.pt td{padding:5px 0;border-bottom:1px solid var(--line)}
+table.pt td:last-child{text-align:right;font-weight:700;color:var(--gold);white-space:nowrap;padding-left:10px}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+table.ff{border-collapse:collapse;width:100%;font-size:.93rem}
+table.ff th,table.ff td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+table.ff th{background:var(--panel2);font-family:var(--serif);color:var(--gold)}
+table.ff tr:last-child td{border-bottom:0}
+.callout{background:linear-gradient(135deg,rgba(230,182,83,.12),rgba(230,182,83,.03));border:1px solid rgba(230,182,83,.4);
+  border-radius:14px;padding:14px 18px;margin:18px 0}
+.callout b{color:var(--gold)}
+
+/* stat blocks */
+.sbgrid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));align-items:start}
+.sb{background:var(--sbbg);color:var(--sbink);border-radius:6px;padding:16px 18px;font-size:.9rem;line-height:1.45;
+  border-top:4px solid var(--sbred);border-bottom:4px solid var(--sbred);box-shadow:0 8px 24px rgba(0,0,0,.35);scroll-margin-top:80px}
+.sb h4{margin:0;font-size:1.35rem;color:var(--sbred);font-variant:small-caps;letter-spacing:.02em}
+.sb .meta{font-style:italic;margin-bottom:8px}
+.sb p{margin:3px 0}
+.sb b{color:var(--sbred)}
+.sb-top{border-top:2px solid var(--sbline);border-bottom:2px solid var(--sbline);padding:6px 0}
+.sb .abil{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;margin:8px 0;font-size:.82rem}
+.sb .abil > div{display:grid;grid-template-columns:2.8em 1.8em 2.6em 2.6em;gap:2px;align-items:center;
+  background:rgba(181,137,90,.14);border-radius:4px;padding:2px 6px}
+.sb .abil > div.hd{background:transparent;grid-column:1 / -1;display:none}
+.sb .abil span{text-align:center}
+.sb .abil span:nth-child(3),.sb .abil span:nth-child(4){font-weight:600}
+.sb-lines{border-bottom:2px solid var(--sbline);padding-bottom:6px;margin-bottom:6px}
+.sb h5{margin:10px 0 4px;color:var(--sbred);font-size:1.05rem;border-bottom:1px solid var(--sbline);font-variant:small-caps}
+.sb .sb-desc{margin-top:10px;font-style:italic;color:#5a4a36;border-top:1px dashed var(--sbline);padding-top:6px}
+.abilkey{font-size:.8rem;color:var(--muted);margin:-8px 0 14px}
+
+footer{margin-top:60px;color:var(--muted);font-size:.82rem;border-top:1px solid var(--line);padding-top:18px}
+@media (max-width:700px){ .tl{grid-template-columns:1fr 1fr} }
+@media (max-width:560px){ .hero{padding:26px 18px} .brand small{display:none} .sbgrid{grid-template-columns:1fr} .sb{padding:14px} }
+@media print{
+  :root{--ink:#111;--muted:#444;--panel:#fff;--panel2:#f1ece0;--line:#bbb;--gold:#7a5410}
+  body{background:#fff}
+  header.top,.toc,.printbtn,.back{display:none}
+  .card,.sb,.enc,blockquote.ra,.tablewrap{break-inside:avoid;box-shadow:none}
+  section[id^="s"]{break-before:page}
+  a{color:#111;text-decoration:none}
+  *{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="top-inner">
+  <div class="crest">H</div>
+  <div class="brand">Hollowmere Academy<small>DM Guide · Year One</small></div>
+  <a class="back" href="hollowmere-handbook.html">Student Handbook</a>
+  <button class="printbtn" onclick="window.print()">Print</button>
+</div></header>
+<main>
+
+<div class="hero">
+  <div class="kicker">Hollowmere Academy · Dungeon Master's Guide</div>
+  <h1>Year One: The Portrait in the East Wing</h1>
+  <p class="lead">New students arrive at Hollowmere, meet each other, and find out why things keep vanishing around the castle. The trail leads to a covered portrait in the closed East Wing, and to the lonely, cursed artist trapped inside it.</p>
+  <div class="facts"><span><b>Levels</b> 1–3</span><span><b>Sessions</b> 5</span><span><b>Players</b> 3–6 (balanced for 4)</span><span><b>Length</b> About 2 hours each</span><span><b>Rules</b> D&D 2024 (5.5e)</span></div>
+</div>
+<div class="spoiler">🔒 <b>For the Dungeon Master only.</b> This guide has every secret in Year One. Keep it off the student-facing hub (see the note at the bottom of the page).</div>
+<nav class="toc"><a href="#secret">The Secret Story</a><a href="#cast">Cast</a><a href="#places">Places</a><a href="#rules">Running School Life</a><a href="#s1">1. The Sky-Ferry</a><a href="#s2">2. Sorting Night and First Day</a><a href="#s3">3. Paint in the Halls</a><a href="#s4">4. Inside the Portrait</a><a href="#s5">5. The Artist</a><a href="#bestiary">Bestiary</a><a href="#items">Items</a><a href="#scaling">Scaling</a></nav>
+
+<section id="secret"><h2><span class="num">I.</span> The Secret Story</h2>
+<p class="sub">What's really going on. The players uncover this piece by piece.</p>
+<div class="card secretcard"><p><strong>A hundred years ago</strong>, a quiet Tidewell student named <strong>Cordelia Vane</strong> could paint pictures that moved, breathed, and talked back. She had few friends. Her best friend was a Thornwood boy named <strong>Edwin Ashby</strong>, who spent hours sitting for portraits so she'd have someone to talk to.</p><p>In her fifth year, a bully tore up her sketchbook in front of the whole school. That night, Cordelia painted him. By morning he was stuck inside the canvas, banging on the paint. Teachers got him out, but Cordelia was expelled, and her paintings were locked in the East Wing under white sheets.</p><p>Before she left, Cordelia painted one last picture: a <strong>self-portrait</strong>, so that a part of her could stay at Hollowmere forever. Her grief soaked into the paint. She never signed it, and an unsigned living portrait never fully wakes. Edwin died years later and became the Belltower ghost. He still visits the covered portrait sometimes, but it has never answered.</p><p><strong>This autumn, someone woke her up.</strong> A figure in a hood slipped into the East Wing and signed Cordelia's name in fresh paint, and beside it they painted a strange sigil: <strong>a closed eye inside a ring</strong>. The portrait woke up lonely and hungry for company. Now <strong>Cordelia's Shade</strong> reaches out of the paintings at night and pulls things in: things nobody is watching, then pets, and soon a person.</p><p><strong>Who did it?</strong> The players won't learn that this year. The sigil belongs to <strong>the Hollow Circle</strong>, a secret group working toward something that grows across the whole campaign. It shows up once in Session 3 and again at the end of Session 5. Don't explain it. Let the players wonder.</p></div>
+<div class="tl"><div><b>Session 1</b><span>Empty trunk, paint handprint</span></div><div><b>Session 2</b><span>Things vanish, painting watches</span></div><div><b>Session 3</b><span>Pip vanishes; who was Cordelia?</span></div><div><b>Session 4</b><span>Into the painted world</span></div><div><b>Session 5</b><span>Fight her, or save her</span></div></div>
+</section>
+
+<section id="cast"><h2><span class="num">II.</span> Cast of Characters</h2>
+<p class="sub">Give each one a voice and a want. The "Knows" line is what they can tell the players.</p>
+<div class="grid"><div class="card npc"><div class="role">Head of the school · Tidewell (former)</div>
+<h3>Headmistress Aldra Fenwhistle</h3>
+<p><b>Look:</b> Tall and silver-haired, with a cane topped by a glass heron. She hears everything.</p><p><b>Voice:</b> Slow, warm, never raises her voice. She finishes sentences other people start.</p>
+<p><b>Wants:</b> To keep students safe without scaring them.</p><p><b>Secret:</b> She knows the East Wing portraits are dangerous but believes they're asleep forever.</p>
+<p class="knows"><b>Knows:</b> Cordelia's name, and that the expulsion was handled badly. She'll tell students who come to her honestly <em>after</em> Pip goes missing.</p></div><div class="card npc"><div class="role">Head of Emberly · Dueling &amp; Defense · Emberly</div>
+<h3>Professor Ignatia Cole</h3>
+<p><b>Look:</b> Burn-scarred forearms, short red hair, always rolling up her sleeves.</p><p><b>Voice:</b> Loud, cheerful, sports-coach energy. "AGAIN! Better!"</p>
+<p><b>Wants:</b> Brave students who don't do stupid things. Usually gets one of the two.</p><p><b>Secret:</b> She was caught in the East Wing herself as a first-year.</p>
+<p class="knows"><b>Knows:</b> How to get into the East Wing the 'student way': the loose panel behind the Emberly trophy case.</p></div><div class="card npc"><div class="role">Head of Tidewell · Charms · Tidewell</div>
+<h3>Professor Ottoline Marsh</h3>
+<p><b>Look:</b> Tiny, round, enormous spectacles (which go missing in Session 2).</p><p><b>Voice:</b> Excited and fast. Loses track of her own sentences.</p>
+<p><b>Wants:</b> Her spectacles back. Also, for someone to <em>finally</em> enjoy charms as much as she does.</p><p><b>Secret:</b> Without her spectacles she can't tell students apart, and she's too embarrassed to say so.</p>
+<p class="knows"><b>Knows:</b> Painted objects can be undone with water or turpentine. (Tell the players this in Session 2's Charms class.)</p></div><div class="card npc"><div class="role">Head of Thornwood · Greenlore &amp; Creature Care · Thornwood</div>
+<h3>Professor Tamsin Reed</h3>
+<p><b>Look:</b> Half-orc, muddy boots, a sleepy owl named Biscuit on her shoulder.</p><p><b>Voice:</b> Quiet and gentle. She talks to animals more than people.</p>
+<p><b>Wants:</b> Students who are kind to living things.</p><p><b>Secret:</b> None. She's exactly who she seems to be.</p>
+<p class="knows"><b>Knows:</b> Pip Larkspur is in Thornwood and has been sneaking off at night. She thought Pip was just homesick.</p></div><div class="card npc"><div class="role">Head of Duskmoor · Potions · Duskmoor</div>
+<h3>Professor Mordecai Fell</h3>
+<p><b>Look:</b> Thin, black robes, perfectly neat. A smell of peppermint.</p><p><b>Voice:</b> Dry, sarcastic, a little scary. Secretly delighted by clever students.</p>
+<p><b>Wants:</b> Order. And for nobody to touch his ingredients.</p><p><b>Secret:</b> He's the best teacher in the school and works hard to hide that he cares.</p>
+<p class="knows"><b>Knows:</b> He can identify the paint smears: <strong>Vane's Umber</strong>, a brown paint brewed by one student a hundred years ago. He keeps a jar in his collection.</p></div><div class="card npc"><div class="role">Ghost, Cordelia&#x27;s best friend · Thornwood</div>
+<h3>Edwin Ashby, the Belltower Ghost</h3>
+<p><b>Look:</b> A see-through boy of about fifteen in an old-fashioned school uniform, with paint on his sleeves.</p><p><b>Voice:</b> Polite, old-fashioned, a little sad. Says "I say!" when surprised.</p>
+<p><b>Wants:</b> For Cordelia to be at peace. He's waited a hundred years.</p><p><b>Secret:</b> He blames himself for not stopping the bully.</p>
+<p class="knows"><b>Knows:</b> Everything about Cordelia. <strong>The key line:</strong> "She always said a painting opens for anyone who truly <em>looks</em> at it. Put your hand on the frame and say her name."</p></div><div class="card npc"><div class="role">Caretaker · —</div>
+<h3>Hodge Barrow</h3>
+<p><b>Look:</b> Old, bent, enormous ring of keys, a lantern that never goes out.</p><p><b>Voice:</b> Grumbly and suspicious. "Out of bed, are we?"</p>
+<p><b>Wants:</b> His toad, <strong>Mortimer</strong>, who vanished in Session 2. He's heartbroken but won't admit it.</p><p><b>Secret:</b> He has the only key to the East Wing.</p>
+<p class="knows"><b>Knows:</b> Where everything in the castle is. He saw a hooded figure in the East Wing corridor three weeks ago but thought it was a student prank.</p></div><div class="card npc"><div class="role">Head hearth sprite (castle kitchens) · —</div>
+<h3>Nettle</h3>
+<p><b>Look:</b> A tiny, soot-smudged creature with ember-orange eyes and an apron.</p><p><b>Voice:</b> Squeaky, bossy, talks about herself in the third person.</p>
+<p><b>Wants:</b> Respect. Students never say thank you.</p><p><b>Secret:</b> The hearth sprites use the dumbwaiter shafts to reach every wing, including the East Wing.</p>
+<p class="knows"><b>Knows:</b> She saw "a lady step out of a picture frame" at midnight, carrying the Lantern Hall salt cellar. Polite students who bring a gift (any sweet) learn this.</p></div><div class="card npc"><div class="role">Rival first-year · Duskmoor</div>
+<h3>Lucan Ashgrove</h3>
+<p><b>Look:</b> Perfect hair, expensive robes, a silver dueling trophy he brought from home.</p><p><b>Voice:</b> Smug, quick, always has a comeback.</p>
+<p><b>Wants:</b> To be the best, and for his parents to notice.</p><p><b>Secret:</b> He's scared of failing. Underneath, he could become a friend in later years.</p>
+<p class="knows"><b>Knows:</b> His trunk was emptied on the sky-ferry, and he blames the players. Use him as a rival, not a villain.</p></div><div class="card npc"><div class="role">Shy first-year, the missing student · Thornwood</div>
+<h3>Pip Larkspur</h3>
+<p><b>Look:</b> Small, freckled, ink on her fingers, always carrying a sketchbook.</p><p><b>Voice:</b> Barely above a whisper, but lights up when talking about art.</p>
+<p><b>Wants:</b> A friend.</p><p><b>Secret:</b> She found the covered portrait in the first week and has been visiting it. Cordelia talks back to her.</p>
+<p class="knows"><b>Knows:</b> Cordelia is sad, not evil. Pip's drawing of Cordelia <em>smiling</em> helps talk the Shade down in Session 5.</p></div><div class="card npc"><div class="role">Sky-ferry captain · —</div>
+<h3>Captain Wren Tallow</h3>
+<p><b>Look:</b> Leather flying coat, goggles, a scar across her chin.</p><p><b>Voice:</b> Shouts everything over the wind.</p>
+<p><b>Wants:</b> Students to stay away from the griffons' tails.</p><p><b>Secret:</b> —</p>
+<p class="knows"><b>Knows:</b> The pixies in the luggage hold are a yearly nuisance. Sweets distract them.</p></div></div></section>
+
+<section id="places"><h2><span class="num">III.</span> Places in Year One</h2>
+<div class="grid"><div class="card"><h3>The Sky-Ferry <em>Marigold</em></h3><p>An old flying riverboat pulled by four griffons. It has a deck, a passenger cabin, and a cramped luggage hold below.</p></div><div class="card"><h3>Lantern Hall</h3><p>The great dining hall. Four long house tables, a high table for teachers, and the Founders' Lantern hanging overhead. Portraits line the walls.</p></div><div class="card"><h3>The Inkwell</h3><p>The library, seven floors cut down into the island's rock. Floors 1–3 are open to first-years. Floor 4 and below is the <strong>Restricted Stacks</strong>, and the books there don't like to be read.</p></div><div class="card"><h3>The Glasshouses</h3><p>Greenhouses full of snapping, singing, and wandering plants. Pip's favorite drawing spot.</p></div><div class="card"><h3>The Kitchens</h3><p>Under Lantern Hall. Hot, busy, and run by hearth sprites. Dumbwaiter shafts run from here to every wing.</p></div><div class="card"><h3>The Belltower</h3><p>Home of the bell that rings for classes and curfew, and of Edwin the ghost, who sits at the top most nights.</p></div><div class="card"><h3>The East Wing</h3><p>Closed. Dusty corridors, sheet-covered paintings, and at the end of the Long Gallery, one tall portrait whose sheet has slipped off.</p></div><div class="card"><h3>Inside the Portrait</h3><p>A world made of paint: the Brushstroke Wood, the Wet-Paint Marsh, and the Painted Manor where Cordelia lives. Colors are too bright, shadows are painted on, and everything smells like linseed oil.</p></div></div></section>
+
+<section id="rules"><h2><span class="num">IV.</span> Running School Life</h2>
+<p>Each session mixes three kinds of scenes: <strong>school</strong> (classes, meals, friends), <strong>mystery</strong> (clues and sneaking), and <strong>adventure</strong> (combat and danger). If a session feels slow, jump to the next adventure scene.</p>
+<div class="grid">
+ <div class="card"><h3>🏆 House Point Guide</h3><table class="pt"><tr><td>Clever idea or great question in class</td><td>+5</td></tr><tr><td>Outstanding grade in a class (3 successes)</td><td>+10</td></tr><tr><td>Kindness that costs something</td><td>+10</td></tr><tr><td>Brave act to protect someone</td><td>+15 to +20</td></tr><tr><td>Caught out after curfew</td><td>−10</td></tr><tr><td>Fighting or hexing in the halls</td><td>−10</td></tr><tr><td>Caught somewhere forbidden</td><td>−20</td></tr></table></div>
+ <div class="card"><h3>🌙 Curfew</h3><p>After the Belltower rings ten, students sneaking around make a <strong>group Dexterity (Stealth) check, DC 12</strong>. If half or more succeed, they're unseen. If not, Hodge Barrow (or a prefect) spots them: they can run (<strong>Athletics or Acrobatics DC 13</strong>), talk their way out (<strong>Deception or Persuasion DC 14</strong>), or accept detention. Detention is never a dead end. It's a chance to find a clue.</p></div>
+ <div class="card"><h3>🏮 The Lantern Cup</h3><p><strong>Lantern Cup:</strong> Each house starts with 100 points from the other students. Add the points each player earned to their own house. The house with the most points at the end of Session 5 wins. Every player in the winning house starts Year Two with Heroic Inspiration.</p></div>
+</div></section>
+
+
+<section id="s1">
+  <h2><span class="num">Session 1</span> The Sky-Ferry</h2>
+  <p class="sub"><b>Level 1.</b> Players meet each other, learn combat basics, and find the first clue.</p>
+  
+  <h4 class='scene'>Dawn at the River Docks</h4>
+<blockquote class="ra"><span>Read aloud</span>Mist hangs over the river. Students in new robes clutch trunks and wands. Then, out of the clouds, comes an old riverboat with four griffons pulling it on silver chains, wings beating like thunder. A woman in goggles leans over the rail and shouts: "HOLLOWMERE STUDENTS! ALL ABOARD! KEEP AWAY FROM THE TAILS!"</blockquote>
+<p>Have each player describe their character as they climb aboard. Captain Wren Tallow points all the first-years to one cramped cabin.</p><h4 class='scene'>The Cabin: Meeting Each Other</h4>
+<p>Go around the table. Each player answers <strong>one icebreaker question</strong> (roll a d6 or let them pick):</p>
+<p><strong>(1)</strong> What did you pack that you're secretly nervous about? <strong>(2)</strong> What magic happened to you before you got your letter? <strong>(3)</strong> Which house do you hope for, and which do you dread? <strong>(4)</strong> Who did you leave behind? <strong>(5)</strong> What's the first thing you want to learn? <strong>(6)</strong> What's your worst habit?</p>
+<p>Then each player makes a <strong>bond</strong> with the player on their left: <em>met on the docks · cousins · rivals from home · sat together on the ferry · owe each other a favor · secretly admire each other</em>.</p>
+<p><strong>Meet Pip.</strong> A small, freckled girl sits in the corner, sketching each of them. If anyone talks to her, she shyly shows them their own portrait. It's very good. <strong>Meet Lucan.</strong> He swaggers in, mocks somebody's robes, and leaves to sit with "the important families."</p>
+<p class="pts">🏆 <b>House points:</b> None yet. The houses don't exist for them until sorting.</p><h4 class='scene'>Raid on the Luggage Hold</h4>
+<blockquote class="ra"><span>Read aloud</span>A crash from below. Then giggling, high, buzzing, and mean. Captain Tallow swears. "PIXIES! In the hold again! Somebody get down there before they eat all the luggage!"</blockquote>
+<p>The luggage hold is 30 feet by 20 feet: dim, cramped, and stacked with trunks (half cover). The pixies are tearing through bags and flying off with small objects.</p>
+<p><strong>This is a teaching fight.</strong> Explain turns, attacks, and spells as you go. Pixies try to steal rather than hurt, and they flee when Bloodied. Players who throw sweets can win without fighting at all (see the pixies' <em>Sweet Tooth</em> trait).</p>
+<div class="enc"><div class="enc-h">⚔️ Encounter</div><p><b>Enemies:</b> 6 × <a href="#m-luggage-pixie">Luggage Pixie</a></p><p><b>Difficulty:</b> Low: 200 XP with the reinforcements (exactly the Low budget for 4 level-1 characters).</p><p><b>Reinforcements:</b> 2 more pixies burst out of a trunk at the start of round 3.</p><p><b>Tactics:</b> Pixies swarm the student with the most stuff, Snatch an item, and fly toward the hatch. A pixie that reaches the hatch with an item escapes, and that item is lost until Session 4.</p></div><h4 class='scene'>The Empty Trunk</h4>
+<p>After the fight, one trunk stands open and completely empty: <strong>Lucan's</strong>. Its inside is smeared with streaks of thick brown paint. The pixies didn't do this. Their tiny hands are clean.</p>
+<p>Lucan storms in and accuses the players. A good Persuasion or Insight check (DC 12) calms him down, but he stays sour.</p>
+<p><strong>Clue (Investigation DC 12):</strong> The paint is still slightly wet and smells like old oil. The smear looks like a <em>handprint</em>, but with brushstrokes instead of fingerprints.</p>
+<p class="pts">🏆 <b>House points:</b> Players who share their own things with Lucan or calm him down get a note: <em>+10 house points once you're sorted.</em></p><h4 class='scene'>First Sight of Hollowmere</h4>
+<blockquote class="ra"><span>Read aloud</span>The clouds part. Below you is a lake as black as ink. In the middle sits an island, and on the island a castle with crooked towers, a hundred lit windows, and one dark wing where no lights burn at all.</blockquote>
+<p>End the session here.</p>
+  
+</section>
+<section id="s2">
+  <h2><span class="num">Session 2</span> Sorting Night and First Day</h2>
+  <p class="sub"><b>Level 1.</b> Sort the students, show off school life, and make the vanishings personal.</p>
+  
+  <h4 class='scene'>The Founders' Lantern</h4>
+<blockquote class="ra"><span>Read aloud</span>Lantern Hall is louder than anywhere you've ever been, with four long tables, hundreds of students, and floating candles. Then the Headmistress taps her cane once, and the hall goes silent. Above you, the great Lantern begins to turn, and it burns in all four colors at once.</blockquote>
+<p>Call students up one at a time. Each steps into the light and <strong>says which house they want</strong>. The light flares in that color. (The player always chooses.)</p>
+<p>Make it a moment: the Lantern <strong>whispers one word</strong> to each student that only they hear. Pick a word that hooks their backstory: <em>Remember. Protect. Hidden. Brave. Listen. Home.</em></p>
+<p>Lucan is sorted into <strong>Duskmoor</strong> and smirks. Pip goes to <strong>Thornwood</strong> and looks relieved. Then the house tables cheer and the feast appears.</p>
+<p class="pts">🏆 <b>House points:</b> Award any house points promised in Session 1.</p><h4 class='scene'>First Classes (Skill Challenges)</h4>
+<p>Run two or three classes. In each, every student makes <strong>three checks</strong> using the class's skill, and the DC is 13 unless noted. 3 successes = Outstanding (+10 points), 2 = Good, 0–1 = Try again. Let players suggest other skills with a good explanation.</p>
+<p><strong>Charms with Professor Marsh (Arcana):</strong> Make a feather float. Marsh explains that <em>painted things can be undone with water or turpentine</em>. Remember this.</p>
+<p><strong>Potions with Professor Fell (Medicine or Intelligence):</strong> Brew a Boil-Shrinking Tonic. On a failure, roll a d6: 1 hair turns green for a day · 2 hiccuping bubbles · 3 voice goes squeaky · 4 cauldron grows legs and walks off · 5 the potion smells like socks · 6 it explodes in glitter.</p>
+<p><strong>Creature Care with Professor Reed (Animal Handling):</strong> Feed a nervous baby griffon. Pip is great at this and smiles for the first time.</p><h4 class='scene'>Things Start Vanishing</h4>
+<p>Over the next few days, the players notice (or hear about) the vanishings: Professor Marsh's <strong>spectacles</strong> are gone from her desk. The Lantern Hall <strong>salt cellar</strong> is missing. The Duskmoor <strong>banner</strong> is torn from the wall. Then Hodge Barrow's beloved toad, <strong>Mortimer</strong>, disappears from his lantern-lit office.</p>
+<p>Every scene of a vanishing has a smear of the same <strong>brown paint</strong>.</p><h4 class='scene'>Dueling Club (Optional)</h4>
+<p>Professor Cole runs a friendly dueling club after dinner. Lucan challenges one of the players. Use the <strong>Student Duelist</strong> stat block. Duels are to the first knockout: at 0 HP a duelist drops to 1 HP and yields.</p>
+<p>A good duel, win or lose, earns +5 points. A graceful winner or a good loser earns +5 more.</p>
+<div class="enc"><div class="enc-h">⚔️ Encounter</div><p><b>Enemies:</b> 1 × <a href="#m-student-duelist">Student Duelist (Lucan Ashgrove)</a></p><p><b>Difficulty:</b> One-on-one, friendly. Lucan plus two Duskmoor friends works as a 3-on-3 team duel.</p><p><b>Tactics:</b> Lucan opens with Tripping Jinx, then fires Stinging Hex. He uses Flash Shield the first time he's hit.</p></div><h4 class='scene'>The Painting That Watches</h4>
+<blockquote class="ra"><span>Read aloud</span>On your way back to your tower, you pass the portraits in the long corridor. One of them, a painting of an empty chair beside a window, has changed. There's a smear of brown paint on the chair now, and in the window's reflection, for just a second, a woman in old-fashioned robes is looking straight at you.</blockquote>
+<p>Then she's gone. End the session. <strong>Everyone reaches level 2.</strong></p>
+  <div class="lvl-up">⬆ <strong>Level 2</strong> at the end of this session.</div>
+</section>
+<section id="s3">
+  <h2><span class="num">Session 3</span> Paint in the Halls</h2>
+  <p class="sub"><b>Level 2.</b> Pip goes missing. The players investigate, learn who Cordelia was, and find a way into the East Wing.</p>
+  
+  <h4 class='scene'>Pip Is Missing</h4>
+<blockquote class="ra"><span>Read aloud</span>Breakfast. The Thornwood table is whispering. Pip Larkspur's bed wasn't slept in. Her sketchbook was found in the corridor outside the East Wing, and the last page is smeared with brown paint.</blockquote>
+<p>Professor Reed is frantic. The teachers search the grounds and tell students to stay in their towers. Of course, the players won't.</p>
+<p><strong>Pip's sketchbook</strong> (if the players get hold of it): drawing after drawing of one portrait, a young woman with paint on her hands. On the last page, Pip wrote: <em>"She says she's so lonely. I told her I'd come back."</em></p><h4 class='scene'>The Investigation</h4>
+<p>Let the players go where they want. There are <strong>three questions</strong> to answer, and each has more than one source, so they can't get stuck. Each source can be visited in any order:</p>
+<p><strong>Question 1: What's taking things?</strong> · <em>Professor Fell</em> identifies the paint as <strong>Vane's Umber</strong>, made by a student a hundred years ago (Persuasion DC 12, or an Outstanding Potions grade). · <em>Nettle the hearth sprite</em> saw a lady step out of a picture frame carrying the salt cellar (offer a sweet, or Persuasion DC 13). · <em>Pip's sketchbook</em> shows the same portrait over and over.</p>
+<p><strong>Question 2: Who is she?</strong> · <em>The Inkwell</em> has an old record: "Cordelia Vane, Tidewell, expelled for the Living Portrait Incident" (Investigation DC 13). · <em>The trophy room</em> has an art prize engraved with her name. · <em>Edwin the ghost</em> tells the whole sad story if approached kindly. He's at the top of the Belltower after dark.</p>
+<p><strong>Question 3: How do we get in?</strong> · The East Wing door needs <strong>Hodge's key</strong> (borrow it by returning Mortimer later, sneak it while in detention with Sleight of Hand DC 14, or ask nicely after Pip vanishes). · <em>Unlatcha</em> (Knock) opens it. · The <strong>loose panel</strong> behind the Emberly trophy case (Professor Cole's old trick). · The <strong>kitchen dumbwaiter</strong> (Nettle shows students who were polite to her). · Inside, the portrait opens if a student <em>puts a hand on the frame and says Cordelia's name</em> (Edwin knows this, and so does Pip's sketchbook margin).</p><h4 class='scene'>The Restricted Stacks</h4>
+<blockquote class="ra"><span>Read aloud</span>Floor four of the Inkwell is cold and dark. As your light falls across the shelves, the books rustle. Pages tear loose by themselves, hundreds of them, swirling into the air like a flock of angry birds.</blockquote>
+<p>Players come here to find Cordelia's records, or a book called <em>On Waking Paintings</em>. The pages attack anyone who isn't a librarian.</p>
+<p><strong>Trick:</strong> A student can use an action to slam a big book shut on a swarm (Athletics DC 12), dealing 2d6 damage to it. Fire works well too, but if it hits the shelves, the librarian will <em>not</em> be happy (−10 points).</p>
+<p><strong>Villain seed:</strong> The library card in <em>On Waking Paintings</em> shows it was borrowed three weeks ago. The borrower didn't sign a name, just a small drawing of <strong>a closed eye inside a ring</strong>.</p>
+<div class="enc"><div class="enc-h">⚔️ Encounter</div><p><b>Enemies:</b> 3 × <a href="#m-paper-swarm">Swarm of Restless Pages</a></p><p><b>Difficulty:</b> Easy: 300 XP, just under the 2024 Low budget (400 XP for 4 level-2 characters). That's on purpose for a mystery night. Add a fourth swarm for 5 or more players.</p><p><b>Tactics:</b> Two swarms attack at once, and the third tears loose at the start of round 2. They chase anyone holding a book.</p></div><h4 class='scene'>Curfew</h4>
+<p>Most of this investigation happens at night. Use the <strong>curfew rules</strong>. Getting caught isn't the end: detention with Hodge Barrow means cleaning near the East Wing, which is a perfect chance to learn about the key.</p><h4 class='scene'>The Long Gallery</h4>
+<blockquote class="ra"><span>Read aloud</span>The East Wing smells like dust and old paint. Painting after painting stands draped in white sheets. At the end of the corridor, one sheet has slipped to the floor. Behind it is a tall portrait of a young woman with paint-stained hands. Her name is signed in the corner in wet, fresh paint. And in the background of the painting, small and far away, you can see Pip, waving for help.</blockquote>
+<p>End the session on this image. When the players put a hand on the frame and say <em>Cordelia</em>, the paint ripples, and they fall in. <strong>Everyone reaches level 3</strong> before Session 4 begins.</p>
+  
+</section>
+<section id="s4">
+  <h2><span class="num">Session 4</span> Inside the Portrait</h2>
+  <p class="sub"><b>Level 3.</b> Cross the painted world, find the lost things, and reach Cordelia's manor.</p>
+  <div class="lvl-up">⬆ <strong>Level 3</strong> at the start of this session. Students choose their Path (subclass). Unlock the Path box on their sheets.</div>
+  <h4 class='scene'>Rules of the Painted World</h4>
+<p>Tell the players these rules as they discover them:</p>
+<p>• <strong>Water and turpentine undo paint.</strong> A splash of water (or <em>Create Water</em>, <em>Fizzwhit</em>, or a full waterskin) erases a painted object up to the size of a door, or deals 2d6 Force damage to a painted creature.</p>
+<p>• <strong>Paint is creative.</strong> <em>Fizzwhit</em> (Prestidigitation) can recolor or smudge small painted objects. A student who describes painting something useful (a bridge, a door, a rope) can try an Intelligence or Dexterity check (DC 13) to make it real for one minute.</p>
+<p>• <strong>Nothing here is really alive</strong> except people who fell in. Painted creatures splash into puddles when defeated.</p><h4 class='scene'>Umber the Painted Fox</h4>
+<p>Soon after arriving, the players meet <strong>Umber</strong>, a small brown fox painted by Cordelia long ago to keep her company. He's nervous and lonely too.</p>
+<p>If the students are kind (Animal Handling or Persuasion DC 11), he guides them and warns them of danger. He knows: <em>"Lady Cordelia isn't wicked. She just doesn't want to be alone. But the new paint, the fresh signature, made her hungry."</em></p><h4 class='scene'>The Brushstroke Wood</h4>
+<blockquote class="ra"><span>Read aloud</span>The trees here are painted with thick, swirling strokes of green and gold. The sky is too blue. The ground squishes like wet canvas. And from between the trees, sleek wolves made of brown and black paint pad toward you, dripping as they come.</blockquote>
+<p>The wolves are guards. Umber can lead the group around them with a group Stealth check (DC 13), but if it fails, the wolves attack.</p>
+<p><strong>Lost items found here:</strong> the Duskmoor banner (tangled in a tree) and Lucan's trunk contents, scattered around a clearing.</p>
+<div class="enc"><div class="enc-h">⚔️ Encounter</div><p><b>Enemies:</b> 4 × <a href="#m-brushwood-wolf">Brushwood Wolf</a></p><p><b>Difficulty:</b> Easy warm-up: 400 XP, under the Low budget (600 XP for 4 level-3 characters). The marsh and the Frame Warden come next, so students should save their resources.</p><p><b>Terrain:</b> Painted trees give half cover.</p><p><b>Tactics:</b> Wolves circle and use Pack Tactics, gang up on one student, and flee once two of them are gone.</p></div><h4 class='scene'>The Wet-Paint Marsh</h4>
+<blockquote class="ra"><span>Read aloud</span>The woods give way to a swamp of thick, shining paint. Puddles of every color bubble and pop. A river of clear liquid, which smells strongly of turpentine, cuts across the middle. On the far side stands a painted manor house.</blockquote>
+<p><strong>Crossing the marsh:</strong> each student makes a <strong>Dexterity saving throw (DC 12)</strong> or gets stuck in wet paint (Restrained until they or an ally use an action to pull free, Athletics DC 12). Clever plans skip the save: painting a bridge, flying, using rope, or following Umber's path (Survival DC 12).</p>
+<p><strong>The turpentine river:</strong> it erases painted things. Wading through it is safe for real people but uncomfortable. Students can <strong>fill flasks or buckets</strong> here, which is a huge help in Session 5.</p>
+<p><strong>Lost item found here:</strong> Hodge's toad <strong>Mortimer</strong>, painted onto a lily pad and croaking sadly. A splash of water frees him.</p><h4 class='scene'>The Painted Manor: The Gallery</h4>
+<blockquote class="ra"><span>Read aloud</span>Inside, the manor is one long hall of picture frames, hundreds of them, all empty. Your footsteps echo. Then one of the biggest frames, a huge gilded thing taller than a door, creaks, steps down off the wall, and comes toward you on its corners.</blockquote>
+<p>The <strong>Frame Warden</strong> guards the way to Cordelia's studio, along with two more painted wolves. Students who are pulled into its frame can be freed by beating it or breaking its grapple.</p>
+<p><strong>After the fight</strong>, the students find: Professor Marsh's <strong>spectacles</strong>, the <strong>salt cellar</strong>, three <strong>Mendwell Draughts</strong> (Potions of Healing), and <strong>Cordelia's diary</strong> (it gives Advantage on one talk-down check in Session 5).</p>
+<p>End the session at the studio door. From behind it, they hear a woman humming, and Pip saying <em>"Please. They're my friends. They'll come."</em></p>
+<div class="enc"><div class="enc-h">⚔️ Encounter</div><p><b>Enemies:</b> 1 × <a href="#m-frame-warden">Frame Warden</a>, 2 × <a href="#m-brushwood-wolf">Brushwood Wolf</a></p><p><b>Difficulty:</b> Low: 650 XP (Low is 600, Moderate is 900 for 4 level-3 characters).</p><p><b>Tactics:</b> The Warden snares the closest spellcaster while the wolves keep everyone else busy.</p></div>
+  
+</section>
+<section id="s5">
+  <h2><span class="num">Session 5</span> The Artist</h2>
+  <p class="sub"><b>Level 3.</b> Face Cordelia's Shade, rescue Pip, and choose how this ends: by fighting or by kindness.</p>
+  
+  <h4 class='scene'>The Studio</h4>
+<blockquote class="ra"><span>Read aloud</span>The studio is enormous and full of light. Paint pots float in the air. In the middle of the room, on a tall easel, stands a self-portrait of a young woman, and in front of it stands the woman herself, made of paint and shadow, a brush in her hand. Pip is beside her, half-painted onto a canvas up to her shoulders. Cordelia smiles at you. "Oh, how wonderful. More friends. I'll paint you right next to her."</blockquote>
+<p>Give the players a moment to talk. Cordelia is polite but won't let anyone leave. If they're rude or attack, the fight begins. If they try talking right away, go straight to <strong>Talk Her Down</strong>. She'll listen for one round before getting impatient.</p>
+<p>When the fight starts, she paints two <strong>Painted Duplicates</strong>, copies of two students, which step off a canvas to fight.</p><h4 class='scene'>The Fight</h4>
+<p><strong>The self-portrait on the easel</strong> keeps Cordelia's Shade alive (see her <em>Living Portrait</em> trait). Smart students will go for it. Umber the fox can hint: <em>"Her picture! Her picture is her heart!"</em></p>
+<p><strong>Freeing Pip:</strong> a student next to Pip's canvas can take an action to scrub or splash her free (or succeed on an Athletics check, DC 13). A freed Pip hides and shouts encouragement, and she can hand someone her drawing.</p>
+<p><strong>Turpentine and water</strong> from the marsh deal 2d6 Force damage to the Duplicates and the Shade's portrait. Remind players if they filled flasks.</p>
+<p><strong>Found items:</strong> let each student roll on the <strong>Lost &amp; Found table</strong> once at the start of the fight. They find something useful lying around the studio.</p>
+<div class="enc"><div class="enc-h">⚔️ Encounter</div><p><b>Enemies:</b> 1 × <a href="#m-cordelias-shade">Cordelia&#x27;s Shade</a>, 2 × <a href="#m-painted-duplicate">Painted Duplicate</a></p><p><b>Difficulty:</b> Between Moderate and High: 1,300 XP (Moderate is 900, High is 1,600 for 4 level-3 characters). Her self-portrait's healing makes it feel harder, and talking her down makes it easier.</p><p><b>Tactics:</b> Cordelia stays at range, uses Brushstep to escape anyone who gets close, and saves Paint Them In for the student who hurts her most. The first time she's Bloodied, the room's paint runs (see her <em>Tears of Paint</em> trait) and she hesitates. <strong>This is the best moment to talk her down.</strong></p></div><h4 class='scene'>Talk Her Down</h4>
+<p>At any point, especially once she's Bloodied or after the students show her something from her past, players can try to <strong>reach Cordelia</strong> instead of fighting her.</p>
+<p><strong>How it works:</strong> 3 successes before 3 failures. On their turn, a student can use their action to talk (Insight, Persuasion, Performance, or History, DC 13). While a student is talking, Cordelia doesn't attack them that round. <strong>Things that give Advantage (once each):</strong> Cordelia's diary · Pip's drawing of her smiling · mentioning Edwin Ashby · offering to visit her (and meaning it) · showing her real art of their own.</p>
+<p><strong>Success:</strong> Cordelia lowers her brush. She takes the fresh paint signature off her portrait, signs it again in her own hand, and the curse breaks. Pip, Mortimer, and every stolen thing return to the real castle. Cordelia becomes a <strong>friendly portrait</strong>, and in later years she can watch through any painting in Hollowmere and help the students. <strong>Award +20 points to every student involved.</strong></p>
+<p><strong>Three failures:</strong> she screams, "You're just like <em>them</em>!" and the fight resumes. Players can try again once she's below half her remaining HP.</p><h4 class='scene'>If She's Defeated</h4>
+<p>If the Shade drops to 0 HP, the paint melts and the portrait goes blank and grey. Pip and the stolen things return. The students win, but Edwin the ghost is heartbroken, and the castle feels a little sadder. (In later years, a blank frame hangs in the East Wing.)</p><h4 class='scene'>The Sigil</h4>
+<blockquote class="ra"><span>Read aloud</span>As the paint settles, you notice something on the back of the easel. Someone has burned a small mark into the wood: a closed eye inside a ring. It's still warm.</blockquote>
+<p>Don't explain it. If students ask the Headmistress, she goes very quiet, says "Leave that with me," and changes the subject. This is the first thread of the campaign's big villain.</p><h4 class='scene'>End of Year</h4>
+<p>Back in Lantern Hall, the Headmistress gives the students who solved the mystery <strong>+50 points for their houses</strong> (+30 if Cordelia was defeated rather than saved).</p>
+<p>Tally the <strong>Lantern Cup</strong>. The winning house's banners cover the hall, and its players start Year Two with Heroic Inspiration.</p>
+<p><strong>Rewards to hand out:</strong> Hodge Barrow gives the students who saved Mortimer a copy of the <strong>Spare East Wing Key</strong> (and stops reporting them for curfew "as long as I don't see it"). Cordelia (if saved) gives one student <strong>Cordelia's Brush</strong>. Everyone keeps the item they rolled on the Lost &amp; Found table.</p>
+<p>The sky-ferry carries everyone home for summer. On the last page of Pip's new sketchbook, she's drawn all of them together.</p>
+  
+</section>
+
+<section id="bestiary"><h2><span class="num">V.</span> Bestiary</h2>
+<p class="sub">Original stat blocks in the D&amp;D 2024 format. Encounter difficulty uses the 2024 XP budgets for four characters. Each ability shows score, modifier, then save.</p>
+<div class="sbgrid">
+<article class="sb" id="m-luggage-pixie">
+  <h4>Luggage Pixie</h4>
+  <div class="meta">Tiny Fey, Neutral</div>
+  <div class="sb-top">
+    <p><b>AC</b> 13 &nbsp; <b>Initiative</b> +2 (12)</p>
+    <p><b>HP</b> 5 (2d4)</p>
+    <p><b>Speed</b> 10 ft., Fly 40 ft.</p>
+  </div>
+  <div class="abil"><div class="hd"><b></b><span></span><span>MOD</span><span>SAVE</span></div><div><b>STR</b><span>3</span><span>−4</span><span>−4</span></div><div><b>DEX</b><span>14</span><span>+2</span><span>+2</span></div><div><b>CON</b><span>10</span><span>+0</span><span>+0</span></div><div><b>INT</b><span>8</span><span>−1</span><span>−1</span></div><div><b>WIS</b><span>10</span><span>+0</span><span>+0</span></div><div><b>CHA</b><span>12</span><span>+1</span><span>+1</span></div></div>
+  <div class="sb-lines"><p><b>Skills</b> Sleight of Hand +4, Stealth +4</p><p><b>Senses</b> Passive Perception 10</p><p><b>Languages</b> Sylvan; understands Common but pretends not to</p><p><b>CR</b> 1/8 (XP 25; PB +2)</p></div>
+  <h5>Traits</h5><p><b><i>Sweet Tooth.</i></b> When a creature within 10 feet of the pixie takes an action to offer it a sweet, the pixie must succeed on a DC 10 Wisdom saving throw or spend its next turn eating instead of doing anything else.</p>
+  <h5>Actions</h5><p><b><i>Pinch.</i></b> <em>Melee Attack Roll:</em> +4, reach 5 ft. <em>Hit:</em> 4 (1d4 + 2) Piercing damage.</p>
+  <h5>Bonus Actions</h5><p><b><i>Snatch.</i></b> The pixie takes one object weighing 1 pound or less that isn't being worn or held, then flies up to half its Fly Speed without provoking Opportunity Attacks.</p>
+  
+  <p class="sb-desc">Mischievous fey that ride stowaway on the sky-ferry every year and steal anything shiny.</p>
+</article>
+<article class="sb" id="m-student-duelist">
+  <h4>Student Duelist (Lucan Ashgrove)</h4>
+  <div class="meta">Medium Humanoid (Human), Neutral</div>
+  <div class="sb-top">
+    <p><b>AC</b> 12 &nbsp; <b>Initiative</b> +2 (12)</p>
+    <p><b>HP</b> 13 (3d8)</p>
+    <p><b>Speed</b> 30 ft.</p>
+  </div>
+  <div class="abil"><div class="hd"><b></b><span></span><span>MOD</span><span>SAVE</span></div><div><b>STR</b><span>9</span><span>−1</span><span>−1</span></div><div><b>DEX</b><span>14</span><span>+2</span><span>+2</span></div><div><b>CON</b><span>10</span><span>+0</span><span>+0</span></div><div><b>INT</b><span>14</span><span>+2</span><span>+2</span></div><div><b>WIS</b><span>11</span><span>+0</span><span>+0</span></div><div><b>CHA</b><span>13</span><span>+1</span><span>+1</span></div></div>
+  <div class="sb-lines"><p><b>Skills</b> Arcana +4, Deception +3</p><p><b>Senses</b> Passive Perception 10</p><p><b>Languages</b> Common</p><p><b>CR</b> 1/4 (XP 50; PB +2)</p></div>
+  <h5>Traits</h5><p><b><i>Friendly Duel.</i></b> In a dueling-club duel, when the duelist is reduced to 0 Hit Points, it drops to 1 Hit Point instead and yields.</p>
+  <h5>Actions</h5><p><b><i>Stinging Hex.</i></b> <em>Ranged Attack Roll:</em> +4, range 60 ft. <em>Hit:</em> 6 (1d8 + 2) Force damage.</p><p><b><i>Tripping Jinx (1/Day).</i></b> <em>Dexterity Saving Throw:</em> DC 12, one creature the duelist can see within 30 feet. <em>Failure:</em> The target has the Prone condition.</p>
+  
+  <h5>Reactions</h5><p><b><i>Flash Shield (1/Day).</i></b> <em>Trigger:</em> The duelist is hit by an attack roll. <em>Response:</em> The duelist gains a +3 bonus to AC against that attack, which might cause it to miss.</p>
+  <p class="sb-desc">Use this for Lucan and other student rivals.</p>
+</article>
+<article class="sb" id="m-paper-swarm">
+  <h4>Swarm of Restless Pages</h4>
+  <div class="meta">Medium Swarm of Tiny Constructs, Unaligned</div>
+  <div class="sb-top">
+    <p><b>AC</b> 12 &nbsp; <b>Initiative</b> +2 (12)</p>
+    <p><b>HP</b> 22 (5d8)</p>
+    <p><b>Speed</b> 5 ft., Fly 30 ft. (hover)</p>
+  </div>
+  <div class="abil"><div class="hd"><b></b><span></span><span>MOD</span><span>SAVE</span></div><div><b>STR</b><span>3</span><span>−4</span><span>−4</span></div><div><b>DEX</b><span>14</span><span>+2</span><span>+2</span></div><div><b>CON</b><span>10</span><span>+0</span><span>+0</span></div><div><b>INT</b><span>1</span><span>−5</span><span>−5</span></div><div><b>WIS</b><span>7</span><span>−2</span><span>−2</span></div><div><b>CHA</b><span>1</span><span>−5</span><span>−5</span></div></div>
+  <div class="sb-lines"><p><b>Vulnerabilities</b> Fire</p><p><b>Resistances</b> Bludgeoning, Piercing, Slashing</p><p><b>Immunities</b> Poison, Psychic; Charmed, Frightened, Grappled, Paralyzed, Petrified, Poisoned, Prone, Restrained, Stunned</p><p><b>Senses</b> Blindsight 30 ft.; Passive Perception 8</p><p><b>Languages</b> None</p><p><b>CR</b> 1/2 (XP 100; PB +2)</p></div>
+  <h5>Traits</h5><p><b><i>Swarm.</i></b> The swarm can occupy another creature's space and vice versa, and it can move through any opening large enough for a Tiny creature. The swarm can't regain Hit Points or gain Temporary Hit Points.</p><p><b><i>Slam the Book.</i></b> A creature within 5 feet of the swarm can take an action to slam a heavy book shut on it (Strength (Athletics) check, DC 12). On a success, the swarm takes 7 (2d6) Bludgeoning damage, ignoring its Resistance.</p>
+  <h5>Actions</h5><p><b><i>Paper Cuts.</i></b> <em>Melee Attack Roll:</em> +4, reach 5 ft. <em>Hit:</em> 7 (2d6) Slashing damage, or 3 (1d6) Slashing damage if the swarm is Bloodied.</p>
+  
+  
+  <p class="sb-desc">Torn pages from the Restricted Stacks, animated by old library wards.</p>
+</article>
+<article class="sb" id="m-brushwood-wolf">
+  <h4>Brushwood Wolf</h4>
+  <div class="meta">Medium Construct, Unaligned</div>
+  <div class="sb-top">
+    <p><b>AC</b> 13 &nbsp; <b>Initiative</b> +2 (12)</p>
+    <p><b>HP</b> 19 (3d8 + 6)</p>
+    <p><b>Speed</b> 40 ft.</p>
+  </div>
+  <div class="abil"><div class="hd"><b></b><span></span><span>MOD</span><span>SAVE</span></div><div><b>STR</b><span>13</span><span>+1</span><span>+1</span></div><div><b>DEX</b><span>15</span><span>+2</span><span>+2</span></div><div><b>CON</b><span>14</span><span>+2</span><span>+2</span></div><div><b>INT</b><span>3</span><span>−4</span><span>−4</span></div><div><b>WIS</b><span>12</span><span>+1</span><span>+1</span></div><div><b>CHA</b><span>6</span><span>−2</span><span>−2</span></div></div>
+  <div class="sb-lines"><p><b>Skills</b> Perception +3, Stealth +4</p><p><b>Immunities</b> Poison; Exhaustion, Poisoned</p><p><b>Senses</b> Passive Perception 13</p><p><b>Languages</b> None</p><p><b>CR</b> 1/2 (XP 100; PB +2)</p></div>
+  <h5>Traits</h5><p><b><i>Pack Tactics.</i></b> The wolf has Advantage on an attack roll against a creature if at least one of the wolf's allies is within 5 feet of the creature and the ally doesn't have the Incapacitated condition.</p><p><b><i>Paint Body.</i></b> Water or turpentine splashed on the wolf (an action) deals 7 (2d6) Force damage to it. When the wolf drops to 0 Hit Points, it splashes into a puddle, and the ground within 5 feet of it becomes Difficult Terrain.</p>
+  <h5>Actions</h5><p><b><i>Bite.</i></b> <em>Melee Attack Roll:</em> +4, reach 5 ft. <em>Hit:</em> 7 (2d4 + 2) Piercing damage. If the wolf had Advantage on the attack roll and the target is Medium or smaller, the target has the Prone condition.</p>
+  
+  
+  <p class="sb-desc">Guard wolves painted in thick brown and black strokes. They drip as they run.</p>
+</article>
+<article class="sb" id="m-frame-warden">
+  <h4>Frame Warden</h4>
+  <div class="meta">Large Construct, Unaligned</div>
+  <div class="sb-top">
+    <p><b>AC</b> 15 &nbsp; <b>Initiative</b> +0 (10)</p>
+    <p><b>HP</b> 45 (6d10 + 12)</p>
+    <p><b>Speed</b> 30 ft.</p>
+  </div>
+  <div class="abil"><div class="hd"><b></b><span></span><span>MOD</span><span>SAVE</span></div><div><b>STR</b><span>17</span><span>+3</span><span>+3</span></div><div><b>DEX</b><span>10</span><span>+0</span><span>+0</span></div><div><b>CON</b><span>14</span><span>+2</span><span>+2</span></div><div><b>INT</b><span>3</span><span>−4</span><span>−4</span></div><div><b>WIS</b><span>10</span><span>+0</span><span>+0</span></div><div><b>CHA</b><span>1</span><span>−5</span><span>−5</span></div></div>
+  <div class="sb-lines"><p><b>Immunities</b> Poison, Psychic; Charmed, Exhaustion, Frightened, Poisoned</p><p><b>Senses</b> Blindsight 60 ft.; Passive Perception 10</p><p><b>Languages</b> None</p><p><b>CR</b> 2 (XP 450; PB +2)</p></div>
+  <h5>Traits</h5><p><b><i>False Appearance.</i></b> While the Warden is motionless on a wall, it looks like an ordinary empty picture frame.</p>
+  <h5>Actions</h5><p><b><i>Multiattack.</i></b> The Warden makes two Frame Slam attacks.</p><p><b><i>Frame Slam.</i></b> <em>Melee Attack Roll:</em> +5, reach 10 ft. <em>Hit:</em> 8 (1d10 + 3) Bludgeoning damage.</p><p><b><i>Frame Snare (Recharge 5–6).</i></b> <em>Dexterity Saving Throw:</em> DC 13, one Medium or smaller creature within 10 feet. <em>Failure:</em> The target is pulled into the frame and has the Grappled condition (escape DC 13). While Grappled this way, the target also has the Restrained condition. The Warden can snare only one creature at a time.</p>
+  
+  
+  <p class="sb-desc">A huge gilded frame that guards the Painted Manor. It walks on its corners.</p>
+</article>
+<article class="sb" id="m-painted-duplicate">
+  <h4>Painted Duplicate</h4>
+  <div class="meta">Medium Construct, Unaligned</div>
+  <div class="sb-top">
+    <p><b>AC</b> 12 &nbsp; <b>Initiative</b> +2 (12)</p>
+    <p><b>HP</b> 22 (4d8 + 4)</p>
+    <p><b>Speed</b> 30 ft.</p>
+  </div>
+  <div class="abil"><div class="hd"><b></b><span></span><span>MOD</span><span>SAVE</span></div><div><b>STR</b><span>12</span><span>+1</span><span>+1</span></div><div><b>DEX</b><span>14</span><span>+2</span><span>+2</span></div><div><b>CON</b><span>12</span><span>+1</span><span>+1</span></div><div><b>INT</b><span>6</span><span>−2</span><span>−2</span></div><div><b>WIS</b><span>10</span><span>+0</span><span>+0</span></div><div><b>CHA</b><span>10</span><span>+0</span><span>+0</span></div></div>
+  <div class="sb-lines"><p><b>Immunities</b> Poison; Poisoned</p><p><b>Senses</b> Passive Perception 10</p><p><b>Languages</b> Understands Common; speaks in the voice of the student it copies</p><p><b>CR</b> 1/2 (XP 100; PB +2)</p></div>
+  <h5>Traits</h5><p><b><i>Copycat.</i></b> The duplicate looks exactly like one student, but slightly too shiny, and its colors are a little off.</p><p><b><i>Wash Away.</i></b> When a creature takes an action to splash the duplicate with water or turpentine, the duplicate takes 7 (2d6) Force damage.</p>
+  <h5>Actions</h5><p><b><i>Mirror Strike.</i></b> <em>Melee or Ranged Attack Roll:</em> +4, reach 5 ft. or range 60 ft. <em>Hit:</em> 6 (1d8 + 2) Force damage.</p>
+  
+  
+  <p class="sb-desc">Cordelia paints these copies of students mid-fight. Describe them copying the real student's moves and catchphrases.</p>
+</article>
+<article class="sb" id="m-cordelias-shade">
+  <h4>Cordelia&#x27;s Shade</h4>
+  <div class="meta">Medium Undead, Neutral</div>
+  <div class="sb-top">
+    <p><b>AC</b> 14 &nbsp; <b>Initiative</b> +3 (13)</p>
+    <p><b>HP</b> 97 (15d8 + 30)</p>
+    <p><b>Speed</b> 30 ft.</p>
+  </div>
+  <div class="abil"><div class="hd"><b></b><span></span><span>MOD</span><span>SAVE</span></div><div><b>STR</b><span>10</span><span>+0</span><span>+0</span></div><div><b>DEX</b><span>16</span><span>+3</span><span>+5</span></div><div><b>CON</b><span>14</span><span>+2</span><span>+2</span></div><div><b>INT</b><span>14</span><span>+2</span><span>+2</span></div><div><b>WIS</b><span>12</span><span>+1</span><span>+1</span></div><div><b>CHA</b><span>18</span><span>+4</span><span>+6</span></div></div>
+  <div class="sb-lines"><p><b>Skills</b> Insight +3, Perception +3</p><p><b>Resistances</b> Necrotic</p><p><b>Immunities</b> Poison; Exhaustion, Poisoned</p><p><b>Senses</b> Darkvision 60 ft.; Passive Perception 13</p><p><b>Languages</b> Common</p><p><b>CR</b> 4 (XP 1,100; PB +2)</p></div>
+  <h5>Traits</h5><p><b><i>Living Portrait.</i></b> Cordelia's self-portrait stands on an easel in her studio (AC 10, HP 15; Immunity to Poison and Psychic damage; water or turpentine deals 2d6 Force damage to it). While the portrait is intact, the Shade regains 5 Hit Points at the start of each of its turns if it has at least 1 Hit Point. If the portrait is destroyed, this trait stops working, and the Shade has Disadvantage on attack rolls until the end of its next turn.</p><p><b><i>Tears of Paint.</i></b> The first time the Shade is Bloodied, the paint in the room runs. Each creature on the ground must succeed on a DC 12 Dexterity saving throw or have the Prone condition. The Shade then hesitates and doesn't use Paint Them In until the end of its next turn.</p>
+  <h5>Actions</h5><p><b><i>Multiattack.</i></b> The Shade makes two Brush Stroke attacks.</p><p><b><i>Brush Stroke.</i></b> <em>Melee or Ranged Attack Roll:</em> +6, reach 5 ft. or range 60 ft. <em>Hit:</em> 13 (2d8 + 4) Force damage.</p><p><b><i>Paint Them In (Recharge 5–6).</i></b> <em>Charisma Saving Throw:</em> DC 14, one creature the Shade can see within 30 feet. <em>Failure:</em> 14 (4d6) Psychic damage, and the target has the Restrained condition as wet paint covers it. <em>Success:</em> Half damage only. A Restrained target, or a creature within 5 feet of it, can take an action to scrub off the paint, ending the condition.</p>
+  <h5>Bonus Actions</h5><p><b><i>Brushstep.</i></b> The Shade teleports up to 30 feet to an unoccupied space it can see.</p>
+  
+  <p class="sb-desc">The lonely, cursed spirit of the artist Cordelia Vane, woken by a stranger's fresh signature. She can be saved.</p>
+</article></div></section>
+
+<section id="items"><h2><span class="num">VI.</span> Treasure &amp; Items</h2>
+<div class="grid"><div class="card"><div class="role">Common potion</div><h3>Mendwell Draught</h3><p>A Hollowmere Potion of Healing. When you drink it, you regain 2d4 + 2 Hit Points. Drinking or giving it is a Bonus Action.</p></div><div class="card"><div class="role">Uncommon wondrous item</div><h3>Cordelia's Brush</h3><p>A paintbrush whose tip is always wet. As a Magic action, you can paint a simple nonmagical object no bigger than a 1-foot cube (a key, a rope, a cup, a lantern). The object becomes real for 1 hour, then fades into paint. Once used, the brush can't be used this way again until the next dawn. Painted portraits in Hollowmere treat the holder as a friend.</p></div><div class="card"><div class="role">Common wondrous item</div><h3>Spare East Wing Key</h3><p>Hodge Barrow's spare key. It opens the East Wing doors and smells faintly of toad.</p></div></div>
+<h3 style="margin-top:26px">Lost &amp; Found Table (Session 5)</h3>
+<p class="sub">Each student rolls a d10 at the start of the final fight. Students keep their item afterward.</p>
+<div class="tablewrap"><table class="ff"><tr><th>d10</th><th>Item</th><th>What it does</th></tr><tr><td>1</td><td><b>Bucket of water</b></td><td>Splash a creature within 5 feet (action). It deals 7 (2d6) Force damage to a painted creature, or scrubs paint off a Restrained ally.</td></tr><tr><td>2</td><td><b>Jar of turpentine</b></td><td>Throw it up to 20 feet (action, ranged attack using Dexterity). It deals 7 (2d6) Force damage to a painted creature.</td></tr><tr><td>3</td><td><b>Hodge's brass whistle</b></td><td>Blow it (Bonus Action). Every painted creature within 30 feet has Disadvantage on its next attack roll.</td></tr><tr><td>4</td><td><b>Professor Marsh's spectacles</b></td><td>Wear them (Bonus Action). For 1 minute, you always know where Cordelia teleports, and your next attack against her has Advantage.</td></tr><tr><td>5</td><td><b>An old broom</b></td><td>For 1 minute, you have a Fly Speed of 20 feet.</td></tr><tr><td>6</td><td><b>Bag of sneezing powder</b></td><td>Throw it at a point within 20 feet (action). Each creature within 5 feet of that point must succeed on a DC 12 Constitution saving throw or have the Incapacitated condition until the end of its next turn.</td></tr><tr><td>7</td><td><b>Lucan's silver trophy</b></td><td>So shiny it's distracting. Hold it up (Bonus Action). Cordelia has Disadvantage on her next attack roll against you.</td></tr><tr><td>8</td><td><b>A blank canvas</b></td><td>When you're targeted by Paint Them In, you can hold up the canvas (Reaction). The paint lands on the canvas and you automatically succeed. Usable once.</td></tr><tr><td>9</td><td><b>The Duskmoor banner</b></td><td>Wrap yourself in it (Bonus Action). You have half cover until you move.</td></tr><tr><td>10</td><td><b>Pip's drawing</b></td><td>A sketch of Cordelia smiling. Gives Advantage on one Talk Her Down check.</td></tr></table></div>
+</section>
+
+<section id="scaling"><h2><span class="num">VII.</span> Scaling for Your Table</h2>
+<div class="tablewrap"><table class="ff"><tr><th>Table</th><th>Change</th></tr><tr><td><b>3 players</b></td><td>Remove one minion from each fight (one fewer pixie pair, swarm, wolf, or duplicate). Cordelia's Shade has 80 HP.</td></tr><tr><td><b>4 players</b></td><td>Use as written.</td></tr><tr><td><b>5 players</b></td><td>Add one minion to each fight. Cordelia's Shade has 110 HP.</td></tr><tr><td><b>6 players</b></td><td>Add two minions to each fight. Cordelia's Shade has 120 HP, and her Paint Them In recharges on a 4–6.</td></tr><tr><td><b>Too hard?</b></td><td>Have Umber the fox or Pip help: once per fight, they distract an enemy (it has Disadvantage on its next attack).</td></tr><tr><td><b>Too easy?</b></td><td>Give Cordelia a third Painted Duplicate when she's first Bloodied.</td></tr></table></div>
+<div class="callout"><b>Hub note:</b> This page has all of Year One's secrets. If you upload it to the public hub, don't link it from the hub's menus, or keep it in Google Classroom instead. Students should only see the <a href="hollowmere-handbook.html">Student Handbook</a> and the <a href="hollowmere-sheet-year1.html">character sheet</a>.</div>
+</section>
+
+<footer>Hollowmere Academy is an original fan-made campaign for the Wildcat Gaming Guild, Wachter Middle School, written for the 2024 <i>Dungeons &amp; Dragons</i> rules. All characters, places, and creatures here are original. Dungeons &amp; Dragons is a trademark of Wizards of the Coast; this guide is not affiliated with or endorsed by Wizards of the Coast.</footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,245 @@
+
+■ Load, JS syntax and navigation (http://localhost)
+  ✔ No JavaScript errors on load ()
+  ✔ SRD spells: 339
+  ✔ SRD cantrips: 27
+  ✔ SRD weapons: 38
+  ✔ Mini-lessons: 38
+  ✔ 12-step course with feedback for every answer
+  ✔ Guided adventure scenes: 5
+  ✔ Exact SRD 5.2.1 CC-BY-4.0 attribution present
+  ✔ Route #/screen renders (1 Guide the Game ↗ Pop out No campaign s…)
+  ✔ Route #/guide/campaign renders (🗺 No campaign selected  Pick one from y…)
+  ✔ Route #/guide/lessons renders (38 lessons · 0 read THE DM'S JOB What a …)
+  ✔ Route #/guide/course renders (12-step beginner sequence 1What a Dungeo…)
+  ✔ Route #/guide/adventure renders (The Lantern of Brindle Ford Before you s…)
+  ✔ Route #/guide/roll renders (What Do I Roll? Could this action reason…)
+  ✔ Route #/rules/spells renders (339 of 339 spells (SRD 5.2.1) All levels…)
+  ✔ Route #/rules/cantrips renders (27 of 27 cantrips (SRD 5.2.1) All classe…)
+  ✔ Route #/rules/weapons renders (38 weapons (SRD 5.2.1) All Simple Melee …)
+  ✔ Route #/rules/glossary renders (88 SRD 5.2.1 rules entries All Condition…)
+  ✔ Route #/rules/rulings renders (Quick Rulings — 2024 rules  Short DM Atl…)
+  ✔ Route #/rules/monsters renders (330 SRD 5.2.1 stat blocks (read-only) Ab…)
+  ✔ Route #/rules/credits renders (Sources & License Attribution This work …)
+  ✔ Route #/combat/party renders (No campaign — scratch table Pick a campa…)
+  ✔ Route #/combat/tracker renders (No campaign selected — scratch table. Ch…)
+  ✔ Route #/combat/log renders (Encounter Log 0 entries ⬇ Export as text…)
+  ✔ Route #/tools/dice renders (Dice Roller  For your own quick or secre…)
+  ✔ Route #/tools/events renders (Event Generator  Use when the players go…)
+  ✔ Route #/tools/npcs renders (NPC & Captain Generator  Give every NPC …)
+  ✔ Route #/tools/notes renders (No campaign selected — scratch table. Ch…)
+  ✔ Route #/tools/save renders (No campaign selected — scratch table. Ch…)
+  ✔ Route #/campaigns renders (Choose your campaign ⬆ Import campaign (…)
+  ✔ No JavaScript errors after visiting every section
+
+■ First run: no campaign until the DM picks one
+  ✔ Fresh load: no campaign is active
+  ✔ Fresh load: empty party, no combatants, empty notes/recap/log
+  ✔ Header campaign selector says “No campaign selected”
+  ✔ DM Screen shows the empty state (no campaign, no party)
+  ✔ Guide the Game campaign area: friendly empty state with Pick / Import / Start blank buttons
+  ✔ Works with no campaign: #/guide/lessons
+  ✔ Works with no campaign: #/guide/course
+  ✔ Works with no campaign: #/guide/adventure
+  ✔ Works with no campaign: #/guide/roll
+  ✔ Works with no campaign: #/rules/spells
+  ✔ Works with no campaign: #/rules/weapons
+  ✔ Works with no campaign: #/rules/glossary
+  ✔ Works with no campaign: #/rules/monsters
+  ✔ Works with no campaign: #/tools/dice
+  ✔ Works with no campaign: #/tools/events
+  ✔ Works with no campaign: #/tools/npcs
+  ✔ Works with no campaign: #/tools/notes
+  ✔ Works with no campaign: #/tools/save
+  ✔ Works with no campaign: #/combat/party
+  ✔ Works with no campaign: #/combat/tracker
+  ✔ Works with no campaign: #/campaigns
+  ✔ Party screen explains the separate scratch table
+  ✔ Picker has an explicit “No campaign” option, selected
+  ✔ Picking Hollowmere activates it (header updated)
+  ✔ Scratch characters/notes do not leak into Hollowmere
+  ✔ Guide the Game shows Hollowmere content
+  ✔ Reload keeps Hollowmere selected
+  ✔ Switching back to “No campaign” restores the empty state (scratch table only)
+  ✔ Reload keeps “No campaign” selected
+  ✔ Hollowmere kept its own saved party through the switches
+  ✔ Start a blank campaign creates and activates an empty campaign
+  ✔ Existing saved Hollowmere progress from older versions still loads as active
+  ✔ Header has search, Full Screen, Monitor Setup, Pop Out, Save/Resume and Learning/Table toggle
+  ✔ DM Screen shows the four panels
+  ✔ Table mode hides learning tips
+  ✔ Global search finds Fireball
+  ✔ Search result opens the spell card
+
+■ Spell & weapon reference
+  ✔ Level filter: 42 of 339 spells (SRD 5.2.1)
+  ✔ Class + Concentration filters: 13 of 339 spells (SRD 5.2.1)
+  ✔ Spell card: summary, DM guidance, full text, scaling, official links
+  ✔ Cantrip list: 27 of 27 cantrips (SRD 5.2.1)
+  ✔ Weapon card: damage, properties, mastery, weight, cost, resolution
+
+■ Lessons, course, adventure, What Do I Roll?
+  ✔ 38 lessons listed
+  ✔ Wrong practice answer shows explanatory feedback
+  ✔ Answering all correctly completes the step
+  ✔ Adventure scene 3 renders with monsters
+  ✔ Roll guide: routine action → no roll
+  ✔ Roll guide: impossible action → no roll can make it possible
+
+■ Weapon autofill and bonus math
+  ✔ Selecting Longsword autofills 1d8 Slashing, Versatile (1d10), mastery Sap
+  ✔ Missing ability/level info → attack +0, damage +0
+  ✔ Level 5, STR +3, martial proficiency → +6 to hit, +3 damage (PB not added to damage)
+  ✔ Not proficient → no Proficiency Bonus (+3)
+  ✔ Finesse uses the better of STR/DEX (DEX +4 → +6/+4)
+  ✔ Finesse ability can be chosen (STR → +3/+1)
+  ✔ Thrown melee weapon (Handaxe) uses STR even when DEX is higher
+  ✔ Thrown + Finesse (Dagger) may use DEX
+  ✔ Ranged weapon uses DEX
+  ✔ Versatile two-handed grip uses the larger die
+  ✔ Manual magic bonus kept separate from automatic bonus
+  ✔ Proficiency override “No” removes PB
+  ✔ Proficiency Bonus by level 1-4:+2 … 17-20:+6
+
+■ Party dashboard and popup editing
+  ✔ Edit modal has every spec field
+  ✔ Edit modal lists the 15 conditions
+  ✔ Adding a Warhammer autofills and shows auto bonus (+5, 1d8 +3)
+  ✔ Saving the modal updates the character
+  ✔ Card shows two weapon buttons plus “All Weapons (4)”
+  ✔ All Weapons popup lists every weapon
+
+■ Guided attacks: hit/miss/crit/advantage
+  ✔ d20 12 + 5 = 17 vs AC 15 → HIT
+  ✔ Target AC autofilled from combatant (15)
+  ✔ 9 + 5 = 14 vs AC 15 → MISS
+  ✔ Meeting AC exactly (15) hits
+  ✔ Natural 1 misses even vs AC 2
+  ✔ Natural 20 crits even vs AC 99
+  ✔ Critical Hit doubles the damage dice (1d8 → 2d8)
+  ✔ Crit damage adds the modifier once (9 + 3 = 12)
+  ✔ Advantage + Disadvantage cancel → one d20
+  ✔ Advantage keeps the higher d20 (3, 15 → 15)
+  ✔ Disadvantage keeps the lower d20 (3, 15 → 3)
+
+■ Damage: resistance, vulnerability, immunity, preview, apply, duplicates
+  ✔ Resistance auto-selected from stat block
+  ✔ Resistance halves rounded down: (7+3)=10 → 5; preview 40 → 35
+  ✔ Preview does not change HP before confirmation
+  ✔ Vulnerability doubles: (4+1)=5 → 10; Skeleton 13 → 3
+  ✔ Immunity prevents damage (40 → 40)
+  ✔ Preview: Goblin 10 → 3 (4 + 3 = 7)
+  ✔ Damage applied only after clicking Apply (HP 3)
+  ✔ Attack recorded in the encounter log
+  ✔ Apply button disabled after applying
+  ✔ Re-applying the same attack is blocked (no double damage)
+  ✔ After applying, the preview shows the applied result (10 → 3), not a new one
+  ✔ A miss can be recorded in the log
+
+■ Concentration prompt and 0 HP reminder
+  ✔ Preview warns of the Concentration save (7 damage → DC 10)
+  ✔ After damage: Concentration save prompt, DC 10
+  ✔ Concentration DC = max(10, half damage), capped at 30 (7→10, 22→11, 45→22, 100→30)
+  ✔ 0 HP reminder shown for the monster
+  ✔ Monster at 0 HP is not removed or marked dead automatically
+  ✔ PC at 0 HP: death-save reminder, never auto-killed
+
+■ Initiative tracker and linked party/combat HP
+  ✔ Party added to tracker as linked combatants (4)
+  ✔ Sort by Initiative orders highest first
+  ✔ Start combat + Next turn advances the turn
+  ✔ Wrapping past the last combatant starts round 2
+  ✔ Previous turn goes back
+  ✔ Damage in the tracker updates the linked party card (31 → 25)
+  ✔ Party card shows the tracker change
+  ✔ Healing on the party card shows in the tracker (29)
+
+■ Two windows: BroadcastChannel sync and stale-HP re-review (http)
+  ✔ New character appears in the second window without reload
+  ✔ Second window received the change over BroadcastChannel
+  ✔ Window A previews Bandit 11 → 6
+  ✔ Window A warns that HP changed in window B
+  ✔ Preview recalculated from the new HP (8 → 3)
+  ✔ First Apply after a remote change does not apply — fresh review required
+  ✔ Second Apply (after review) applies to the new HP (8 → 3)
+  ✔ Window B shows the applied damage
+  ✔ Saving the edit modal keeps HP changed meanwhile in another window
+
+■ Pop-out windows
+  ✔ Pop Out opens the same route in a new window: /rules/weapons?popout=1
+  ✔ Pop-out window renders compact chrome and the view
+  ✔ Pop-out route #/rules/spells works
+  ✔ Pop-out route #/combat/tracker works
+  ✔ Pop-out route #/combat/party works
+  ✔ Pop-out route #/guide/lessons works
+  ✔ Pop-out route #/rules/rulings works
+  ✔ Pop-out route #/tools/events works
+  ✔ Pop-out route #/tools/npcs works
+  ✔ Pop-out route #/tools/dice works
+  ✔ Pop-out route #/tools/notes works
+  ✔ Pop-out route #/screen works
+  ✔ Monitor Setup explains the file:// sync limitation
+  ✔ Blocked pop-up shows help
+
+■ Campaign save: export, import, validation
+  ✔ Export Campaign Save downloads a file: dm-atlas-save-campaign-2026-10-10.json
+  ✔ Save has {"app":"DM Atlas","format":"dm-atlas-campaign-save","version":1}
+  ✔ Save includes party, weapons, combat, log, location and recap
+  ✔ Import shows a summary and asks for confirmation
+  ✔ Confirmed import restores the saved party and location
+  ✔ Unknown extra fields are preserved
+  ✔ Invalid save rejected without changing data: broken JSON
+  ✔ Invalid save rejected without changing data: wrong format
+  ✔ Invalid save rejected without changing data: party not a list
+  ✔ Invalid save rejected without changing data: newer version
+  ✔ Invalid save rejected without changing data: damaged character
+  ✔ Cancelling an import changes nothing
+  ✔ End Night & Save stores a snapshot and downloads a save
+  ✔ Resume lists snapshots
+
+■ Layout: party cards fit with no page scroll, text ≥ 14px
+  ✔ 4 characters at 1366×768: 2×2 grid, no page scroll, no clipped cards
+  ✔ 4 characters at 1366×768: smallest text 14px (lbl)
+  ✔ 6 characters at 1366×768: 3×2 grid, no page scroll, no clipped cards
+  ✔ 6 characters at 1366×768: smallest text 14px (lbl)
+  ✔ 4 characters at 1920×1080: 2×2 grid, no page scroll, no clipped cards
+  ✔ 4 characters at 1920×1080: smallest text 14px (ed)
+  ✔ 6 characters at 1920×1080: 3×2 grid, no page scroll, no clipped cards
+  ✔ 6 characters at 1920×1080: smallest text 14px (ed)
+  ✔ DM Screen fits 1366×768 without page scroll
+  ✔ Mobile layout: menu button and single-column panels
+
+■ Campaign library: import JSON, HTML, Markdown; switching
+  ✔ Picker lists the bundled Hollowmere campaign as active
+  ✔ Template JSON imports and becomes the active campaign (header updated)
+  ✔ New campaign starts with its own empty party (saves are per campaign)
+  ✔ Imported campaign sessions show in Guide the Game
+  ✔ Invalid campaign JSON rejected
+  ✔ HTML import preview: sections listed, handbook detected as player-facing
+  ✔ Imported both HTML files: 5 sessions, 11 NPCs, 8 locations, 4 items, 1 secrets, handbook 11 sections
+  ✔ Imported HTML contains no scripts, event handlers or javascript: links
+  ✔ Preview reports stripped scripts/event handlers
+  ✔ Malicious HTML sanitized: no script ran, no handlers/iframes/forms kept
+  ✔ HTML + Markdown split by headings into sessions and NPCs: The Drowned Village / Beneath the Waves / The Market Theft / Into the Sewers
+  ✔ Rendering imported content runs no scripts
+  ✔ Exported campaigns/hollowmere-year-one.dmatlas.json re-imports as a DM Atlas campaign (5 sessions, 11 NPCs, 7 creatures, 10 handbook sections)
+  ✔ Switching back to Hollowmere restores its own party
+
+■ Player handbook window never shows DM secrets
+  ✔ Player handbook window shows 11 player sections
+  ✔ No DM secrets, sessions or bestiary in the player window
+  ✔ Player window has no DM navigation or search
+  ✔ No JavaScript errors during the http test run
+
+■ file:// (opened straight from disk)
+  ✔ file:// route #/screen renders
+  ✔ file:// route #/rules/spells renders
+  ✔ file:// route #/combat/party renders
+  ✔ file:// route #/tools/save renders
+  ✔ file:// route #/campaigns renders
+  ✔ file:// party dashboard works with local storage
+  ✔ file:// attack flow works
+  ℹ file:// cross-window sync in this headless Chrome: worked (not promised; documented in Monitor Setup)
+  ✔ No JavaScript errors on file://
+
+209 passed, 0 failed
