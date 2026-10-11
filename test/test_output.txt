@@ -237,7 +237,7 @@
   ✔ Vesperine is listed in the library (export id "vesperine-and-the-velvet-marches") and not auto-selected
   ✔ Progress saved under the old campaign id is migrated to the export id
   ✔ Hollowmere and Vesperine keep separate saved data
-  ✔ Art pack import stores 213 images in IndexedDB; re-importing replaces them (still 213)
+  ✔ Art pack import stores 252 images in IndexedDB; re-importing replaces them (still 252)
   ✔ Campaign card shows the art status
 
 ■ Vesperine: every record type is surfaced
@@ -245,11 +245,11 @@
   ✔ NPCs: 65
   ✔ Locations: 50
   ✔ Factions: 18
-  ✔ Maps: 11
+  ✔ Maps: 20
   ✔ Adventures: 19 (side adventures, lair, solo entries, Night 3, Night 7 climax, 6 seeds)
   ✔ Read-aloud library: 58
   ✔ DM Guide (dm.md): 13 sections
-  ✔ Known gaps shown to the DM: 11 open by default
+  ✔ Known gaps shown to the DM: 8 open by default
   ✔ All 41 gaps, resolved ones with their resolution
   ✔ Bestiary: 128 stat blocks
   ✔ SRD 5.2.1 creatures cited: 28, all with stat blocks
@@ -258,6 +258,7 @@
   ✔ Night 7 climax: lair actions, endings and hand-offs (Hall of Vows)
   ✔ Six adventure seeds
   ✔ DM guide includes the Seats in the Glass rules
+  ✔ All 65 NPCs have portraits; Dobbs and Pirelli share one image (stored once)
   ✔ DM location page shows the painted map (DM-only at hidden sites) and the keyed map (always DM-only)
   ✔ Adventure page lists its encounters with XP and 2024 difficulty
   ✔ Faction page lists its members
@@ -291,7 +292,7 @@
 
 ■ Vesperine player window: player-safe + revealed only, opaque art names
   ✔ No true names, gated aliases or spoiler terms anywhere in the player window (text, attributes, image src/alt/title, loaded URLs; 53 terms)
-  ✔ No DM-only text in the player window (435 passages: NPC secrets/motives/tells/triggers, DM notes, solution, clues, riddle answers, clock, endings, adventures, bestiary, sidebars, DM maps, gaps, dm.md)
+  ✔ No DM-only text in the player window (436 passages: NPC secrets/motives/tells/triggers, DM notes, solution, clues, riddle answers, clock, endings, adventures, bestiary, sidebars, DM maps, gaps, dm.md)
   ✔ Faces: 64 player-visible NPCs (the DM-only NPC is excluded)
   ✔ Every player image uses an opaque id (no names in src or data attributes, no title)
   ✔ Image alt text is the name the players know (public alias)
@@ -333,7 +334,7 @@
   ✔ No JavaScript errors in the Vesperine run
 
 ■ Vesperine art files: opaque names in the repo
-  ✔ art/ holds 213 opaque files (art/vesperine-and-the-velvet-marches/v/<hash>.webp); art pack keys are opaque; no true names in any path
+  ✔ art/ holds 252 opaque files (art/vesperine-and-the-velvet-marches/v/<hash>.webp); art pack keys are opaque; no true names in any path
   ✔ Old true-name art paths are gone
 
 ■ file:// (opened straight from disk)
@@ -347,4 +348,4 @@
   ℹ file:// cross-window sync in this headless Chrome: worked (not promised; documented in Monitor Setup)
   ✔ No JavaScript errors on file://
 
-296 passed, 0 failed
+297 passed, 0 failed

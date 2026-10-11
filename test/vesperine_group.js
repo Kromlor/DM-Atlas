@@ -28,7 +28,7 @@ module.exports = async function vesperineTests(CTX) {
   const nArt = await ev(v, t => window.DMAtlas.importCampaignJSON(t, 'x.dmatlas-art.json'), art); await sleep(300);
   const nArt2 = await ev(v, t => window.DMAtlas.importCampaignJSON(t, 'x.dmatlas-art.json'), art); await sleep(300);
   const NART = Object.keys(JSON.parse(art).images).length;
-  ok(NART === 213 && nArt === NART && nArt2 === NART && (await ev(v, id => window.DMAtlas.ArtStore.count(id), VID)) === NART, `Art pack import stores ${NART} images in IndexedDB; re-importing replaces them (still ${NART})`);
+  ok(NART === 252 && nArt === NART && nArt2 === NART && (await ev(v, id => window.DMAtlas.ArtStore.count(id), VID)) === NART, `Art pack import stores ${NART} images in IndexedDB; re-importing replaces them (still ${NART})`);
   await H.go(v, 'campaigns'); await sleep(400);
   ok(new RegExp(NART + ' images stored').test(await txt(v, `[data-artc="${VID}"]`)), 'Campaign card shows the art status');
 
@@ -38,7 +38,7 @@ module.exports = async function vesperineTests(CTX) {
   await shot(v, 'shot-vesperine.png');
   const cnt = async (q) => { await tab(v, q); return ev(v, () => document.querySelectorAll('.slist [data-aid]').length); };
   ok((await cnt('npcs')) === 65, 'NPCs: 65'); ok((await cnt('locations')) === 50, 'Locations: 50'); ok((await cnt('factions')) === 18, 'Factions: 18');
-  ok((await cnt('maps')) === 11, 'Maps: 11'); ok((await cnt('adventures')) === 19, 'Adventures: 19 (side adventures, lair, solo entries, Night 3, Night 7 climax, 6 seeds)'); ok((await cnt('readaloud')) === 58, 'Read-aloud library: 58');
+  ok((await cnt('maps')) === 20, 'Maps: 20'); ok((await cnt('adventures')) === 19, 'Adventures: 19 (side adventures, lair, solo entries, Night 3, Night 7 climax, 6 seeds)'); ok((await cnt('readaloud')) === 58, 'Read-aloud library: 58');
   ok((await cnt('dmguide')) === VJ.dmguide.length, 'DM Guide (dm.md): ' + VJ.dmguide.length + ' sections');
   const openGaps = VJ.gaps.filter(g => !/^resolved/.test(g.status || 'open')).length;
   await tab(v, 'gaps'); ok((await ev(v, () => document.querySelectorAll('tbody tr').length)) === openGaps, `Known gaps shown to the DM: ${openGaps} open by default`);
@@ -57,6 +57,7 @@ module.exports = async function vesperineTests(CTX) {
   ok(/Ledger Bleeds/.test(n7) && /Ending D/.test(n7) && /Hall of Vows/.test(n7), 'Night 7 climax: lair actions, endings and hand-offs (Hall of Vows)');
   await tab(v, 'adventures&f=seed'); ok((await ev(v, () => document.querySelectorAll('[data-aid]').length)) === 6, 'Six adventure seeds');
   await tab(v, 'dmguide'); ok((await ev(v, () => document.body.innerText)).includes('Seats in the Glass'), 'DM guide includes the Seats in the Glass rules');
+  const dob = npc('watchman-dobbs').art.portrait.key; ok(dob && dob === npc('watchman-pirelli').art.portrait.key && VJ.npcs.every(n => (n.art.portrait || n.art.guise)), 'All 65 NPCs have portraits; Dobbs and Pirelli share one image (stored once)');
   await tab(v, 'locations&id=thornwake-ballroom'); ok(/Painted map/i.test(await txt(v, '.ld-detail')) && /Keyed map/i.test(await txt(v, '.ld-detail')) && /hidden from players/i.test(await txt(v, '.ld-detail')), 'DM location page shows the painted map (DM-only at hidden sites) and the keyed map (always DM-only)');
   await tab(v, 'adventures&id=sa3-song-beneath-saltgrave'); ok((await ev(v, () => document.querySelectorAll('[data-enc]').length)) === VJ.adventures[2].encounters.length && /XP/.test(await txt(v, '.ld-detail')), 'Adventure page lists its encounters with XP and 2024 difficulty');
   await tab(v, 'adventures&id=sa1-courting-moot-of-the-honeyhorn-matrons'); await shot(v, 'shot-adventures.png');
@@ -233,6 +234,6 @@ module.exports = async function vesperineTests(CTX) {
   walk(path.join(__dirname, '..', 'art'));
   const pack = JSON.parse(art); const names = files.concat(Object.keys(pack.images));
   const bad = names.filter(f => FORBID.some(t => rx(t).test(f)) || /portrait|guise|spicy|monster|solo/.test(f.replace(/^art\/[^/]+\//, '')));
-  ok(files.length === 213 && bad.length === 0 && files.every(f => /^art\/vesperine-and-the-velvet-marches\/v\/[0-9a-f]{20}\.webp$/.test(f)), 'art/ holds 213 opaque files (art/' + VID + '/v/<hash>.webp); art pack keys are opaque; no true names in any path');
+  ok(files.length === 252 && bad.length === 0 && files.every(f => /^art\/vesperine-and-the-velvet-marches\/v\/[0-9a-f]{20}\.webp$/.test(f)), 'art/ holds 252 opaque files (art/' + VID + '/v/<hash>.webp); art pack keys are opaque; no true names in any path');
   ok(!fs.existsSync(path.join(__dirname, '..', 'art', OLD)) && !fs.existsSync(path.join(__dirname, '..', 'campaigns', OLD + '.dmatlas-art.json')), 'Old true-name art paths are gone');
 };

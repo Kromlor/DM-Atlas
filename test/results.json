@@ -1,6 +1,6 @@
 {
-  "when": "2026-10-11T00:10:31.775Z",
-  "pass": 296,
+  "when": "2026-10-11T00:28:35.373Z",
+  "pass": 297,
   "fail": 0,
   "results": [
     {
@@ -1031,7 +1031,7 @@
     {
       "group": "Vesperine: library, id migration, separate data, art pack",
       "ok": true,
-      "msg": "Art pack import stores 213 images in IndexedDB; re-importing replaces them (still 213)"
+      "msg": "Art pack import stores 252 images in IndexedDB; re-importing replaces them (still 252)"
     },
     {
       "group": "Vesperine: library, id migration, separate data, art pack",
@@ -1061,7 +1061,7 @@
     {
       "group": "Vesperine: every record type is surfaced",
       "ok": true,
-      "msg": "Maps: 11"
+      "msg": "Maps: 20"
     },
     {
       "group": "Vesperine: every record type is surfaced",
@@ -1081,7 +1081,7 @@
     {
       "group": "Vesperine: every record type is surfaced",
       "ok": true,
-      "msg": "Known gaps shown to the DM: 11 open by default"
+      "msg": "Known gaps shown to the DM: 8 open by default"
     },
     {
       "group": "Vesperine: every record type is surfaced",
@@ -1122,6 +1122,11 @@
       "group": "Vesperine: every record type is surfaced",
       "ok": true,
       "msg": "DM guide includes the Seats in the Glass rules"
+    },
+    {
+      "group": "Vesperine: every record type is surfaced",
+      "ok": true,
+      "msg": "All 65 NPCs have portraits; Dobbs and Pirelli share one image (stored once)"
     },
     {
       "group": "Vesperine: every record type is surfaced",
@@ -1251,7 +1256,7 @@
     {
       "group": "Vesperine player window: player-safe + revealed only, opaque art names",
       "ok": true,
-      "msg": "No DM-only text in the player window (435 passages: NPC secrets/motives/tells/triggers, DM notes, solution, clues, riddle answers, clock, endings, adventures, bestiary, sidebars, DM maps, gaps, dm.md)"
+      "msg": "No DM-only text in the player window (436 passages: NPC secrets/motives/tells/triggers, DM notes, solution, clues, riddle answers, clock, endings, adventures, bestiary, sidebars, DM maps, gaps, dm.md)"
     },
     {
       "group": "Vesperine player window: player-safe + revealed only, opaque art names",
@@ -1431,7 +1436,7 @@
     {
       "group": "Vesperine art files: opaque names in the repo",
       "ok": true,
-      "msg": "art/ holds 213 opaque files (art/vesperine-and-the-velvet-marches/v/<hash>.webp); art pack keys are opaque; no true names in any path"
+      "msg": "art/ holds 252 opaque files (art/vesperine-and-the-velvet-marches/v/<hash>.webp); art pack keys are opaque; no true names in any path"
     },
     {
       "group": "Vesperine art files: opaque names in the repo",

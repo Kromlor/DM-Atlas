@@ -9,7 +9,7 @@ DM Atlas starts with **No campaign selected**. Pick a campaign on the Campaigns 
 ## Bundled campaigns
 - **Hollowmere Year One** — `campaigns/hollowmere-year-one.dmatlas.json`.
 - **Vesperine & the Velvet Marches** (world: Carnelia; gateway: the Oathless Glass; main mystery: *The Black Kiss*; by DnD Bot). Campaign id `vesperine-and-the-velvet-marches`, file `campaigns/vesperine-and-the-velvet-marches.dmatlas.json`. It is built from DnD Bot's canonical **DM Atlas export** (`/workspace/dnd-world/dm-atlas-export/`) and uses the export's record ids. It includes:
-  - 65 NPCs, 50 locations and 18 factions, cross-linked. There are 11 maps: ASCII maps, plus painted player-view maps with no labels, plus keyed schematic maps that are always DM-only.
+  - 65 NPCs, 50 locations and 18 factions, cross-linked. There are 20 maps: ASCII maps, plus painted player-view maps with no labels, plus keyed schematic maps that are always DM-only.
   - The Black Kiss mystery board: suspects; 40 clues, each with where it is found and which suspect it points to; red herrings; riddles; the timeline; a 7-night clock the DM advances (saved per campaign); endings.
   - 19 adventures and 76 encounters. The adventures are the side adventures, the Thornwake lair, the solo entries, the Night 3 assassin, the Night 7 climax at the Hall of Vows (with lair actions and endings) and 6 adventure seeds.
   - Fights above the 2024 High budget are marked **☠ Deadly: flee or bargain** and list their ways out.
@@ -40,7 +40,7 @@ In the solo reader, **Group table mode** hides endings and riddle answers until 
 
 ## Vesperine art (portraits, monster art, solo-book pictures)
 Every served or bundled image has an **opaque file name** (`v/<20 hex chars>`, a salted hash). No true name appears in a file name, path, `src`, `alt` or `title`. In the player window, the alt text is the name the players know. The images are kept out of `index.html`. Load them in either of two ways:
-1. **Art pack (works anywhere, including file://).** Go to Campaigns → **🖼 Import art pack** and pick `campaigns/vesperine-and-the-velvet-marches.dmatlas-art.json` (8.3 MB, 213 WebP images). The images are stored in this browser (IndexedDB). Re-importing replaces them.
+1. **Art pack (works anywhere, including file://).** Go to Campaigns → **🖼 Import art pack** and pick `campaigns/vesperine-and-the-velvet-marches.dmatlas-art.json` (11.9 MB, 252 WebP images). The images are stored in this browser (IndexedDB). Re-importing replaces them.
 2. **Art folder (automatic over http/https, e.g. GitHub Pages).** The images load from `art/vesperine-and-the-velvet-marches/v/<hash>.webp` with no import needed.
 
 Imported pack images win over the folder.
