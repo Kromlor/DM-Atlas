@@ -32,7 +32,7 @@ function validateCampaignDoc(d) {
   ['sessions', 'npcs', 'locations', 'bestiary', 'items', 'tables', 'secrets', 'overview', 'sections'].forEach(k => { if (d[k] !== undefined && !Array.isArray(d[k])) errs.push('"' + k + '" must be a list.'); });
   if (errs.length) return { errs };
   const doc = deepClone(d);
-  const clean = o => { if (Array.isArray(o)) o.forEach(clean); else if (o && typeof o === 'object') Object.keys(o).forEach(k => { if (k === 'html' && typeof o[k] === 'string') o[k] = sanitizeHTML(o[k]); else clean(o[k]); }); };
+  const clean = o => { if (Array.isArray(o)) o.forEach(clean); else if (o && typeof o === 'object') Object.keys(o).forEach(k => { if (/html$/i.test(k) && typeof o[k] === 'string') o[k] = sanitizeHTML(o[k]); else clean(o[k]); }); };
   clean(doc);
   doc.app = 'DM Atlas'; doc.version = 1; delete doc.bundled;
   return { errs: [], doc };
@@ -149,10 +149,10 @@ VIEWS.campaigns = {
       <p class="muted">Each campaign keeps its own party, combat, notes and saves. Switching never mixes them.</p>
       <div class="campgrid">${(() => { const s = LS.get(K.camp(null), null); return `<article class="campcard parch none ${!act ? 'active' : ''}"><h3 class="deco">No campaign</h3><p class="muted small">Empty scratch table</p><p>Run without a campaign: lessons, rules, references and tools all work. Characters and fights you add are kept on a separate scratch table that never mixes with a campaign.</p><p class="small">${s && s.party.length ? 'Scratch table: ' + s.party.length + ' characters' : 'Scratch table is empty'}</p><div class="btnrow">${!act ? '<span class="pill on">▶ Selected now</span>' : '<button data-none>Use no campaign</button>'}<button data-blank>✚ Start a blank campaign</button></div></article>`; })()}${all.map(c => { const s = LS.get(K.camp(c.id), null); return `<article class="campcard parch ${c.id === act ? 'active' : ''}"><h3 class="deco">${esc(c.title)}</h3><p class="muted small">${c.bundled ? 'Bundled with DM Atlas' : 'Imported ' + (c.importedAt ? new Date(c.importedAt).toLocaleDateString() : '')}${c.system ? ' · ' + esc(c.system) : ''}</p>
         <p>${esc((c.summary || '').slice(0, 260))}</p>
-        <div class="facts small">${['sessions', 'npcs', 'locations', 'bestiary'].map(k => `<div><span>${k}</span><b>${(c[k] || []).length}</b></div>`).join('')}<div><span>handbook</span><b>${c.handbook && c.handbook.sections ? c.handbook.sections.length : 0}</b></div></div>
+        <div class="facts small">${(c.structured ? ['npcs', 'locations', 'adventures', 'bestiary', 'readAloud'] : ['sessions', 'npcs', 'locations', 'bestiary']).map(k => `<div><span>${k === 'readAloud' ? 'read-alouds' : k}</span><b>${(c[k] || []).length}</b></div>`).join('')}<div><span>handbook</span><b>${c.handbook && c.handbook.sections ? c.handbook.sections.length : 0}</b></div></div>
         ${c.art ? `<p class="small artstat" data-artc="${esc(c.id)}">🖼 Art: checking…</p>` : ''}
         <p class="small">${s ? `Your progress: ${s.party.length} characters · last played ${fmtTime(s.updatedAt)}` : 'Not started yet'}</p>
-        <div class="btnrow">${c.id === act ? '<span class="pill on">▶ Running now</span><button data-open>Open guide</button>' : `<button class="primary" data-run="${esc(c.id)}">Run this campaign</button>`}<button data-exp="${esc(c.id)}">⬇ Export</button>${c.handbook ? `<button data-hb="${esc(c.id)}">👁 Player handbook</button>` : ''}${c.bundled ? '' : `<button class="danger" data-rm="${esc(c.id)}">Remove</button>`}</div></article>`; }).join('')}</div>
+        <div class="btnrow">${c.id === act ? '<span class="pill on">▶ Running now</span><button data-open>Open guide</button>' : `<button class="primary" data-run="${esc(c.id)}">Run this campaign</button>`}<button data-exp="${esc(c.id)}">⬇ Export</button>${c.handbook ? `<button data-hb="${esc(c.id)}">👁 Player handbook</button>` : ''}${c.bundled ? '' : `<button class="danger" data-rm="${esc(c.id)}">Remove</button>`}${c.overridesBundled ? `<button data-revert="${esc(c.id)}">Revert to bundled version</button>` : ''}</div>${c.overridesBundled ? `<p class="small muted">Updated by import (data ${esc(c.generated || '')}; bundled ${esc(c.bundledGenerated || '')}). Your progress is kept either way.</p>` : ''}${c.staleOverride ? `<p class="small muted">An older imported update (${esc(c.staleOverride)}) is ignored because this app bundles newer data.</p>` : ''}</article>`; }).join('')}</div>
       <details class="parch pad"><summary><b>How campaign import works</b></summary>
         <ul><li><b>DM Atlas campaign JSON</b> (<code>"format": "dm-atlas-campaign"</code>): full structure — sessions with scenes and encounters, NPCs, locations, bestiary stat blocks, items, tables, secrets and an optional player handbook. Download the template to start one.</li>
         <li><b>HTML or Markdown</b> (.html, .htm, .md): DM Atlas splits the document by its headings and guesses each section's type from its title (Session…, Cast/NPCs, Places, Bestiary, Items, Secrets). You review and adjust before anything is saved. All scripts, event handlers, styles, forms, images and embedded content are removed.</li>
@@ -170,6 +170,7 @@ VIEWS.campaigns = {
     $('[data-imjson]', el).onclick = () => pickFiles('.json,application/json', false, async files => importCampaignJSON(await readFileText(files[0]), files[0].name));
     $('[data-imhtml]', el).onclick = () => pickFiles('.html,.htm,.md,.markdown,.txt,text/html,text/markdown', true, async files => importDocs(files));
     $('[data-imart]', el).onclick = pickArtPack;
+    $$('[data-revert]', el).forEach(b => b.onclick = async () => { if (await confirmBox('Revert to the bundled version?', '<p>This removes the imported update and goes back to the campaign data bundled with DM Atlas. Your party, combat, notes, reveals and clock are kept.</p>', 'Revert')) { Library.revert(b.dataset.revert); Sync.post({ t: 'library' }); Store.fresh(); renderChrome(); renderView(); } });
     $$('[data-artc]', el).forEach(async p => {
       const c = Library.get(p.dataset.artc); const n = await ArtStore.count(c.id);
       const f = !n && location.protocol.startsWith('http') && await ArtStore.folderAvailable(c);
@@ -201,8 +202,52 @@ async function importCampaignJSON(text, fname) {
   const { errs, doc } = validateCampaignDoc(d);
   if (errs.length) { openModal({ title: 'Not imported', html: `<ul class="errs">${errs.map(e => `<li>${esc(e)}</li>`).join('')}</ul><p>Nothing was changed.</p>` }); return null; }
   const exists = Library.get(doc.id);
-  const ok = await confirmBox('Import “' + esc(doc.title) + '”?', `<table class="tbl sum">${['sessions', 'npcs', 'locations', 'bestiary', 'items', 'tables', 'secrets'].map(k => `<tr><th>${k}</th><td>${(doc[k] || []).length}</td></tr>`).join('')}<tr><th>Player handbook</th><td>${doc.handbook && doc.handbook.sections ? doc.handbook.sections.length + ' sections' : 'none'}</td></tr></table>${exists ? `<p>A campaign with the id “${esc(doc.id)}” already exists${exists.bundled ? ' (bundled)' : ''}; this one will be added as a separate copy.</p>` : ''}<p>HTML inside the file has been sanitized.</p>`, 'Import');
-  if (!ok) return null;
+  const counts = `<table class="tbl sum">${['sessions', 'npcs', 'locations', 'adventures', 'bestiary', 'readAloud', 'items', 'tables', 'secrets'].filter(k => (doc[k] || []).length || k === 'npcs').map(k => `<tr><th>${k}</th><td>${(doc[k] || []).length}</td></tr>`).join('')}<tr><th>Player handbook</th><td>${doc.handbook && doc.handbook.sections ? doc.handbook.sections.length + ' sections' : 'none'}</td></tr></table>`;
+  if (exists) {
+    const d = campaignDiff((validateCampaignDoc(deepClone(exists)).doc) || exists, doc);   /* compare like with like: both sanitized */
+    const choice = await new Promise(res => {
+      const m = openModal({ title: 'Update “' + exists.title + '”?', wide: true, cls: 'import-update', onClose: () => res(null), html: `<p>A campaign with the id <code>${esc(doc.id)}</code> is already in your library${exists.bundled ? ' (bundled)' : ''}. Updating it in place replaces its content record by record (matched by id) and <b>keeps your progress</b>: party, combat, notes, reveals, the clock, found clues and hidden NPCs.</p>
+        ${exists.generated || doc.generated ? `<p class="small">Current version: ${esc(exists.generated || 'unknown')} → this file: ${esc(doc.generated || 'unknown')}</p>` : ''}
+        <p class="diff-total"><b class="add">+${d.total.added} added</b> · <b class="chg">~${d.total.changed} changed</b> · <b class="rem">−${d.total.removed} removed</b> · ${d.total.same} unchanged</p>
+        <div class="tablewrap"><table class="tbl sum diff"><thead><tr><th>Records</th><th>Added</th><th>Changed</th><th>Removed</th><th>Unchanged</th></tr></thead><tbody>${d.rows.map(r => `<tr><th>${esc(r.name)}</th><td>${r.added}</td><td>${r.changed}</td><td>${r.removed}</td><td>${r.same}</td></tr>`).join('')}</tbody></table></div>
+        ${d.fields.length ? `<p class="small">Other changed fields: ${d.fields.map(esc).join(', ')}</p>` : ''}
+        ${doc.generated && exists.generated && doc.generated < exists.generated ? '<p class="callout warn small">This file is older than the version you have.</p>' : ''}
+        <p class="small">HTML inside the file has been sanitized.</p>
+        <div class="btnrow"><button class="primary" data-k="update">Update in place</button><button data-k="copy">Add as a separate copy</button><button data-k="cancel">Cancel</button></div>` });
+      $$('[data-k]', m.body).forEach(b => b.onclick = () => { const k = b.dataset.k; m.onClose = null; m.close(); res(k === 'cancel' ? null : k); });
+    });
+    if (!choice) return null;
+    if (choice === 'update') {
+      const saved = Library.upsert(doc); if (!saved) return null;
+      Sync.post({ t: 'library' }); renderChrome();
+      toast(`Updated “${saved.title}”: +${d.total.added} added, ~${d.total.changed} changed, −${d.total.removed} removed. Your progress was kept.`, 'good', 6000);
+      if (Store.cid === saved.id) { Store.fresh(); renderView(); } else switchCampaign(saved.id);
+      return Object.assign({}, Library.get(saved.id) || saved, { _diff: d });
+    }
+  } else {
+    const ok = await confirmBox('Import “' + esc(doc.title) + '”?', counts + '<p>HTML inside the file has been sanitized.</p>', 'Import');
+    if (!ok) return null;
+  }
   const saved = Library.add(doc); if (!saved) return null;
   Sync.post({ t: 'library' }); switchCampaign(saved.id); return saved;
 }
+/* Record-by-id comparison of two campaign docs (for the import preview). */
+function campaignDiff(a, b) {
+  const idOf = x => x && (x.id || x.slug || x.anchor || x.npc || x.title || x.name);
+  const colls = [['npcs'], ['locations'], ['adventures'], ['bestiary'], ['readAloud'], ['factions'], ['maps'], ['gaps'], ['sessions'], ['items'], ['tables'], ['secrets'], ['dmguide'], ['overview'],
+    ['mystery', 'clues'], ['mystery', 'suspects'], ['mystery', 'riddles'], ['mystery', 'endings'], ['solo', 'adventures'], ['handbook', 'sections']];
+  const get = (o, p) => p.reduce((x, k) => (x || {})[k], o);
+  const rows = []; const total = { added: 0, changed: 0, removed: 0, same: 0 };
+  colls.forEach(p => {
+    const A = get(a, p), B = get(b, p); if (!Array.isArray(A) && !Array.isArray(B)) return;
+    const ma = new Map((A || []).map(x => [idOf(x), x])), mb = new Map((B || []).map(x => [idOf(x), x]));
+    const r = { name: p.join('.'), added: 0, changed: 0, removed: 0, same: 0 };
+    mb.forEach((x, k) => { if (!ma.has(k)) r.added++; else if (JSON.stringify(ma.get(k)) !== JSON.stringify(x)) r.changed++; else r.same++; });
+    ma.forEach((x, k) => { if (!mb.has(k)) r.removed++; });
+    if (r.added + r.changed + r.removed + r.same) { rows.push(r); ['added', 'changed', 'removed', 'same'].forEach(k => { total[k] += r[k]; }); }
+  });
+  const skip = new Set(['app', 'version', 'bundled', 'overridesBundled', 'bundledGenerated', 'staleOverride', 'importedAt', 'generated', 'source', 'counts', 'facts'].concat(colls.map(p => p[0])));
+  const fields = [...new Set(Object.keys(a).concat(Object.keys(b)))].filter(k => !skip.has(k) && JSON.stringify(a[k]) !== JSON.stringify(b[k]));
+  return { rows, total, fields };
+}
+

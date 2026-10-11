@@ -79,6 +79,7 @@ async function importArtPack(text, fname) {
   const c = Library.get(d.campaignId);
   try {
     const entries = Object.entries(d.images).map(([k, v]) => [k, b64ToBlob(v)]);
+    await ArtStore.clear(d.campaignId);   /* re-importing a regenerated pack replaces the old images (idempotent) */
     const n = await ArtStore.putMany(d.campaignId, entries);
     ArtStore.reset(d.campaignId);
     Sync.post({ t: 'art', cid: d.campaignId });
@@ -104,8 +105,32 @@ function npcArtKey(n, mode, st) {
   return n.portrait ? 'portrait/' + n.slug : null;
 }
 
+/* ---------- reveals (three-way visibility: player / gated until revealed / DM only) ---------- */
+function isRevealed(key, st) {
+  st = st || Store.state; if (!key || !st) return false;
+  if (st.reveals && st.reveals[key]) return true;
+  return key.startsWith('npc:') && !!npcView(key.slice(4), st).revealed;   /* older saves kept the NPC reveal in npcView */
+}
+function setReveal(key, on) {
+  Store.mutate(s => { s.reveals = Object.assign({}, s.reveals || {}); if (on) s.reveals[key] = true; else delete s.reveals[key]; if (key.startsWith('npc:') && s.npcView && s.npcView[key.slice(4)]) { s.npcView = Object.assign({}, s.npcView); s.npcView[key.slice(4)] = Object.assign({}, s.npcView[key.slice(4)], { revealed: !!on }); } }, 'reveal');
+}
+/* What the player window shows for one NPC of a structured campaign (doc.player.npcs entry). */
+function playerFace(p, st) {
+  const v = npcView(p.id, st); const rev = p.gate && isRevealed(p.gate, st) ? p.rev : null;
+  let img = p.img; let name = p.name; const aliases = (p.aliases || []).slice();
+  if (rev) { if (rev.name) { aliases.unshift(p.name); name = rev.name; } if (rev.img) img = rev.img; (rev.aliases || []).forEach(a => aliases.push(a)); }
+  if (p.spicy && v.spicyPlayer && (!p.spicy.gated || rev)) img = p.spicy.key;
+  return { name, img, aliases: aliases.filter(a => a !== name), altImg: rev && rev.altImg, ra: rev ? rev.ra : [], revealed: !!rev, hidden: !!v.hidden };
+}
+/* DM-side portrait for a structured NPC record: the preferred alternate unless the DM switched to standard. */
+function dmPortrait(n, st) {
+  const v = npcView(n.id, st); const a = n.art || {};
+  if (a.spicy && a.spicy.key && !v.std) return a.spicy.key;
+  return (a.portrait && a.portrait.key) || (a.guise && a.guise.key) || null;
+}
+
 /* ---------- SRD 5.2.1 creature references inside campaign text ---------- */
-function srdMonsterByName(name) { const n = String(name).toLowerCase(); return SRD.monsters.find(m => m.name.toLowerCase() === n) || null; }
+function srdMonsterByName(name) { const lc = x => String(x).toLowerCase().replace(/’/g, "'"); const n = lc(name); return SRD.monsters.find(m => lc(m.name) === n) || null; }
 function linkSRD(root, c) {
   if (!c || !c.srdRefs) return;
   $$('.rich em, .rich i', root).forEach(e => {

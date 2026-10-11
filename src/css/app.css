@@ -499,3 +499,73 @@ button.srdref:hover{background:rgba(90,45,130,.1)}
 .face h4{margin:0 0 4px;color:var(--purple)}
 .face p{margin:0 0 6px}
 @media (max-width:1100px){.npc-top{grid-template-columns:1fr}}
+/* ---------- structured campaigns (visibility, mystery board, adventures) ---------- */
+.vis{display:inline-block;font-size:12px;font-weight:600;font-family:system-ui,sans-serif;font-variant:normal;border-radius:10px;padding:1px 8px;vertical-align:middle;white-space:nowrap;letter-spacing:0;text-transform:none}
+.vis-player{background:#dfeed7;color:#245a24;border:1px solid #9cc58f}
+.vis-gated{background:#fbecc4;color:#7a4c00;border:1px solid #e0b75a}
+.vis-revealed{background:#ebe0f7;color:var(--purple);border:1px solid var(--purple-hi)}
+.vis-dm{background:#f7dcd6;color:var(--red);border:1px solid #e3a99f}
+.atl-dl{display:grid;grid-template-columns:minmax(120px,170px) 1fr;gap:4px 12px;margin:6px 0 12px}
+.atl-dl dt{font-weight:700;color:var(--ink-2)}
+.atl-dl dd{margin:0}
+.atl-dl ul{margin:0;padding-left:18px}
+.ld-detail h3{margin:14px 0 4px;border-bottom:1px solid var(--parch-3);padding-bottom:2px}
+a.xref{color:var(--purple);text-decoration:none;border-bottom:1px dotted var(--purple)}
+.tgl.reveal{font-size:15px}
+.tgl.reveal.on b{color:var(--purple)}
+.ra-card{background:rgba(255,255,255,.35);border:1px solid var(--parch-3);border-radius:8px;padding:6px 12px;margin:8px 0}
+.subtabs.mys{margin:6px 0 12px;border-radius:8px;border:1px solid var(--parch-3)}
+.subtabs.mys button{background:transparent;border:1px solid transparent;border-radius:6px;padding:4px 10px;cursor:pointer;color:var(--ink);font-size:15px}
+.subtabs.mys button.on{background:var(--purple);color:#fff}
+.suspects{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.suspect{background:rgba(255,255,255,.4);border:1px solid var(--parch-3);border-radius:10px;padding:10px}
+.suspect.killer{border:2px solid var(--red)}
+.suspect h3{margin:2px 0 6px;font-size:18px}
+.suspect .artbox{margin-bottom:6px}
+.pill.bad{background:#f7dcd6;border-color:var(--red);color:var(--red)}
+.tbl.clues tr.found td{background:rgba(47,107,47,.08)}
+.tbl.clues tr.hl td{outline:2px solid var(--amber)}
+.timeline-dl{display:grid;grid-template-columns:minmax(110px,160px) 1fr;gap:6px 14px}
+.timeline-dl dt{font-weight:700;color:var(--purple)}
+.timeline-dl dd{margin:0}
+.clock-head{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:6px 0}
+.clock-now{display:flex;flex-direction:column;align-items:center;background:var(--purple);color:#fff;border-radius:12px;padding:4px 16px;line-height:1.1}
+.clock-now b{font-size:34px}
+.clock{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:10px}
+.night{border:1px solid var(--parch-3);border-radius:10px;padding:8px 12px;background:rgba(255,255,255,.35)}
+.night.now{border:2px solid var(--purple);background:#efe3fb}
+.night.past{opacity:.6}
+.night h4{margin:0 0 4px}
+.enc.variant{margin-left:18px;border-left:3px solid var(--parch-3);padding-left:8px}
+.scene{border-top:1px solid var(--parch-3);padding:6px 0}
+.ov-cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;margin:12px 0}
+.ov-card{display:flex;flex-direction:column;gap:2px;text-align:left;background:rgba(255,255,255,.45);border:1px solid var(--brass);border-radius:10px;padding:10px 12px;cursor:pointer;color:var(--ink);font-size:15px}
+.ov-card b{font-size:17px;color:var(--purple)}
+.ov-card:hover{background:rgba(199,154,69,.25)}
+.reveal-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:4px 16px;margin:6px 0 12px}
+.reveal-row{display:flex;gap:8px;align-items:center}
+.place-card{background:rgba(255,255,255,.35);border:1px solid var(--parch-3);border-radius:8px;padding:6px 12px;margin:6px 0}
+.place-card h4{margin:2px 0}
+.artbox.primer-face{max-width:420px}
+pre.asciimap.big{font-size:13px}
+.diff-total .add{color:var(--green)}.diff-total .chg{color:var(--amber)}.diff-total .rem{color:var(--red)}
+.pill.sev{text-transform:uppercase;font-size:12px}
+tr.sev-high .pill.sev{background:#f7dcd6;border-color:var(--red)}
+tr.sev-medium .pill.sev{background:#fbecc4}
+.row.wrap{flex-wrap:wrap;gap:8px}
+/* round 3: deadly encounters, painted maps, objects */
+.enc.deadly{background:#2a0f12;color:#f6e7e3;border-left:6px solid #e0303a}
+.enc.deadly .muted{color:#d9b9b4}
+.deadly-banner{background:#e0303a;color:#fff;border-radius:6px;padding:8px 12px;margin:6px 0}
+.deadly-banner b{font-size:16px;letter-spacing:.02em}
+.deadly-banner .escapes{margin:6px 0 0 18px;padding:0}
+.deadly-banner .escapes li{margin:2px 0}
+.deadly-banner .escapes::before{content:'Ways out:';display:block;font-weight:700;margin-left:-18px}
+.dl-tag{color:#b3141f;font-weight:700}
+.artbox.mapimg,.artbox.painted-map{max-width:100%;margin:8px 0}
+.artbox.mapimg img,.artbox.painted-map img{width:100%;height:auto;aspect-ratio:auto;object-fit:contain}
+.place-card .artbox.painted-map{max-width:640px}
+.obj-cards{display:flex;flex-wrap:wrap;gap:12px}
+.obj-cards .artbox{width:260px}
+tr.gap-resolved td{opacity:.7}
+.srow.on .dl-tag{color:#ffd6d6}

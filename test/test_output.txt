@@ -222,6 +222,7 @@
   ✔ Malicious HTML sanitized: no script ran, no handlers/iframes/forms kept
   ✔ HTML + Markdown split by headings into sessions and NPCs: The Drowned Village / Beneath the Waves / The Market Theft / Into the Sewers
   ✔ Rendering imported content runs no scripts
+  ✔ Re-importing the unchanged bundled file (same id) previews +0 added · ~0 changed · −0 removed
   ✔ Exported campaigns/hollowmere-year-one.dmatlas.json re-imports as a DM Atlas campaign (5 sessions, 11 NPCs, 7 creatures, 10 handbook sections)
   ✔ Switching back to Hollowmere restores its own party
 
@@ -231,46 +232,109 @@
   ✔ Player window has no DM navigation or search
   ✔ No JavaScript errors during the http test run
 
-■ Vesperine & the Velvet Marches: library, tabs and data
+■ Vesperine: library, id migration, separate data, art pack
   ✔ Fresh start is still "No campaign selected"
-  ✔ Vesperine is listed in the campaign library and not auto-selected
-  ✔ Switching to Vesperine shows an empty, separate party
+  ✔ Vesperine is listed in the library (export id "vesperine-and-the-velvet-marches") and not auto-selected
+  ✔ Progress saved under the old campaign id is migrated to the export id
   ✔ Hollowmere and Vesperine keep separate saved data
-  ✔ Art pack import stores 180 images in IndexedDB (25 portraits, 8 guises, 3 alternates, 128 monsters, 16 solo)
+  ✔ Art pack import stores 213 images in IndexedDB; re-importing replaces them (still 213)
   ✔ Campaign card shows the art status
-  ✔ Overview shows Carnelia, the Oathless Glass, The Black Kiss and the 2024 / SRD 5.2.1 rules note
-  ✔ Chapters tab lists 12 chapters/parts
-  ✔ Chapter text renders (SRD creature links where names match)
-  ✔ Locations tab lists 20 places
-  ✔ NPCs tab lists 40 NPCs
-  ✔ DM sees the true form and the human guise (from the imported pack)
-  ✔ Bestiary tab has 128 creatures
-  ✔ Bestiary search filters (2 match "wax")
-  ✔ Stat block with actions, lore and tactics shows
-  ✔ Wax Cherub added to the tracker with AC 12, HP 5, initiative +2 and its Wax Arrow attack
-  ✔ Attack flow hits the Vesperine monster and applies damage (Longsword 1 + 3 → 5 to 1 HP)
-  ✔ The monster's own attack opens in the attack flow
+
+■ Vesperine: every record type is surfaced
+  ✔ Overview: world, gateway, main adventure, 2024 / SRD 5.2.1 and the export validator result
+  ✔ NPCs: 65
+  ✔ Locations: 50
+  ✔ Factions: 18
+  ✔ Maps: 11
+  ✔ Adventures: 19 (side adventures, lair, solo entries, Night 3, Night 7 climax, 6 seeds)
+  ✔ Read-aloud library: 58
+  ✔ DM Guide (dm.md): 13 sections
+  ✔ Known gaps shown to the DM: 11 open by default
+  ✔ All 41 gaps, resolved ones with their resolution
+  ✔ Bestiary: 128 stat blocks
+  ✔ SRD 5.2.1 creatures cited: 28, all with stat blocks
+  ✔ Encounters across adventures: 76
+  ✔ Over-budget fights are flagged "Deadly: flee or bargain" with their escape options (13 across the campaign)
+  ✔ Night 7 climax: lair actions, endings and hand-offs (Hall of Vows)
+  ✔ Six adventure seeds
+  ✔ DM guide includes the Seats in the Glass rules
+  ✔ DM location page shows the painted map (DM-only at hidden sites) and the keyed map (always DM-only)
+  ✔ Adventure page lists its encounters with XP and 2024 difficulty
+  ✔ Faction page lists its members
+  ✔ Maps show the ASCII map
+  ✔ Location page: public description, DM notes, NPCs and clues found there
+
+■ Vesperine mystery board
+  ✔ Suspects board: 6 suspects, the killer marked for the DM
+  ✔ Clue table: 40 clues
+  ✔ Each clue shows where it is found and which suspect it points to
+  ✔ Filter by suspect (23 clues point to Thessaly)
+  ✔ Marking a clue found is saved with the campaign
+  ✔ Red herrings: 6
+  ✔ Riddles: 6, answers folded away
+  ✔ Timeline: 21 events with visibility
+  ✔ Endings: 4 plus the fey endgame
+  ✔ 7-night clock
+  ✔ Advancing the clock to Night 3 is saved per campaign (survives reload)
+
+■ Vesperine encounters, NPC stat blocks and the attack flow
+  ✔ Encounter "The whole clan" adds 1 Honeyhorn Matron (Bestiary block) + 5 Ogres (SRD 5.2.1) with AC/HP
+  ✔ SRD Ogres come with 2024 stats and attacks
+  ✔ NPC creatures use their cited stat block (Kray → Bandit Captain) with the book's note as a reminder
+  ✔ Attack flow hits a Vesperine bestiary monster and applies damage (5 → 1 HP)
+  ✔ A Vesperine monster's own attack opens in the attack flow
 
 ■ Vesperine solo gamebook reader
   ✔ Solo Book lists 5 adventures
-  ✔ Begin opens entry 1
-  ✔ Clicking a "go to 2" link turns to entry 2 (lys-2)
+  ✔ Clicking a "go to N" link turns to that entry (lys-2)
   ✔ Back returns to the previous entry
-  ✔ Group table mode hides the endings until the DM chooses to show them
 
-■ Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen
-  ✔ Player window shows 14 player sections (incl. Faces and Places)
-  ✔ No secret agendas, murder solution, Parts 6–8 secrets or bestiary text in the player window (checked 133 passages)
-  ✔ Player faces show human guises for all 8 fey and no true-form or pin-up portraits (25 portraits)
-  ✔ Disguised fey appear under their alias
-  ✔ Reveal toggle switches the player portrait to true form and shows the reveal read-aloud
-  ✔ Other fey stay disguised
-  ✔ DM default is the alternate (pin-up) portrait; players see the standard one
-  ✔ DM can toggle to the standard portrait
-  ✔ Pin-up reaches the player window only after the DM explicitly chooses it (with confirmation)
-  ✔ Turning it off removes it from the player window
+■ Vesperine player window: player-safe + revealed only, opaque art names
+  ✔ No true names, gated aliases or spoiler terms anywhere in the player window (text, attributes, image src/alt/title, loaded URLs; 53 terms)
+  ✔ No DM-only text in the player window (435 passages: NPC secrets/motives/tells/triggers, DM notes, solution, clues, riddle answers, clock, endings, adventures, bestiary, sidebars, DM maps, gaps, dm.md)
+  ✔ Faces: 64 player-visible NPCs (the DM-only NPC is excluded)
+  ✔ Every player image uses an opaque id (no names in src or data attributes, no title)
+  ✔ Image alt text is the name the players know (public alias)
+  ✔ The 6 disguised fey show their mortal-guise portrait, never the true form
+  ✔ The disguised assassin appears only under her cover name with her cover portrait
+  ✔ A reveal-gated portrait (Thessaly's revealed form) stays hidden until its reveal
+  ✔ No pin-up portrait in the player window by default
+  ✔ Caelum's mortal guise (a gated alias) is not shown before the reveal
+  ✔ Places: 46 player-visible locations (hidden sites excluded)
+  ✔ Painted maps show on player-visible places; Thornwake's painting and every keyed schematic map stay DM-only
+  ✔ Factions: 16 public factions (2 DM-only excluded)
+  ✔ Timeline: only the 3 player-visible events
+  ✔ Read-alouds: 33 player-safe (reveals hidden, rules sidebars DM-only)
+  ✔ Object portraits: the Oathless Glass is shown to players
+  ✔ No adventure teasers until the DM teases one
+
+■ Vesperine reveals, per record type
+  ✔ NPC reveal: true name, true-form portrait and the reveal read-aloud reach the player window
+  ✔ Other disguised fey stay in guise
+  ✔ The revealed read-aloud also appears in the player Read-Alouds
+  ✔ Alias reveal (from the reveal panel): Caelum's mortal guise name and portrait appear
+  ✔ Revealed-form portrait replaces the public one only after the reveal (Thessaly)
+  ✔ Read-aloud reveal (from the Read-Aloud library) shows that reveal to players
+  ✔ Adventure tease: title and hook only, never the DM situation
+  ✔ DM default for Valentin is the alternate (pin-up) portrait
+  ✔ Players see the standard portrait
+  ✔ The pin-up reaches players only after the DM explicitly chooses it (with confirmation)
+  ✔ A gated pin-up (Nocturne) shows only after reveal + explicit choice
   ✔ Hide toggle removes an NPC from the player window
+  ✔ Un-revealing hides Nocturne again; still no leaks for the fey that remain disguised
+  ✔ No errors in the player window
+
+■ Vesperine re-import by id keeps the DM's progress
+  ✔ Import preview reports added / changed / removed records by id (+1 / ~1 / −1)
+  ✔ Update in place: same id, records replaced, no duplicate campaign
+  ✔ Party, notes, reveals, clock, found clues and hidden NPCs are preserved
+  ✔ Re-importing the same file is idempotent (+0 / ~0 / −0)
+  ✔ Revert to bundled keeps the progress too
   ✔ No JavaScript errors in the Vesperine run
+
+■ Vesperine art files: opaque names in the repo
+  ✔ art/ holds 213 opaque files (art/vesperine-and-the-velvet-marches/v/<hash>.webp); art pack keys are opaque; no true names in any path
+  ✔ Old true-name art paths are gone
 
 ■ file:// (opened straight from disk)
   ✔ file:// route #/screen renders
@@ -283,4 +347,4 @@
   ℹ file:// cross-window sync in this headless Chrome: worked (not promised; documented in Monitor Setup)
   ✔ No JavaScript errors on file://
 
-244 passed, 0 failed
+296 passed, 0 failed

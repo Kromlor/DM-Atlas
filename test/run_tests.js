@@ -357,9 +357,12 @@ async function fresh(p) { await ev(p, () => { localStorage.clear(); }); await p.
     ok(ev2.sessions.length === 4 && ev2.npcs.includes('Mother Ysolde') && ev2.npcs.includes('Pim the Pickpocket'), 'HTML + Markdown split by headings into sessions and NPCs: ' + ev2.sessions.join(' / '));
     await ev(p, () => { location.hash = '#/guide/campaign?tab=sessions'; }); await sleep(300); ok(!(await ev(p, () => window.__pwned)), 'Rendering imported content runs no scripts');
     const hjson = fs.readFileSync(path.join(__dirname, '..', 'campaigns', 'hollowmere-year-one.dmatlas.json'), 'utf8');
-    cj = ev(p, t => window.DMAtlas.importCampaignJSON(t, 'hollowmere-year-one.dmatlas.json').then(d => d && { id: d.id, s: d.sessions.length, n: d.npcs.length, b: d.bestiary.length, hb: d.handbook.sections.length }), hjson); await sleep(300); await p.click('.modal [data-ok]'); const hj = await cj; await sleep(200);
+    cj = ev(p, t => window.DMAtlas.importCampaignJSON(t, 'hollowmere-year-one.dmatlas.json').then(d => d && { id: d.id, s: d.sessions.length, n: d.npcs.length, b: d.bestiary.length, hb: d.handbook.sections.length }), hjson); await sleep(300);
+    ok(/\+0 added · ~0 changed · −0 removed/.test(await txt(p, '.modal .diff-total')), 'Re-importing the unchanged bundled file (same id) previews +0 added · ~0 changed · −0 removed');
+    await p.click('.modal [data-k="update"]'); const hj = await cj; await sleep(200);
     ok(hj && hj.s === 5 && hj.n === 11 && hj.b === 7 && hj.hb === 10, 'Exported campaigns/hollowmere-year-one.dmatlas.json re-imports as a DM Atlas campaign (5 sessions, 11 NPCs, 7 creatures, 10 handbook sections)');
-    // switching
+    // switching (updating in place made Hollowmere active; step away first)
+    await ev(p, id => window.DMAtlas.switchCampaign(id), tid); await sleep(200);
     await H.go(p, 'campaigns'); await clickSel(p, '[data-run="hollowmere-year-one"]'); await sleep(200);
     ok(/Hollowmere Year One/.test(await txt(p, '#hdr')) && (await ev(p, () => window.DMAtlas.Store.fresh().party.length)) === hollowParty, 'Switching back to Hollowmere restores its own party');
     await shot(p, 'shot-campaigns.png');

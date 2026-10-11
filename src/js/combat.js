@@ -40,12 +40,12 @@ const Combat = {
     return out;
   },
   findCreature(name) {
-    const c = Store.campaign(); const n = String(name).toLowerCase().trim();
+    const c = Store.campaign(); const n = String(name).toLowerCase().replace(/’/g, "'").trim(); const lc = x => String(x).toLowerCase().replace(/’/g, "'");
     const sing = n.replace(/ies$/, 'y').replace(/s$/, '');
-    const b = c && (c.bestiary || []).find(x => x.ac !== undefined && [n, sing].includes(x.name.toLowerCase()));
+    const b = c && (c.bestiary || []).find(x => x.ac !== undefined && [n, sing].includes(lc(x.name)));
     if (b) return { name: b.name, ac: b.ac, hp: b.hp, init: b.init, res: b.res || '', vul: b.vul || '', imm: b.imm || '', attacks: this.parseAttacks((b.sections || []).flatMap(s => s.entries.map(e => e.name + '. ' + e.text))), src: 'campaign' };
     const alias = c && c.srdRefs && (c.srdRefs[n] || c.srdRefs[sing]);
-    const m = SRD.monsters.find(x => [n, sing, String(alias || '').toLowerCase()].includes(x.name.toLowerCase()));
+    const m = SRD.monsters.find(x => [n, sing, lc(alias || '')].includes(lc(x.name)));
     if (m) return { name: m.name, ac: m.ac, hp: m.hp, init: m.init, res: m.res, vul: m.vul, imm: m.imm, attacks: this.parseAttacks(m.lines), src: 'srd' };
     return null;
   },
@@ -54,15 +54,18 @@ const Combat = {
     const added = []; const missing = [];
     Store.mutate(st => {
       foes.forEach(f => {
-        const cr = this.findCreature(f.name);
+        /* f = { count, name } or { count, stat, label, note }: stat = the stat block to use, label = what to call it (e.g. an NPC using an SRD block). */
+        const cr = f.stat !== null && (f.stat || f.name) ? this.findCreature(f.stat || f.name) : null;
+        const base = f.label || (cr ? cr.name : f.name);
         const n = Math.max(1, int0(f.count) || 1);
-        const existing = st.combat.combatants.filter(c => c.group === (cr ? cr.name : f.name)).length;
+        const existing = st.combat.combatants.filter(c => c.group === base).length;
         for (let i = 0; i < n; i++) {
-          const label = (cr ? cr.name : f.name) + (n > 1 || existing ? ' ' + (existing + i + 1) : '');
-          const c = this.newCombatant(cr ? { name: label, group: cr.name, ac: cr.ac, hp: cr.hp, maxHp: cr.hp, initBonus: String(cr.init || '').replace('−', '-').replace('+', ''), res: cr.res, vul: cr.vul, imm: cr.imm, attacks: cr.attacks } : { name: label, group: f.name });
+          const label = base + (n > 1 || existing ? ' ' + (existing + i + 1) : '');
+          const extra = { reminders: [f.label && cr && f.label !== cr.name ? 'Uses the ' + cr.name + ' stat block (' + (cr.src === 'srd' ? 'SRD 5.2.1' : 'campaign bestiary') + ').' : '', f.note || ''].filter(Boolean).join(' ') };
+          const c = this.newCombatant(Object.assign(cr ? { name: label, group: base, ac: cr.ac, hp: cr.hp, maxHp: cr.hp, initBonus: String(cr.init || '').replace('−', '-').replace('+', ''), res: cr.res, vul: cr.vul, imm: cr.imm, attacks: cr.attacks } : { name: label, group: base }, extra));
           st.combat.combatants.push(c); added.push(label);
         }
-        if (!cr) missing.push(f.name);
+        if (!cr) missing.push(base);
       });
     }, 'add-foes');
     toast('Added to the Initiative Tracker: ' + added.join(', ') + (missing.length ? '. Fill in AC/HP for: ' + missing.join(', ') : ''), missing.length ? 'warn' : 'good', 4500);

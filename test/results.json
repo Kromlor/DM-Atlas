@@ -1,6 +1,6 @@
 {
-  "when": "2026-10-10T23:35:30.097Z",
-  "pass": 244,
+  "when": "2026-10-11T00:10:31.775Z",
+  "pass": 296,
   "fail": 0,
   "results": [
     {
@@ -976,6 +976,11 @@
     {
       "group": "Campaign library: import JSON, HTML, Markdown; switching",
       "ok": true,
+      "msg": "Re-importing the unchanged bundled file (same id) previews +0 added · ~0 changed · −0 removed"
+    },
+    {
+      "group": "Campaign library: import JSON, HTML, Markdown; switching",
+      "ok": true,
       "msg": "Exported campaigns/hollowmere-year-one.dmatlas.json re-imports as a DM Atlas campaign (5 sessions, 11 NPCs, 7 creatures, 10 handbook sections)"
     },
     {
@@ -1004,94 +1009,224 @@
       "msg": "No JavaScript errors during the http test run"
     },
     {
-      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "group": "Vesperine: library, id migration, separate data, art pack",
       "ok": true,
       "msg": "Fresh start is still \"No campaign selected\""
     },
     {
-      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "group": "Vesperine: library, id migration, separate data, art pack",
       "ok": true,
-      "msg": "Vesperine is listed in the campaign library and not auto-selected"
+      "msg": "Vesperine is listed in the library (export id \"vesperine-and-the-velvet-marches\") and not auto-selected"
     },
     {
-      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "group": "Vesperine: library, id migration, separate data, art pack",
       "ok": true,
-      "msg": "Switching to Vesperine shows an empty, separate party"
+      "msg": "Progress saved under the old campaign id is migrated to the export id"
     },
     {
-      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "group": "Vesperine: library, id migration, separate data, art pack",
       "ok": true,
       "msg": "Hollowmere and Vesperine keep separate saved data"
     },
     {
-      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "group": "Vesperine: library, id migration, separate data, art pack",
       "ok": true,
-      "msg": "Art pack import stores 180 images in IndexedDB (25 portraits, 8 guises, 3 alternates, 128 monsters, 16 solo)"
+      "msg": "Art pack import stores 213 images in IndexedDB; re-importing replaces them (still 213)"
     },
     {
-      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "group": "Vesperine: library, id migration, separate data, art pack",
       "ok": true,
       "msg": "Campaign card shows the art status"
     },
     {
-      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "group": "Vesperine: every record type is surfaced",
       "ok": true,
-      "msg": "Overview shows Carnelia, the Oathless Glass, The Black Kiss and the 2024 / SRD 5.2.1 rules note"
+      "msg": "Overview: world, gateway, main adventure, 2024 / SRD 5.2.1 and the export validator result"
     },
     {
-      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "group": "Vesperine: every record type is surfaced",
       "ok": true,
-      "msg": "Chapters tab lists 12 chapters/parts"
+      "msg": "NPCs: 65"
     },
     {
-      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "group": "Vesperine: every record type is surfaced",
       "ok": true,
-      "msg": "Chapter text renders (SRD creature links where names match)"
+      "msg": "Locations: 50"
     },
     {
-      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "group": "Vesperine: every record type is surfaced",
       "ok": true,
-      "msg": "Locations tab lists 20 places"
+      "msg": "Factions: 18"
     },
     {
-      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "group": "Vesperine: every record type is surfaced",
       "ok": true,
-      "msg": "NPCs tab lists 40 NPCs"
+      "msg": "Maps: 11"
     },
     {
-      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "group": "Vesperine: every record type is surfaced",
       "ok": true,
-      "msg": "DM sees the true form and the human guise (from the imported pack)"
+      "msg": "Adventures: 19 (side adventures, lair, solo entries, Night 3, Night 7 climax, 6 seeds)"
     },
     {
-      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "group": "Vesperine: every record type is surfaced",
       "ok": true,
-      "msg": "Bestiary tab has 128 creatures"
+      "msg": "Read-aloud library: 58"
     },
     {
-      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "group": "Vesperine: every record type is surfaced",
       "ok": true,
-      "msg": "Bestiary search filters (2 match \"wax\")"
+      "msg": "DM Guide (dm.md): 13 sections"
     },
     {
-      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "group": "Vesperine: every record type is surfaced",
       "ok": true,
-      "msg": "Stat block with actions, lore and tactics shows"
+      "msg": "Known gaps shown to the DM: 11 open by default"
     },
     {
-      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "group": "Vesperine: every record type is surfaced",
       "ok": true,
-      "msg": "Wax Cherub added to the tracker with AC 12, HP 5, initiative +2 and its Wax Arrow attack"
+      "msg": "All 41 gaps, resolved ones with their resolution"
     },
     {
-      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "group": "Vesperine: every record type is surfaced",
       "ok": true,
-      "msg": "Attack flow hits the Vesperine monster and applies damage (Longsword 1 + 3 → 5 to 1 HP)"
+      "msg": "Bestiary: 128 stat blocks"
     },
     {
-      "group": "Vesperine & the Velvet Marches: library, tabs and data",
+      "group": "Vesperine: every record type is surfaced",
       "ok": true,
-      "msg": "The monster's own attack opens in the attack flow"
+      "msg": "SRD 5.2.1 creatures cited: 28, all with stat blocks"
+    },
+    {
+      "group": "Vesperine: every record type is surfaced",
+      "ok": true,
+      "msg": "Encounters across adventures: 76"
+    },
+    {
+      "group": "Vesperine: every record type is surfaced",
+      "ok": true,
+      "msg": "Over-budget fights are flagged \"Deadly: flee or bargain\" with their escape options (13 across the campaign)"
+    },
+    {
+      "group": "Vesperine: every record type is surfaced",
+      "ok": true,
+      "msg": "Night 7 climax: lair actions, endings and hand-offs (Hall of Vows)"
+    },
+    {
+      "group": "Vesperine: every record type is surfaced",
+      "ok": true,
+      "msg": "Six adventure seeds"
+    },
+    {
+      "group": "Vesperine: every record type is surfaced",
+      "ok": true,
+      "msg": "DM guide includes the Seats in the Glass rules"
+    },
+    {
+      "group": "Vesperine: every record type is surfaced",
+      "ok": true,
+      "msg": "DM location page shows the painted map (DM-only at hidden sites) and the keyed map (always DM-only)"
+    },
+    {
+      "group": "Vesperine: every record type is surfaced",
+      "ok": true,
+      "msg": "Adventure page lists its encounters with XP and 2024 difficulty"
+    },
+    {
+      "group": "Vesperine: every record type is surfaced",
+      "ok": true,
+      "msg": "Faction page lists its members"
+    },
+    {
+      "group": "Vesperine: every record type is surfaced",
+      "ok": true,
+      "msg": "Maps show the ASCII map"
+    },
+    {
+      "group": "Vesperine: every record type is surfaced",
+      "ok": true,
+      "msg": "Location page: public description, DM notes, NPCs and clues found there"
+    },
+    {
+      "group": "Vesperine mystery board",
+      "ok": true,
+      "msg": "Suspects board: 6 suspects, the killer marked for the DM"
+    },
+    {
+      "group": "Vesperine mystery board",
+      "ok": true,
+      "msg": "Clue table: 40 clues"
+    },
+    {
+      "group": "Vesperine mystery board",
+      "ok": true,
+      "msg": "Each clue shows where it is found and which suspect it points to"
+    },
+    {
+      "group": "Vesperine mystery board",
+      "ok": true,
+      "msg": "Filter by suspect (23 clues point to Thessaly)"
+    },
+    {
+      "group": "Vesperine mystery board",
+      "ok": true,
+      "msg": "Marking a clue found is saved with the campaign"
+    },
+    {
+      "group": "Vesperine mystery board",
+      "ok": true,
+      "msg": "Red herrings: 6"
+    },
+    {
+      "group": "Vesperine mystery board",
+      "ok": true,
+      "msg": "Riddles: 6, answers folded away"
+    },
+    {
+      "group": "Vesperine mystery board",
+      "ok": true,
+      "msg": "Timeline: 21 events with visibility"
+    },
+    {
+      "group": "Vesperine mystery board",
+      "ok": true,
+      "msg": "Endings: 4 plus the fey endgame"
+    },
+    {
+      "group": "Vesperine mystery board",
+      "ok": true,
+      "msg": "7-night clock"
+    },
+    {
+      "group": "Vesperine mystery board",
+      "ok": true,
+      "msg": "Advancing the clock to Night 3 is saved per campaign (survives reload)"
+    },
+    {
+      "group": "Vesperine encounters, NPC stat blocks and the attack flow",
+      "ok": true,
+      "msg": "Encounter \"The whole clan\" adds 1 Honeyhorn Matron (Bestiary block) + 5 Ogres (SRD 5.2.1) with AC/HP"
+    },
+    {
+      "group": "Vesperine encounters, NPC stat blocks and the attack flow",
+      "ok": true,
+      "msg": "SRD Ogres come with 2024 stats and attacks"
+    },
+    {
+      "group": "Vesperine encounters, NPC stat blocks and the attack flow",
+      "ok": true,
+      "msg": "NPC creatures use their cited stat block (Kray → Bandit Captain) with the book's note as a reminder"
+    },
+    {
+      "group": "Vesperine encounters, NPC stat blocks and the attack flow",
+      "ok": true,
+      "msg": "Attack flow hits a Vesperine bestiary monster and applies damage (5 → 1 HP)"
+    },
+    {
+      "group": "Vesperine encounters, NPC stat blocks and the attack flow",
+      "ok": true,
+      "msg": "A Vesperine monster's own attack opens in the attack flow"
     },
     {
       "group": "Vesperine solo gamebook reader",
@@ -1101,12 +1236,7 @@
     {
       "group": "Vesperine solo gamebook reader",
       "ok": true,
-      "msg": "Begin opens entry 1"
-    },
-    {
-      "group": "Vesperine solo gamebook reader",
-      "ok": true,
-      "msg": "Clicking a \"go to 2\" link turns to entry 2 (lys-2)"
+      "msg": "Clicking a \"go to N\" link turns to that entry (lys-2)"
     },
     {
       "group": "Vesperine solo gamebook reader",
@@ -1114,69 +1244,199 @@
       "msg": "Back returns to the previous entry"
     },
     {
-      "group": "Vesperine solo gamebook reader",
+      "group": "Vesperine player window: player-safe + revealed only, opaque art names",
       "ok": true,
-      "msg": "Group table mode hides the endings until the DM chooses to show them"
+      "msg": "No true names, gated aliases or spoiler terms anywhere in the player window (text, attributes, image src/alt/title, loaded URLs; 53 terms)"
     },
     {
-      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "group": "Vesperine player window: player-safe + revealed only, opaque art names",
       "ok": true,
-      "msg": "Player window shows 14 player sections (incl. Faces and Places)"
+      "msg": "No DM-only text in the player window (435 passages: NPC secrets/motives/tells/triggers, DM notes, solution, clues, riddle answers, clock, endings, adventures, bestiary, sidebars, DM maps, gaps, dm.md)"
     },
     {
-      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "group": "Vesperine player window: player-safe + revealed only, opaque art names",
       "ok": true,
-      "msg": "No secret agendas, murder solution, Parts 6–8 secrets or bestiary text in the player window (checked 133 passages)"
+      "msg": "Faces: 64 player-visible NPCs (the DM-only NPC is excluded)"
     },
     {
-      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "group": "Vesperine player window: player-safe + revealed only, opaque art names",
       "ok": true,
-      "msg": "Player faces show human guises for all 8 fey and no true-form or pin-up portraits (25 portraits)"
+      "msg": "Every player image uses an opaque id (no names in src or data attributes, no title)"
     },
     {
-      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "group": "Vesperine player window: player-safe + revealed only, opaque art names",
       "ok": true,
-      "msg": "Disguised fey appear under their alias"
+      "msg": "Image alt text is the name the players know (public alias)"
     },
     {
-      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "group": "Vesperine player window: player-safe + revealed only, opaque art names",
       "ok": true,
-      "msg": "Reveal toggle switches the player portrait to true form and shows the reveal read-aloud"
+      "msg": "The 6 disguised fey show their mortal-guise portrait, never the true form"
     },
     {
-      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "group": "Vesperine player window: player-safe + revealed only, opaque art names",
       "ok": true,
-      "msg": "Other fey stay disguised"
+      "msg": "The disguised assassin appears only under her cover name with her cover portrait"
     },
     {
-      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "group": "Vesperine player window: player-safe + revealed only, opaque art names",
       "ok": true,
-      "msg": "DM default is the alternate (pin-up) portrait; players see the standard one"
+      "msg": "A reveal-gated portrait (Thessaly's revealed form) stays hidden until its reveal"
     },
     {
-      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "group": "Vesperine player window: player-safe + revealed only, opaque art names",
       "ok": true,
-      "msg": "DM can toggle to the standard portrait"
+      "msg": "No pin-up portrait in the player window by default"
     },
     {
-      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "group": "Vesperine player window: player-safe + revealed only, opaque art names",
       "ok": true,
-      "msg": "Pin-up reaches the player window only after the DM explicitly chooses it (with confirmation)"
+      "msg": "Caelum's mortal guise (a gated alias) is not shown before the reveal"
     },
     {
-      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "group": "Vesperine player window: player-safe + revealed only, opaque art names",
       "ok": true,
-      "msg": "Turning it off removes it from the player window"
+      "msg": "Places: 46 player-visible locations (hidden sites excluded)"
     },
     {
-      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "group": "Vesperine player window: player-safe + revealed only, opaque art names",
+      "ok": true,
+      "msg": "Painted maps show on player-visible places; Thornwake's painting and every keyed schematic map stay DM-only"
+    },
+    {
+      "group": "Vesperine player window: player-safe + revealed only, opaque art names",
+      "ok": true,
+      "msg": "Factions: 16 public factions (2 DM-only excluded)"
+    },
+    {
+      "group": "Vesperine player window: player-safe + revealed only, opaque art names",
+      "ok": true,
+      "msg": "Timeline: only the 3 player-visible events"
+    },
+    {
+      "group": "Vesperine player window: player-safe + revealed only, opaque art names",
+      "ok": true,
+      "msg": "Read-alouds: 33 player-safe (reveals hidden, rules sidebars DM-only)"
+    },
+    {
+      "group": "Vesperine player window: player-safe + revealed only, opaque art names",
+      "ok": true,
+      "msg": "Object portraits: the Oathless Glass is shown to players"
+    },
+    {
+      "group": "Vesperine player window: player-safe + revealed only, opaque art names",
+      "ok": true,
+      "msg": "No adventure teasers until the DM teases one"
+    },
+    {
+      "group": "Vesperine reveals, per record type",
+      "ok": true,
+      "msg": "NPC reveal: true name, true-form portrait and the reveal read-aloud reach the player window"
+    },
+    {
+      "group": "Vesperine reveals, per record type",
+      "ok": true,
+      "msg": "Other disguised fey stay in guise"
+    },
+    {
+      "group": "Vesperine reveals, per record type",
+      "ok": true,
+      "msg": "The revealed read-aloud also appears in the player Read-Alouds"
+    },
+    {
+      "group": "Vesperine reveals, per record type",
+      "ok": true,
+      "msg": "Alias reveal (from the reveal panel): Caelum's mortal guise name and portrait appear"
+    },
+    {
+      "group": "Vesperine reveals, per record type",
+      "ok": true,
+      "msg": "Revealed-form portrait replaces the public one only after the reveal (Thessaly)"
+    },
+    {
+      "group": "Vesperine reveals, per record type",
+      "ok": true,
+      "msg": "Read-aloud reveal (from the Read-Aloud library) shows that reveal to players"
+    },
+    {
+      "group": "Vesperine reveals, per record type",
+      "ok": true,
+      "msg": "Adventure tease: title and hook only, never the DM situation"
+    },
+    {
+      "group": "Vesperine reveals, per record type",
+      "ok": true,
+      "msg": "DM default for Valentin is the alternate (pin-up) portrait"
+    },
+    {
+      "group": "Vesperine reveals, per record type",
+      "ok": true,
+      "msg": "Players see the standard portrait"
+    },
+    {
+      "group": "Vesperine reveals, per record type",
+      "ok": true,
+      "msg": "The pin-up reaches players only after the DM explicitly chooses it (with confirmation)"
+    },
+    {
+      "group": "Vesperine reveals, per record type",
+      "ok": true,
+      "msg": "A gated pin-up (Nocturne) shows only after reveal + explicit choice"
+    },
+    {
+      "group": "Vesperine reveals, per record type",
       "ok": true,
       "msg": "Hide toggle removes an NPC from the player window"
     },
     {
-      "group": "Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen",
+      "group": "Vesperine reveals, per record type",
+      "ok": true,
+      "msg": "Un-revealing hides Nocturne again; still no leaks for the fey that remain disguised"
+    },
+    {
+      "group": "Vesperine reveals, per record type",
+      "ok": true,
+      "msg": "No errors in the player window"
+    },
+    {
+      "group": "Vesperine re-import by id keeps the DM's progress",
+      "ok": true,
+      "msg": "Import preview reports added / changed / removed records by id (+1 / ~1 / −1)"
+    },
+    {
+      "group": "Vesperine re-import by id keeps the DM's progress",
+      "ok": true,
+      "msg": "Update in place: same id, records replaced, no duplicate campaign"
+    },
+    {
+      "group": "Vesperine re-import by id keeps the DM's progress",
+      "ok": true,
+      "msg": "Party, notes, reveals, clock, found clues and hidden NPCs are preserved"
+    },
+    {
+      "group": "Vesperine re-import by id keeps the DM's progress",
+      "ok": true,
+      "msg": "Re-importing the same file is idempotent (+0 / ~0 / −0)"
+    },
+    {
+      "group": "Vesperine re-import by id keeps the DM's progress",
+      "ok": true,
+      "msg": "Revert to bundled keeps the progress too"
+    },
+    {
+      "group": "Vesperine re-import by id keeps the DM's progress",
       "ok": true,
       "msg": "No JavaScript errors in the Vesperine run"
+    },
+    {
+      "group": "Vesperine art files: opaque names in the repo",
+      "ok": true,
+      "msg": "art/ holds 213 opaque files (art/vesperine-and-the-velvet-marches/v/<hash>.webp); art pack keys are opaque; no true names in any path"
+    },
+    {
+      "group": "Vesperine art files: opaque names in the repo",
+      "ok": true,
+      "msg": "Old true-name art paths are gone"
     },
     {
       "group": "file:// (opened straight from disk)",

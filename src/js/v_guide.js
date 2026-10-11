@@ -102,13 +102,16 @@ VIEWS['guide/campaign'] = {
     if (!c) { el.innerHTML = noCampaignHTML(); bindNoCampaign(el); return; }
     const tab = params.tab || 'overview'; const st = Store.state; const SL = c.sessionLabel || 'Session';
     let body = '';
+    const custom = c.structured && ATLAS_TABS[tab];
     const sel = num(params.i);
     const listDetail = (items, label, renderItem, nameOf = x => x.name || x.title) => {
       if (!items.length) return `<p class="muted">This campaign has no ${label} yet.</p>`;
       const i = sel !== null && items[sel] ? sel : 0;
       return `<div class="ld"><div class="ld-list" data-keep-scroll="ldl">${items.map((x, k) => `<button class="${k === i ? 'on' : ''}" data-i="${k}">${esc(nameOf(x))}</button>`).join('')}</div><div class="ld-detail parch" data-keep-scroll="ldd">${renderItem(items[i], i)}</div></div>`;
     };
-    if (tab === 'overview') {
+    if (custom) {
+      body = custom.html(c, params, st);
+    } else if (tab === 'overview') {
       body = `<div class="parch pad scrolly" data-keep-scroll="ov">
         <h2 class="deco">${esc(c.title)}</h2>${c.subtitle ? `<p class="muted">${esc(c.subtitle)}</p>` : ''}
         ${c.dmWarning ? `<div class="callout warn">${esc(c.dmWarning)}</div>` : ''}
@@ -153,11 +156,13 @@ VIEWS['guide/campaign'] = {
       const hb = c.handbook;
       body = `<div class="parch pad scrolly" data-keep-scroll="hb"><div class="row between"><h2 class="deco">${esc(hb ? hb.title : 'Player handbook')}</h2><button class="primary" data-player>👁 Show player handbook (new window)</button></div>
         <p>The player handbook window shows only player-facing material — no DM secrets, NPC secrets, sessions or bestiary. Drag it to a monitor or TV the players can see.</p>
-        ${hb && hb.sections && hb.sections.length ? `<ol class="toc">${hb.sections.map(s => `<li>${esc(s.title)}</li>`).join('')}</ol>` : '<p class="muted">This campaign has no player-facing handbook. When you import an HTML or Markdown file, mark it as “Player handbook” to fill this.</p>'}</div>`;
+        ${hb && hb.sections && hb.sections.length ? `<ol class="toc">${hb.sections.map(s => `<li>${esc(s.title)}</li>`).join('')}</ol>${c.structured ? atlasRevealPanel(c, st) : ''}` : '<p class="muted">This campaign has no player-facing handbook. When you import an HTML or Markdown file, mark it as “Player handbook” to fill this.</p>'}</div>`;
     }
-    const tabs = CAMP_TABS.slice(); if (c.solo) tabs.splice(tabs.length - 1, 0, ['solo', 'Solo Book']); if (c.sessionLabel) tabs[1] = ['sessions', c.sessionLabel + 's'];
+    let tabs = CAMP_TABS.slice(); if (c.solo) tabs.splice(tabs.length - 1, 0, ['solo', 'Solo Book']); if (c.sessionLabel) tabs[1] = ['sessions', c.sessionLabel + 's'];
+    if (Array.isArray(c.tabs)) tabs = c.tabs.map(k => [k, TAB_LABELS[k] || k]);
     el.innerHTML = `<div class="camp-wrap"><div class="tabs">${tabs.map(([k, t]) => `<button class="${k === tab ? 'on' : ''}" data-tab="${k}">${t}</button>`).join('')}</div><div class="camp-body">${body}</div></div>`;
     $$('[data-tab]', el).forEach(b => b.onclick = () => go('guide/campaign', { tab: b.dataset.tab }));
+    if (custom) { custom.bind(el, c, params); bindXrefs(el); linkSRD(el, c); ArtStore.hydrate(el, c); return; }
     $$('.ld-list button', el).forEach(b => b.onclick = () => go('guide/campaign', { tab, i: b.dataset.i }));
     $$('[data-cur]', el).forEach(b => b.onclick = () => { Store.mutate(s => { s.currentSession = Number(b.dataset.cur); }); renderView(); toast('Current session updated'); });
     $$('[data-loc]', el).forEach(b => b.onclick = () => { Store.mutate(s => { s.location = b.dataset.loc; }); toast('Party location set: ' + b.dataset.loc); });
@@ -165,6 +170,8 @@ VIEWS['guide/campaign'] = {
     $$('[data-addbeast]', el).forEach(b => b.onclick = () => Combat.addFoes([{ count: 1, name: c.bestiary[Number(b.dataset.addbeast)].name }]));
     $$('[data-rolltable]', el).forEach(b => b.onclick = () => { const r = rollExpr('1' + b.dataset.rolltable); b.nextElementSibling.textContent = 'Rolled ' + r.total; });
     const pb = $('[data-player]', el); if (pb) pb.onclick = openPlayerHandbook;
+    if (tab === 'handbook' && c.structured) bindReveals(el);
+    if (tab === 'bestiary' && c.srdCited) { const sb = $('[data-srdcited]', el); if (sb) sb.onclick = () => showSRDCited(c); }
     if (tab === 'npcs') bindNpcControls(el, c);
     if (tab === 'bestiary') bindBestiary(el, c, params);
     if (tab === 'solo') bindSolo(el, c, params);
@@ -210,7 +217,7 @@ function bestiaryHTML(c, items, params) {
   const list = items.map((b, i) => [b, i]).filter(([b]) => (!q || (b.name + ' ' + (b.meta || '') + ' ' + (b.collectionName || '')).toLowerCase().includes(q)) && (!col || String(b.collection) === col));
   const sel = num(params.i); const cur = items[sel !== null && items[sel] ? sel : (list[0] ? list[0][1] : 0)];
   const ci = cur && cols.find(x => x.num === cur.collection);
-  return `<div class="ld"><div class="ld-list wide"><div class="ld-head">${items.length} creatures${c.bestiaryInfo ? ' · ' + esc(c.bestiaryInfo.title) : ''} ${dmBadge()}</div>
+  return `<div class="ld"><div class="ld-list wide"><div class="ld-head">${items.length} creatures${c.bestiaryInfo ? ' · ' + esc(c.bestiaryInfo.title) : ''} ${dmBadge()}${c.srdCited ? ` <button class="mini" data-srdcited>SRD 5.2.1 creatures cited (${c.srdCited.length})</button>` : ''}</div>
     <div class="filters"><input type="search" id="bq" placeholder="Search creatures…" value="${esc(params.q || '')}" data-allow-refresh="1"><select id="bcol"><option value="">All collections</option>${cols.map(x => `<option value="${x.num}" ${String(x.num) === col ? 'selected' : ''}>${x.num}. ${esc(x.name)}</option>`).join('')}</select></div>
     <div class="slist" data-keep-scroll="bl">${list.map(([b, i]) => `<button class="srow ${b === cur ? 'on' : ''}" data-bi="${i}"><b>${esc(b.name)}</b><span class="tags">CR ${esc(b.cr || '')}</span><small>${esc(b.meta || '')}${b.collectionName ? ' · ' + esc(b.collectionName) : ''}</small></button>`).join('') || '<p class="muted pad">No matches.</p>'}</div></div>
     <div class="ld-detail parch" data-keep-scroll="bd">${cur ? beastDetailHTML(cur, items.indexOf(cur), ci) : ''}</div></div>`;
@@ -290,24 +297,54 @@ VIEWS.handbook = {
   title: 'Player Handbook', render(el, params) {
     const c = Store.campaign(); const hb = c && c.handbook;
     if (!hb || !hb.sections || !hb.sections.length) { el.innerHTML = `<div class="parch pad"><h2>No player handbook</h2><p>The active campaign has no player-facing handbook.</p></div>`; return; }
-    /* Player-safe: only handbook sections (audience player) and player-facing location blurbs are read here. */
+    /* Player-safe only: handbook sections (audience player), the precomputed player projection (doc.player) and
+       anything the DM has revealed. Nothing else from the campaign is read here. */
+    const P = c.player || {};
     const secs = hb.sections.filter(s => s.audience !== 'dm');
-    const cur = secs.find(s => s.id === params.s) || secs[0];
-    const places = (c.locations_player || []);
-    const faces = (c.npcs_player || []).filter(n => !npcView(n.slug).hidden);
-    el.innerHTML = `<div class="hb"><nav class="hb-nav">${secs.map(s => `<button class="${s === cur && !String(params.s || '').startsWith('_') ? 'on' : ''}" data-s="${esc(s.id)}">${esc(s.title)}</button>`).join('')}${places.length ? `<button class="${params.s === '_places' ? 'on' : ''}" data-s="_places">Places to Know</button>` : ''}${faces.length ? `<button class="${params.s === '_faces' ? 'on' : ''}" data-s="_faces">${esc(hb.facesTitle || 'Faces You May Meet')}</button>` : ''}</nav>
-      <article class="parch pad scrolly hb-body">${params.s === '_faces' ? facesHTML(hb, faces) : params.s === '_places' ? `<h2 class="deco">Places to Know</h2>${places.map(p => `<h3>${esc(p.name)}</h3><p>${esc(p.text)}</p>`).join('')}` : `${cur === secs[0] ? `<p class="kicker">${esc(hb.kicker || '')}</p><h1 class="deco">${esc(hb.title)}</h1><p class="lead">${esc(hb.lead || '')}</p>` : ''}<h2 class="deco">${esc(cur.title)}</h2>${richHTML(cur.html)}`}</article></div>`;
+    const extra = playerExtras(c, P);
+    const sid = params.s || (secs[0] && secs[0].id);
+    const cur = secs.find(s => s.id === sid);
+    const ex = extra.find(x => x.id === sid);
+    let body;
+    if (ex) body = ex.html();
+    else { const s0 = cur || secs[0]; body = `${s0 === secs[0] ? `<p class="kicker">${esc(hb.kicker || '')}</p><h1 class="deco">${esc(hb.title)}</h1><p class="lead">${esc(hb.lead || '')}</p>` : ''}<h2 class="deco">${esc(s0.title)}</h2>${withFaces(richHTML(s0.html), P)}`; }
+    const onId = ex ? ex.id : (cur || secs[0]).id;
+    el.innerHTML = `<div class="hb"><nav class="hb-nav">${secs.map(s => `<button class="${s.id === onId ? 'on' : ''}" data-s="${esc(s.id)}">${esc(s.title)}</button>`).join('')}${extra.map(x => `<button class="${x.id === onId ? 'on' : ''}" data-s="${x.id}">${esc(x.title)}</button>`).join('')}</nav>
+      <article class="parch pad scrolly hb-body">${body}</article></div>`;
     $$('[data-s]', el).forEach(b => b.onclick = () => go('handbook', { s: b.dataset.s }));
     ArtStore.hydrate(el, c);
   }
 };
-/* Player-safe NPC cards: only the computed portrait key and public text are written into the page. */
-function facesHTML(hb, faces) {
-  const groups = [...new Set(faces.map(n => n.group || ''))];
-  return `<h2 class="deco">${esc(hb.facesTitle || 'Faces You May Meet')}</h2>${groups.map(g => `${g ? `<h3>${esc(g)}</h3>` : ''}<div class="faces">${faces.filter(n => (n.group || '') === g).map(n => {
-    const v = npcView(n.slug); const masked = n.guise && !v.revealed;
-    return `<div class="face" data-face="${esc(n.slug)}">${artBox(npcArtKey(n, 'player'), masked ? n.name : (n.revealedName || n.name), 'portrait')}<div><h4>${esc(masked ? n.name : (n.revealedName || n.name))}</h4><p>${esc(masked ? n.text : (n.revealedText || n.text))}</p>${!masked && n.guise && n.revealHTML ? `<details open><summary>${esc(n.revealTitle || 'Revealed')}</summary>${richHTML(n.revealHTML)}</details>` : ''}</div></div>`;
-  }).join('')}</div>`).join('')}`;
+function playerExtras(c, P) {
+  const st = Store.state; const out = [];
+  const faces = (P.npcs || []).map(p => [p, playerFace(p, st)]).filter(([, f]) => !f.hidden);
+  const legacyPlaces = c.locations_player || [];
+  if (faces.length) out.push({ id: '_faces', title: c.handbook.facesTitle || 'Faces You May Meet', html: () => facesHTML(c, faces) });
+  if ((P.locations || []).length) out.push({ id: '_places', title: 'Places to Know', html: () => `<h2 class="deco">Places to Know</h2>${[...new Set(P.locations.map(l => l.type || ''))].map(t => `<h3>${esc(placeType(t))}</h3>${P.locations.filter(l => (l.type || '') === t).map(l => `<div class="place-card"><h4>${esc(l.name)}${l.parent ? ` <small class="muted">· ${esc(l.parent)}</small>` : ''}</h4>${l.text ? `<p>${esc(l.text)}</p>` : ''}${l.travel ? `<p class="small muted">Travel from Vesperine: ${esc(l.travel)}</p>` : ''}${l.painted ? artBox(l.painted, l.name, 'painted-map') : ''}</div>`).join('')}`).join('')}` });
+  else if (legacyPlaces.length) out.push({ id: '_places', title: 'Places to Know', html: () => `<h2 class="deco">Places to Know</h2>${legacyPlaces.map(p => `<h3>${esc(p.name)}</h3><p>${esc(p.text)}</p>`).join('')}` });
+  if ((P.objects || []).length) out.push({ id: '_objects', title: 'Objects of Note', html: () => `<h2 class="deco">Objects of Note</h2><div class="obj-cards">${P.objects.map(o => artBox(o.img, o.name, '', esc(o.name))).join('')}</div>` });
+  if ((P.factions || []).length) out.push({ id: '_factions', title: 'Factions & Powers', html: () => `<h2 class="deco">Factions & Powers</h2>${P.factions.map(f => `<div class="place-card"><h4>${esc(f.name)} <small class="muted">· ${esc(f.kind || '')}</small></h4><p>${esc(f.summary || '')}</p></div>`).join('')}` });
+  if ((P.timeline || []).length) out.push({ id: '_timeline', title: 'What Everyone Knows', html: () => `<h2 class="deco">What Everyone Knows</h2><dl class="timeline-dl">${P.timeline.map(t => `<dt>${esc(t.when)}</dt><dd>${esc(t.event)}</dd>`).join('')}</dl>` });
+  const ras = (P.readAloud || []).filter(r => !r.gate || isRevealed(r.gate, st));
+  if (ras.length) out.push({ id: '_readaloud', title: 'Read-Alouds', html: () => `<h2 class="deco">Read-Alouds</h2>${ras.map(r => `<section class="ra-card" data-ra="${esc(r.t)}">${r.title ? `<h4>${esc(r.title)}</h4>` : ''}${richHTML(r.html)}</section>`).join('')}` });
+  const teas = (P.teasers || []).filter(t => isRevealed(t.gate, st));
+  if (teas.length) out.push({ id: '_rumors', title: 'Rumored Adventures', html: () => `<h2 class="deco">Rumored Adventures</h2>${teas.map(t => `<div class="place-card"><h4>${esc(t.title)}</h4><p class="small muted">${[t.levels ? 'Levels ' + t.levels : '', t.region || ''].filter(Boolean).map(esc).join(' · ')}</p>${t.hook ? `<p>${esc(t.hook)}</p>` : ''}${t.tone ? `<p class="small"><i>${esc(t.tone)}</i></p>` : ''}</div>`).join('')}` });
+  return out;
+}
+function placeType(t) { return ({ world: 'The World', city: 'The City', district: 'Districts of Vesperine', region: 'Regions of the Velvet Marches', site: 'Sites', dungeon: 'Dangerous Places', route: 'Roads & Routes', 'feywild-site': 'Beyond the Veil' })[t] || (t ? t[0].toUpperCase() + t.slice(1) : 'Other'); }
+/* Primer images are [[face:token]] markers; each becomes the player-safe portrait of that NPC (or nothing if hidden). */
+function withFaces(html, P) {
+  return html.replace(/<p>\s*\[\[face:([a-z0-9]+)\]\]\s*<\/p>|\[\[face:([a-z0-9]+)\]\]/g, (m, a, b) => {
+    const p = (P.npcs || []).find(x => x.t === (a || b)); if (!p) return '';
+    const f = playerFace(p, Store.state); return f.hidden || !f.img ? '' : artBox(f.img, f.name, 'portrait primer-face');
+  }).replace(/<p>\s*\[\[art:([a-z0-9]+)\]\]\s*<\/p>|\[\[art:([a-z0-9]+)\]\]/g, (m, a, b) => {
+    const x = (P.primerArt || []).find(y => y.t === (a || b)); return x ? artBox(x.img, x.alt, 'painted-map') : '';
+  });
+}
+/* Player-safe NPC cards: only the computed portrait key, the shown name/aliases and public text are written into the page. */
+function facesHTML(c, faces) {
+  const groups = [...new Set(faces.map(([p]) => p.group || ''))];
+  return `<h2 class="deco">${esc(c.handbook.facesTitle || 'Faces You May Meet')}</h2>${groups.map(g => `${g ? `<h3>${esc(g)}</h3>` : ''}<div class="faces">${faces.filter(([p]) => (p.group || '') === g).map(([p, f]) => `<div class="face" data-face="${esc(p.t)}">${f.img ? artBox(f.img, f.name, 'portrait') : ''}<div><h4>${esc(f.name)}</h4>${f.aliases.length ? `<p class="small">Also known as ${f.aliases.map(esc).join(', ')}</p>` : ''}${p.role ? `<p class="small muted">${esc(p.role)}${p.place ? ' · ' + esc(p.place) : ''}</p>` : ''}${p.text ? `<p>${esc(p.text)}</p>` : ''}${p.allure ? `<p class="small">💋 ${esc(p.allure)}</p>` : ''}${f.altImg ? artBox(f.altImg, f.aliases[f.aliases.length - 1] || f.name, 'portrait guise') : ''}${f.ra.map(r => `<details open><summary>${esc(r.title)}</summary>${richHTML(r.html)}</details>`).join('')}</div></div>`).join('')}</div>`).join('')}`;
 }
 
 /* ---------- Lessons ---------- */
@@ -395,3 +432,8 @@ VIEWS['guide/roll'] = {
     $$('[data-path]', el).forEach(b => b.onclick = () => go('guide/roll', { path: b.dataset.path }));
   }
 };
+
+function showSRDCited(c) {
+  const md = openModal({ title: 'SRD 5.2.1 creatures this campaign cites', wide: true, html: `<p class="muted">2024 stat blocks from the SRD 5.2.1 used by encounters and NPCs.</p><div class="tablewrap"><table class="tbl"><thead><tr><th>Creature</th><th>CR</th><th>XP</th><th>Used by</th><th></th></tr></thead><tbody>${c.srdCited.map((r, i) => { const m = srdMonsterByName(r.name); return `<tr><td>${esc(r.name)}</td><td>${esc(r.cr)}</td><td>${r.xp}</td><td class="small">${esc((r.usedBy || []).map(u => u.split('#')[1]).join(', ') || '—')}</td><td>${m ? `<button class="mini" data-srdi="${i}">Stat block</button>` : '<span class="muted">not in SRD data</span>'}</td></tr>`; }).join('')}</tbody></table></div>` });
+  $$('[data-srdi]', md.body).forEach(b => b.onclick = () => { const r = c.srdCited[Number(b.dataset.srdi)]; md.close(); showSRDMonster(srdMonsterByName(r.name), r.name); });
+}

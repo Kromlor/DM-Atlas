@@ -1,128 +1,238 @@
-/* Vesperine & the Velvet Marches: second bundled campaign, NPC portraits/reveals, bestiary, solo reader, art pack. */
-module.exports = async function vesperineTests(T) {
-  const { H, browser, ok, group, ev, txt, clickSel, shot, sleep, fs, path, openAttack, fillAttack, closeModals } = T;
-  const VID = 'vesperine-velvet-marches';
-  const VJ = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'campaigns', VID + '.dmatlas.json'), 'utf8'));
-  group('Vesperine & the Velvet Marches: library, tabs and data');
+/* Vesperine & the Velvet Marches (DnD Bot's DM Atlas export): structured campaign, three-way visibility, reveals,
+   opaque art names, re-import by id, art pack. */
+module.exports = async function vesperineTests(CTX) {
+  const { H, browser, ok, group, ev, txt, clickSel, shot, sleep, fs, path, openAttack, fillAttack, closeModals } = CTX;
+  const VID = 'vesperine-and-the-velvet-marches', OLD = 'vesperine-velvet-marches';
+  const CAMP = path.join(__dirname, '..', 'campaigns', VID + '.dmatlas.json');
+  const VJ = JSON.parse(fs.readFileSync(CAMP, 'utf8'));
+  const FORBID = JSON.parse(fs.readFileSync(path.join(__dirname, 'vesperine_forbidden.json'), 'utf8'));
+  const rx = t => new RegExp('(^|[^A-Za-z])' + t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '([^A-Za-z]|$)', 'i');
+  const tab = async (p, q) => { await ev(p, q => { location.hash = '#/guide/campaign?tab=' + q; }, q); await sleep(450); };
+  const npc = id => VJ.npcs.find(n => n.id === id);
+
+  group('Vesperine: library, id migration, separate data, art pack');
   const v = await H.page(browser); await ev(v, () => localStorage.clear()); await v.reload({ waitUntil: 'load' }); await sleep(400);
   ok(await ev(v, () => window.DMAtlas.Store.cid === null), 'Fresh start is still "No campaign selected"');
   await H.go(v, 'campaigns');
-  ok(await ev(v, id => !!document.querySelector('[data-run="' + id + '"]') && !document.querySelector('.campcard.active [data-exp="' + id + '"]'), VID), 'Vesperine is listed in the campaign library and not auto-selected');
-  // campaign data stays separate
-  await clickSel(v, '[data-run="hollowmere-year-one"]'); await sleep(200);
-  await ev(v, () => window.DMAtlas.Store.mutate(s => { s.party.push(normalizePC({ name: 'Hollow Hal' })); }));
-  await H.go(v, 'campaigns'); await clickSel(v, `[data-run="${VID}"]`); await sleep(300);
-  ok(/Vesperine/.test(await txt(v, '#hdr')) && (await ev(v, () => window.DMAtlas.Store.fresh().party.length)) === 0, 'Switching to Vesperine shows an empty, separate party');
-  await ev(v, () => window.DMAtlas.Store.mutate(s => { s.party.push(normalizePC({ name: 'Velvet Vee' })); }));
+  ok(await ev(v, id => !!document.querySelector('[data-run="' + id + '"]'), VID), 'Vesperine is listed in the library (export id "' + VID + '") and not auto-selected');
+  // progress saved under the old bundled id moves to the export id
+  await ev(v, o => { localStorage.setItem('dmatlas.camp.' + o, JSON.stringify({ schema: 1, campaignId: o, party: [{ name: 'Old Olga' }], combat: { combatants: [] }, npcView: { 'nocturne-vesh': { revealed: false } } })); localStorage.setItem('dmatlas.meta', JSON.stringify({ activeCampaignId: o, mode: 'learn' })); }, OLD);
+  await v.reload({ waitUntil: 'load' }); await sleep(500);
+  ok(await ev(v, id => window.DMAtlas.Store.cid === id && window.DMAtlas.Store.state.party[0].name === 'Old Olga' && !localStorage.getItem('dmatlas.camp.vesperine-velvet-marches'), VID), 'Progress saved under the old campaign id is migrated to the export id');
+  await ev(v, () => window.DMAtlas.switchCampaign('hollowmere-year-one')); await sleep(200);
+  await ev(v, () => window.DMAtlas.Store.mutate(s => { s.party = [normalizePC({ name: 'Hollow Hal' })]; }));
+  await ev(v, id => window.DMAtlas.switchCampaign(id), VID); await sleep(300);
   const sep = await ev(v, id => ({ h: JSON.parse(localStorage.getItem('dmatlas.camp.hollowmere-year-one')).party.map(p => p.name), v: JSON.parse(localStorage.getItem('dmatlas.camp.' + id)).party.map(p => p.name) }), VID);
-  ok(sep.h.join() === 'Hollow Hal' && sep.v.join() === 'Velvet Vee', 'Hollowmere and Vesperine keep separate saved data');
-  // art pack import
+  ok(sep.h.join() === 'Hollow Hal' && sep.v.join() === 'Old Olga', 'Hollowmere and Vesperine keep separate saved data');
   const art = fs.readFileSync(path.join(__dirname, '..', 'campaigns', VID + '.dmatlas-art.json'), 'utf8');
-  const nArt = await ev(v, t => window.DMAtlas.importCampaignJSON(t, 'vesperine-velvet-marches.dmatlas-art.json'), art); await sleep(400);
-  const stored = await ev(v, id => window.DMAtlas.ArtStore.count(id), VID);
-  ok(nArt === 180 && stored === 180, 'Art pack import stores ' + stored + ' images in IndexedDB (25 portraits, 8 guises, 3 alternates, 128 monsters, 16 solo)');
+  const nArt = await ev(v, t => window.DMAtlas.importCampaignJSON(t, 'x.dmatlas-art.json'), art); await sleep(300);
+  const nArt2 = await ev(v, t => window.DMAtlas.importCampaignJSON(t, 'x.dmatlas-art.json'), art); await sleep(300);
+  const NART = Object.keys(JSON.parse(art).images).length;
+  ok(NART === 213 && nArt === NART && nArt2 === NART && (await ev(v, id => window.DMAtlas.ArtStore.count(id), VID)) === NART, `Art pack import stores ${NART} images in IndexedDB; re-importing replaces them (still ${NART})`);
   await H.go(v, 'campaigns'); await sleep(400);
-  ok(/180 images stored/.test(await txt(v, `[data-artc="${VID}"]`)), 'Campaign card shows the art status');
-  // overview
-  await ev(v, () => { location.hash = '#/guide/campaign?tab=overview'; }); await sleep(400);
-  const ov = await txt(v, '#view');
-  ok(/Carnelia/.test(ov) && /Oathless Glass/.test(ov) && /The Black Kiss/.test(ov) && /SRD 5\.2\.1/.test(ov), 'Overview shows Carnelia, the Oathless Glass, The Black Kiss and the 2024 / SRD 5.2.1 rules note');
+  ok(new RegExp(NART + ' images stored').test(await txt(v, `[data-artc="${VID}"]`)), 'Campaign card shows the art status');
+
+  group('Vesperine: every record type is surfaced');
+  await tab(v, 'overview'); const ov = await txt(v, '#view');
+  ok(/Carnelia/.test(ov) && /Oathless Glass/.test(ov) && /The Black Kiss/.test(ov) && /SRD 5\.2\.1/.test(ov) && /validator: 0 errors/.test(ov), 'Overview: world, gateway, main adventure, 2024 / SRD 5.2.1 and the export validator result');
   await shot(v, 'shot-vesperine.png');
-  await ev(v, () => { location.hash = '#/guide/campaign?tab=sessions'; }); await sleep(300);
-  const nCh = await ev(v, () => document.querySelectorAll('.ld-list>button').length);
-  ok(nCh === VJ.sessions.length && /Chapters/.test(await txt(v, '.tabs')), 'Chapters tab lists ' + nCh + ' chapters/parts');
-  ok(await ev(v, () => document.querySelectorAll('button.srdref').length) >= 0, 'Chapter text renders (SRD creature links where names match)');
-  await ev(v, () => { location.hash = '#/guide/campaign?tab=locations'; }); await sleep(300);
-  ok(await ev(v, () => document.querySelectorAll('.ld-list>button').length) === VJ.locations.length, 'Locations tab lists ' + VJ.locations.length + ' places');
-  // NPCs
-  const ci = VJ.npcs.findIndex(n => n.slug === 'prince-caelum');
-  await ev(v, i => { location.hash = '#/guide/campaign?tab=npcs&i=' + i; }, ci); await sleep(600);
-  const npcInfo = await ev(v, () => ({ n: document.querySelectorAll('.ld-list>button').length, keys: [...document.querySelectorAll('.ld-detail img[data-art]')].map(i => i.dataset.art), src: (document.querySelector('.ld-detail img[data-art]') || {}).src || '', sec: /Secret/.test(document.querySelector('.ld-detail').innerText) }));
-  ok(npcInfo.n === VJ.npcs.length, 'NPCs tab lists ' + npcInfo.n + ' NPCs');
-  ok(npcInfo.keys.join() === 'portrait/prince-caelum,guise/prince-caelum' && /^blob:/.test(npcInfo.src), 'DM sees the true form and the human guise (from the imported pack)');
-  await shot(v, 'shot-vesperine-npcs.png');
-  // bestiary
-  await ev(v, () => { location.hash = '#/guide/campaign?tab=bestiary'; }); await sleep(500);
-  const bc = await ev(v, () => ({ n: document.querySelectorAll('.slist .srow').length, head: document.querySelector('.ld-head').innerText, sb: !!document.querySelector('.ld-detail .statblock, .ld-detail .sb') }));
-  ok(bc.n === 128 && /128 creatures/.test(bc.head), 'Bestiary tab has 128 creatures');
-  await ev(v, () => { location.hash = '#/guide/campaign?tab=bestiary&q=wax'; }); await sleep(400);
-  const nh = await ev(v, () => document.querySelectorAll('.slist .srow').length);
-  ok(nh > 0 && nh < 128, 'Bestiary search filters (' + nh + ' match "wax")');
-  const vb = VJ.bestiary.findIndex(b => b.name === 'Wax Cherub');
-  await ev(v, i => { location.hash = '#/guide/campaign?tab=bestiary&i=' + i; }, vb); await sleep(500);
-  ok(/Wax Arrow/.test(await txt(v, '.ld-detail')) && /Tactics/i.test(await txt(v, '.ld-detail')), 'Stat block with actions, lore and tactics shows');
-  await shot(v, 'shot-vesperine-bestiary.png');
-  // combat: add from the bestiary and attack it
+  const cnt = async (q) => { await tab(v, q); return ev(v, () => document.querySelectorAll('.slist [data-aid]').length); };
+  ok((await cnt('npcs')) === 65, 'NPCs: 65'); ok((await cnt('locations')) === 50, 'Locations: 50'); ok((await cnt('factions')) === 18, 'Factions: 18');
+  ok((await cnt('maps')) === 11, 'Maps: 11'); ok((await cnt('adventures')) === 19, 'Adventures: 19 (side adventures, lair, solo entries, Night 3, Night 7 climax, 6 seeds)'); ok((await cnt('readaloud')) === 58, 'Read-aloud library: 58');
+  ok((await cnt('dmguide')) === VJ.dmguide.length, 'DM Guide (dm.md): ' + VJ.dmguide.length + ' sections');
+  const openGaps = VJ.gaps.filter(g => !/^resolved/.test(g.status || 'open')).length;
+  await tab(v, 'gaps'); ok((await ev(v, () => document.querySelectorAll('tbody tr').length)) === openGaps, `Known gaps shown to the DM: ${openGaps} open by default`);
+  await tab(v, 'gaps&st=all'); ok((await ev(v, () => document.querySelectorAll('tbody tr').length)) === 41 && /Resolved:/.test(await txt(v, 'tbody')), 'All 41 gaps, resolved ones with their resolution');
+  await tab(v, 'bestiary'); ok((await ev(v, () => document.querySelectorAll('.slist .srow').length)) === 128, 'Bestiary: 128 stat blocks');
+  await clickSel(v, '[data-srdcited]'); ok((await ev(v, () => document.querySelectorAll('.modal tbody tr').length)) === VJ.srdCited.length && (await ev(v, () => document.querySelectorAll('.modal [data-srdi]').length)) === VJ.srdCited.length, 'SRD 5.2.1 creatures cited: ' + VJ.srdCited.length + ', all with stat blocks'); await closeModals(v);
+  const wax = VJ.bestiary.find(b => b.name === 'Wax Cherub');
+  await tab(v, 'bestiary&i=' + VJ.bestiary.indexOf(wax)); await shot(v, 'shot-vesperine-bestiary.png'); await tab(v, 'npcs&id=prince-caelum'); await shot(v, 'shot-vesperine-npcs.png');
+  let total = 0; for (const a of VJ.adventures) total += a.encounters.length; ok(total === 76, 'Encounters across adventures: 76');
+  const deadly = VJ.adventures.flatMap(x => x.encounters.filter(e => e.deadly).map(e => [x.id, e]));
+  await tab(v, 'adventures&id=sa4-the-crimson-vintage');
+  const dz = await ev(v, () => [...document.querySelectorAll('.enc.deadly')].map(e => ({ t: e.querySelector('.deadly-banner') ? e.querySelector('.deadly-banner').innerText : '', n: e.querySelectorAll('.escapes li').length })));
+  const sa4d = VJ.adventures.find(x => x.id === 'sa4-the-crimson-vintage').encounters.filter(e => e.deadly);
+  ok(deadly.length >= 10 && dz.length === sa4d.length && dz.every((d, i) => /Deadly: flee or bargain/i.test(d.t) && d.n === (sa4d[i].escape_options || []).length), `Over-budget fights are flagged "Deadly: flee or bargain" with their escape options (${deadly.length} across the campaign)`);
+  await tab(v, 'adventures&id=night-7-the-seventh-bell'); const n7 = await txt(v, '.ld-detail');
+  ok(/Ledger Bleeds/.test(n7) && /Ending D/.test(n7) && /Hall of Vows/.test(n7), 'Night 7 climax: lair actions, endings and hand-offs (Hall of Vows)');
+  await tab(v, 'adventures&f=seed'); ok((await ev(v, () => document.querySelectorAll('[data-aid]').length)) === 6, 'Six adventure seeds');
+  await tab(v, 'dmguide'); ok((await ev(v, () => document.body.innerText)).includes('Seats in the Glass'), 'DM guide includes the Seats in the Glass rules');
+  await tab(v, 'locations&id=thornwake-ballroom'); ok(/Painted map/i.test(await txt(v, '.ld-detail')) && /Keyed map/i.test(await txt(v, '.ld-detail')) && /hidden from players/i.test(await txt(v, '.ld-detail')), 'DM location page shows the painted map (DM-only at hidden sites) and the keyed map (always DM-only)');
+  await tab(v, 'adventures&id=sa3-song-beneath-saltgrave'); ok((await ev(v, () => document.querySelectorAll('[data-enc]').length)) === VJ.adventures[2].encounters.length && /XP/.test(await txt(v, '.ld-detail')), 'Adventure page lists its encounters with XP and 2024 difficulty');
+  await tab(v, 'adventures&id=sa1-courting-moot-of-the-honeyhorn-matrons'); await shot(v, 'shot-adventures.png');
+  await tab(v, 'factions&id=honeyhorn-clan'); ok(/Big Mother Hulga/.test(await txt(v, '.ld-detail')), 'Faction page lists its members');
+  await tab(v, 'maps&id=map-velvet-marches'); ok(await ev(v, () => !!document.querySelector('.ld-detail pre.asciimap')), 'Maps show the ASCII map');
+  await tab(v, 'locations&id=rosewater-gallery'); ok(/Clues found here/i.test(await txt(v, '.ld-detail')) && /DM notes/.test(await txt(v, '.ld-detail')), 'Location page: public description, DM notes, NPCs and clues found there');
+
+  group('Vesperine mystery board');
+  await tab(v, 'mystery'); ok((await ev(v, () => document.querySelectorAll('.suspect').length)) === 6 && (await ev(v, () => document.querySelectorAll('.suspect.killer').length)) === 1, 'Suspects board: 6 suspects, the killer marked for the DM');
+  await shot(v, 'shot-mystery.png');
+  await tab(v, 'mystery&m=clues'); ok((await ev(v, () => document.querySelectorAll('tbody tr').length)) === 40, 'Clue table: 40 clues');
+  const row = await ev(v, () => [...document.querySelectorAll('tbody tr')[0].cells].map(c => c.innerText));
+  ok(/Rosewater Gallery/.test(row[2]) && /Thessaly Rook/.test(row[4]), 'Each clue shows where it is found and which suspect it points to');
+  const nTh = VJ.mystery.clues.filter(x => (x.points_to_npcs || []).includes('thessaly-rook')).length;
+  await tab(v, 'mystery&m=clues&sus=thessaly-rook'); ok((await ev(v, () => document.querySelectorAll('tbody tr').length)) === nTh, 'Filter by suspect (' + nTh + ' clues point to Thessaly)');
+  await v.click('[data-found="clue-clock-1147"]'); await sleep(300);
+  ok(/1\/40/.test(await txt(v, '#view')) && (await ev(v, () => !!window.DMAtlas.Store.fresh().cluesFound['clue-clock-1147'])), 'Marking a clue found is saved with the campaign');
+  await tab(v, 'mystery&m=herrings'); ok((await ev(v, () => document.querySelectorAll('.camp-body .sec').length)) === 6, 'Red herrings: 6');
+  await tab(v, 'mystery&m=riddles'); ok((await ev(v, () => document.querySelectorAll('.camp-body .sec').length)) === 6 && (await ev(v, () => [...document.querySelectorAll('.camp-body details')].every(d => !d.open))), 'Riddles: 6, answers folded away');
+  await tab(v, 'mystery&m=timeline'); ok((await ev(v, () => document.querySelectorAll('.timeline-dl dt').length)) === VJ.mystery.timeline.length, 'Timeline: ' + VJ.mystery.timeline.length + ' events with visibility');
+  await tab(v, 'mystery&m=endings'); ok((await ev(v, () => document.querySelectorAll('.camp-body .sec').length)) === 4, 'Endings: 4 plus the fey endgame');
+  await tab(v, 'mystery&m=clock'); ok((await ev(v, () => document.querySelectorAll('.night').length)) === 7, '7-night clock');
+  await v.click('[data-clock="1"]'); await sleep(250); await v.click('[data-clock="1"]'); await sleep(250);
+  await v.reload({ waitUntil: 'load' }); await sleep(500); await tab(v, 'mystery&m=clock');
+  ok(/Night\s*3\s*of 7/.test(await txt(v, '.clock-now')) && (await ev(v, () => window.DMAtlas.Store.fresh().clock.night)) === 3, 'Advancing the clock to Night 3 is saved per campaign (survives reload)');
+
+  group('Vesperine encounters, NPC stat blocks and the attack flow');
   await ev(v, () => window.DMAtlas.Store.mutate(s => { s.combat = { combatants: [], round: 1, turn: 0, active: false }; }));
-  await clickSel(v, '.ld-detail [data-addbeast]:not([data-n])'); await sleep(300);
-  const cb = await ev(v, () => window.DMAtlas.Store.fresh().combat.combatants[0]);
-  ok(cb && cb.name === 'Wax Cherub' && cb.ac === 12 && cb.hp === 5 && cb.initBonus === '2' && cb.attacks.some(a => a.name === 'Wax Arrow'), 'Wax Cherub added to the tracker with AC 12, HP 5, initiative +2 and its Wax Arrow attack');
+  await tab(v, 'adventures&id=sa1-courting-moot-of-the-honeyhorn-matrons'); await clickSel(v, '[data-enc="0:0"]'); await sleep(300);
+  let cbs = await ev(v, () => window.DMAtlas.Store.fresh().combat.combatants);
+  const hm = VJ.bestiary.find(b => b.slug === 'honeyhorn-matron');
+  ok(cbs.length === 6 && cbs.filter(c => c.group === 'Ogre').length === 5 && cbs.some(c => c.group === 'Honeyhorn Matron' && c.ac === hm.ac && c.hp === hm.hp), 'Encounter "The whole clan" adds 1 Honeyhorn Matron (Bestiary block) + 5 Ogres (SRD 5.2.1) with AC/HP');
+  ok(cbs.filter(c => c.group === 'Ogre').every(c => c.ac === 11 && c.hp === 68 && c.attacks.length > 0), 'SRD Ogres come with 2024 stats and attacks');
+  await ev(v, () => window.DMAtlas.Store.mutate(s => { s.combat = { combatants: [], round: 1, turn: 0, active: false }; }));
+  const ai = VJ.adventures.findIndex(a => a.id === 'sa3-song-beneath-saltgrave'); const ei = VJ.adventures[ai].encounters.findIndex(e => e.id === 'sa3-e3');
+  await tab(v, 'adventures&id=sa3-song-beneath-saltgrave'); await clickSel(v, `[data-enc="${ai}:${ei}"]`); await sleep(300);
+  cbs = await ev(v, () => window.DMAtlas.Store.fresh().combat.combatants);
+  const kray = cbs.find(c => /Kray/.test(c.name));
+  ok(kray && kray.ac === 15 && /Bandit Captain/.test(kray.reminders) && /HP 71/.test(kray.reminders) && cbs.length === 10, 'NPC creatures use their cited stat block (Kray → Bandit Captain) with the book\'s note as a reminder');
   await H.seedParty(v, 1); await ev(v, () => window.DMAtlas.Combat.addFoes([{ count: 1, name: 'wax cherubs' }])); await sleep(200);
   const wid = await ev(v, () => window.DMAtlas.Store.fresh().combat.combatants[0].id);
   await openAttack(v, 0, 0); await fillAttack(v, { target: 'cb:' + wid, a: 15, dmg: 1 }); await clickSel(v, '#af-apply'); await sleep(200);
-  ok((await ev(v, id => window.DMAtlas.Store.fresh().combat.combatants.find(c => c.id === id).hp, wid)) === 1, 'Attack flow hits the Vesperine monster and applies damage (Longsword 1 + 3 → 5 to 1 HP)');
-  await closeModals(v);
-  await H.go(v, 'combat/tracker'); await sleep(200);
+  ok((await ev(v, id => window.DMAtlas.Store.fresh().combat.combatants.find(c => c.id === id).hp, wid)) === 1, 'Attack flow hits a Vesperine bestiary monster and applies damage (5 → 1 HP)');
+  await closeModals(v); await H.go(v, 'combat/tracker'); await sleep(200);
   const mb = await v.$('[data-matk]'); if (mb) { await mb.click(); await sleep(300); }
-  ok(!!(await v.$('.modal.attack')), 'The monster\'s own attack opens in the attack flow');
-  await closeModals(v);
-  // solo reader
+  ok(!!(await v.$('.modal.attack')), 'A Vesperine monster\'s own attack opens in the attack flow'); await closeModals(v);
+
   group('Vesperine solo gamebook reader');
-  await ev(v, () => { location.hash = '#/guide/campaign?tab=solo'; }); await sleep(400);
-  ok(await ev(v, () => document.querySelectorAll('.solo-doors .door').length) === 5, 'Solo Book lists 5 adventures');
-  await ev(v, () => { location.hash = '#/guide/campaign?tab=solo&adv=0'; }); await sleep(300);
-  await clickSel(v, '.solo-page [data-goto]'); await sleep(300);
-  ok(/^1\b/.test((await txt(v, '.entry-num')).trim()), 'Begin opens entry 1');
+  await tab(v, 'solo'); ok((await ev(v, () => document.querySelectorAll('.solo-doors .door').length)) === 5, 'Solo Book lists 5 adventures');
+  await tab(v, 'solo&adv=0'); await clickSel(v, '.solo-page [data-goto]'); await sleep(300);
   const tgt = await ev(v, () => document.querySelector('.solo-page a.turnto').getAttribute('href').slice(1));
   await v.click('.solo-page a.turnto'); await sleep(400);
-  ok((await ev(v, () => location.hash)).includes('e=' + tgt) && /^2\b/.test((await txt(v, '.entry-num')).trim()), 'Clicking a "go to 2" link turns to entry 2 (' + tgt + ')');
-  await clickSel(v, '[data-back]'); await sleep(300);
-  ok(/^1\b/.test((await txt(v, '.entry-num')).trim()), 'Back returns to the previous entry');
-  const endSec = await ev(v, () => { const b = [...document.querySelectorAll('[data-sec]')].find(x => /Ending/.test(x.textContent)); return b && b.dataset.sec; });
-  await ev(v, s => { location.hash = '#/guide/campaign?tab=solo&adv=0&e=sec' + s; }, endSec); await sleep(300);
-  ok(/Group table mode/.test(await txt(v, '.solo-page')), 'Group table mode hides the endings until the DM chooses to show them');
-  await ev(v, () => { location.hash = '#/guide/campaign?tab=solo&adv=0&e=lys-1'; }); await sleep(400);
-  await shot(v, 'shot-solo.png');
-  // player window
-  group('Vesperine player window: no DM text, guises until revealed, no pin-ups unless chosen');
-  await ev(v, () => { location.hash = '#/guide/campaign?tab=handbook'; }); await sleep(300);
-  const hbT = browser.waitForTarget(t => t.opener() === v.target(), { timeout: 5000 }); await clickSel(v, '[data-player]'); const hp = await (await hbT).page(); await sleep(900);
-  hp._errors = []; hp.on('pageerror', e => hp._errors.push(e.message));
-  let all = ''; const ns = await ev(hp, () => document.querySelectorAll('.hb-nav button').length);
-  for (let i = 0; i < ns; i++) { await ev(hp, i => document.querySelectorAll('.hb-nav button')[i].click(), i); await sleep(150); all += await txt(hp, 'body'); }
-  ok(ns >= 10, 'Player window shows ' + ns + ' player sections (incl. Faces and Places)');
-  const secretBits = [];
-  VJ.npcs.forEach(n => (n.blocks || []).filter(b => b.secret || b.dm).forEach(b => { const t = b.html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim(); if (t.length > 50) secretBits.push(t.slice(10, 60)); }));
-  VJ.secrets.forEach(s => { const t = s.html.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim(); secretBits.push(t.slice(20, 70)); });
-  VJ.bestiary.slice(0, 40).forEach(b => b.tactics && secretBits.push(b.tactics.slice(0, 50)));
+  ok((await ev(v, () => location.hash)).includes('e=' + tgt), 'Clicking a "go to N" link turns to that entry (' + tgt + ')');
+  await clickSel(v, '[data-back]'); await sleep(300); ok(/^1\b/.test((await txt(v, '.entry-num')).trim()), 'Back returns to the previous entry');
+  await tab(v, 'solo&adv=0&e=lys-1'); await sleep(500); await shot(v, 'shot-solo.png');
+
+  group('Vesperine player window: player-safe + revealed only, opaque art names');
+  await ev(v, () => window.DMAtlas.Store.mutate(s => { s.reveals = {}; s.npcView = {}; }));
+  await tab(v, 'handbook');
+  const hbT = browser.waitForTarget(t => t.opener() === v.target(), { timeout: 5000 }); await clickSel(v, '[data-player]'); const hp = await (await hbT).page(); await sleep(1000);
+  hp._errors = []; hp.on('pageerror', e => hp._errors.push(e.message)); hp.on('console', m => { if (m.type() === 'error') hp._errors.push(m.text()); });
+  const collect = async () => { let all = ''; const n = await ev(hp, () => document.querySelectorAll('.hb-nav button').length);
+    for (let i = 0; i < n; i++) { await ev(hp, i => document.querySelectorAll('.hb-nav button')[i].click(), i); await sleep(250);
+      all += await ev(hp, () => { const b = document.body.cloneNode(true); b.querySelectorAll('script').forEach(s => s.remove()); return b.innerText + '\n' + b.outerHTML; }) + '\n'; }
+    all += (await ev(hp, () => performance.getEntriesByType('resource').map(r => r.name).join('\n'))); return all; };
+  const goSec = async id => { await ev(hp, id => { const b = [...document.querySelectorAll('.hb-nav button')].find(x => x.dataset.s === id); b && b.click(); }, id); await sleep(600); };
+  let all = await collect();
+  const leaked = FORBID.filter(t => rx(t).test(all));
+  ok(leaked.length === 0, `No true names, gated aliases or spoiler terms anywhere in the player window (text, attributes, image src/alt/title, loaded URLs; ${FORBID.length} terms)` + (leaked.length ? ' LEAKED: ' + leaked.join(', ') : ''));
+  const dmBits = []; const pick = (s, a = 8, b = 58) => { s = String(s || '').replace(/\s+/g, ' ').trim(); if (s.length > b) dmBits.push(s.slice(a, b)); };
+  VJ.npcs.forEach(n => { pick(n.dmSecret); n.motivations.forEach(x => pick(x, 0, 40)); n.tells.forEach(x => pick(x, 0, 40)); pick(n.trueForm); n.revealTriggers.forEach(x => pick(x, 0, 40)); });
+  VJ.locations.forEach(l => { pick(l.dmNotes); if (l.entry === 'dm_only') pick(l.publicDescription); });
+  pick(VJ.mystery.solution.summary); VJ.mystery.clues.forEach(x => pick(x.name, 0, 40)); VJ.mystery.riddles.forEach(r => pick(r.answer, 0, 30)); VJ.mystery.suspects.forEach(s => pick(s.dm.secret));
+  VJ.mystery.timeline.filter(t => t.visibility === 'dm_only').forEach(t => pick(t.event)); VJ.mystery.endings.forEach(e => pick(e.outcome)); VJ.mystery.clock.forEach(k => pick(k.unravelling, 0, 40));
+  VJ.adventures.forEach(a => pick(a.situation_dm)); VJ.bestiary.forEach(b => pick(b.tactics)); VJ.readAloud.filter(r => r.vis !== 'player').forEach(r => pick(r.html.replace(/<[^>]+>/g, ''), 40, 90));
+  VJ.maps.filter(m => m.vis === 'dm_only').forEach(m => pick(m.title, 0, 60)); VJ.gaps.forEach(g => pick(g.detail)); VJ.dmguide.forEach(s => pick(s.html.replace(/<[^>]+>/g, ' '), 200, 250));
   const norm = s => s.replace(/\s+/g, ' ');
-  const leaks = secretBits.filter(s => norm(all).includes(s)).concat(['Secret agenda', 'Secret:', 'DM only', 'Glamours & Reveals', 'Wax Arrow'].filter(s => all.includes(s)));
-  ok(leaks.length === 0, 'No secret agendas, murder solution, Parts 6–8 secrets or bestiary text in the player window (checked ' + secretBits.length + ' passages)' + (leaks.length ? ' LEAKED: ' + leaks.slice(0, 3).join(' | ') : ''));
-  const faceSel = await ev(hp, () => { const b = [...document.querySelectorAll('.hb-nav button')].find(x => x.dataset.s === '_faces'); b.click(); return !!b; }); await sleep(500);
+  const pubSrc = norm(JSON.stringify(VJ.player, (k, x) => k === 'rev' ? undefined : x) + ' ' + [VJ.handbook.lead || ''].concat(VJ.handbook.sections.map(h => h.html)).join(' ').replace(/<[^>]+>/g, ''));
+  for (let i = dmBits.length - 1; i >= 0; i--) if (pubSrc.includes(dmBits[i])) dmBits.splice(i, 1);
+  const allN = norm(all); const dmLeaks = dmBits.filter(s => allN.includes(s));
+  ok(dmLeaks.length === 0, 'No DM-only text in the player window (' + dmBits.length + ' passages: NPC secrets/motives/tells/triggers, DM notes, solution, clues, riddle answers, clock, endings, adventures, bestiary, sidebars, DM maps, gaps, dm.md)' + (dmLeaks.length ? ' LEAKED: ' + dmLeaks.slice(0, 3).join(' | ') : ''));
   const keys = () => ev(hp, () => [...document.querySelectorAll('img[data-art]')].map(i => i.dataset.art));
-  const FEY = ['amaranth', 'merrow-ashgrave', 'nocturne-vesh', 'ondine-mirewillow', 'pipwhistle-dewlace', 'prince-caelum', 'queen-ilysse', 'rillo-fennamint'];
+  await goSec('_faces');
+  const fx = await ev(hp, () => ({ n: document.querySelectorAll('.face').length, imgs: [...document.querySelectorAll('img')].map(i => ({ k: i.dataset.art, src: i.getAttribute('src') || '', alt: i.alt, title: i.title })), names: [...document.querySelectorAll('.face h4')].map(h => h.textContent) }));
+  ok(fx.n === 64, 'Faces: 64 player-visible NPCs (the DM-only NPC is excluded)');
+  ok(fx.imgs.length > 0 && fx.imgs.every(i => /^v\/[0-9a-f]{20}$/.test(i.k) && (!i.src || /(blob:|\/v\/[0-9a-f]{20}\.webp$)/.test(i.src)) && !i.title), 'Every player image uses an opaque id (no names in src or data attributes, no title)');
+  ok(fx.imgs.every(i => fx.names.some(n => n.toLowerCase() === i.alt.toLowerCase())), 'Image alt text is the name the players know (public alias)');
+  const PN = id => VJ.player.npcs.find(p => p.id === id);
+  const truePortrait = id => (npc(id).art.portrait || {}).key || '-none-'; const spicyKey = id => npc(id).art.spicy && npc(id).art.spicy.key;
+  const DISG = VJ.npcs.filter(n => n.disguised).map(n => n.id);
   let k = await keys();
-  ok(faceSel && k.length >= 20 && !k.some(x => x.startsWith('spicy/')) && FEY.every(f => k.includes('guise/' + f) && !k.includes('portrait/' + f)), 'Player faces show human guises for all 8 fey and no true-form or pin-up portraits (' + k.length + ' portraits)');
-  ok(/Cael Rosier/i.test(await txt(hp, '[data-face="prince-caelum"]')) && !/Prince Caelum of the Dusk/i.test(await txt(hp, '[data-face="prince-caelum"]')), 'Disguised fey appear under their alias');
-  await hp.setViewport({ width: 1366, height: 768 }); await sleep(300); await hp.screenshot({ path: path.join(__dirname, 'shot-vesperine-player.png') });
-  // reveal toggle from the DM screen
-  await ev(v, i => { location.hash = '#/guide/campaign?tab=npcs&i=' + i; }, ci); await sleep(400);
-  await v.click('[data-nv="revealed"]'); await sleep(900);
-  k = await keys();
-  ok(k.includes('portrait/prince-caelum') && !k.includes('guise/prince-caelum') && /Prince Caelum of the Dusk/i.test(await txt(hp, '[data-face="prince-caelum"]')) && /Rose Merchant/i.test(await txt(hp, '[data-face="prince-caelum"]')), 'Reveal toggle switches the player portrait to true form and shows the reveal read-aloud');
-  ok(!k.includes('portrait/queen-ilysse') && k.includes('guise/queen-ilysse'), 'Other fey stay disguised');
-  // alternates
-  const vi = VJ.npcs.findIndex(n => n.slug === 'valentin-dusk');
-  await ev(v, i => { location.hash = '#/guide/campaign?tab=npcs&i=' + i; }, vi); await sleep(500);
-  ok((await ev(v, () => document.querySelector('.ld-detail img[data-art]').dataset.art)) === 'spicy/valentin-dusk' && (await keys()).includes('portrait/valentin-dusk'), 'DM default is the alternate (pin-up) portrait; players see the standard one');
-  await v.click('[data-nv="std"]'); await sleep(300);
-  ok((await ev(v, () => document.querySelector('.ld-detail img[data-art]').dataset.art)) === 'portrait/valentin-dusk', 'DM can toggle to the standard portrait');
-  await v.click('[data-nv="spicyPlayer"]'); await sleep(300); await clickSel(v, '.modal [data-ok]'); await sleep(900);
-  ok((await keys()).includes('spicy/valentin-dusk'), 'Pin-up reaches the player window only after the DM explicitly chooses it (with confirmation)');
-  await v.click('[data-nv="spicyPlayer"]'); await sleep(900);
-  ok(!(await keys()).some(x => x.startsWith('spicy/')), 'Turning it off removes it from the player window');
-  await v.click('[data-nv="hidden"]'); await sleep(900);
-  ok(!(await ev(hp, () => !!document.querySelector('[data-face="valentin-dusk"]'))), 'Hide toggle removes an NPC from the player window');
-  ok(v._errors.length === 0 && hp._errors.length === 0, 'No JavaScript errors in the Vesperine run' + (v._errors.concat(hp._errors).length ? ': ' + v._errors.concat(hp._errors).slice(0, 3).join(' | ') : ''));
-  await hp.close(); await v.close();
+  const FEY = DISG.filter(id => npc(id).fey);
+  ok(FEY.length === 6 && FEY.every(id => k.includes(PN(id).img) && !k.includes(truePortrait(id))), 'The 6 disguised fey show their mortal-guise portrait, never the true form');
+  ok(DISG.includes('ilaria-venn') && k.includes(npc('ilaria-venn').art.guise.key) && fx.names.includes('Nell Daisy'), 'The disguised assassin appears only under her cover name with her cover portrait');
+  ok(!k.includes(npc('thessaly-rook').art.revealed.key) && k.includes(npc('thessaly-rook').art.portrait.key), 'A reveal-gated portrait (Thessaly\'s revealed form) stays hidden until its reveal');
+  ok(!VJ.npcs.some(n => n.art.spicy && k.includes(n.art.spicy.key)), 'No pin-up portrait in the player window by default');
+  ok(!(await ev(hp, k => !!document.querySelector(`[data-face] img[data-art="${k}"]`), npc('prince-caelum').art.guise.key)), 'Caelum\'s mortal guise (a gated alias) is not shown before the reveal');
+  await goSec('_places'); ok((await ev(hp, () => document.querySelectorAll('.place-card').length)) === VJ.player.locations.length && VJ.player.locations.length === 46, 'Places: 46 player-visible locations (hidden sites excluded)');
+  const paintedPl = VJ.locations.filter(l => l.painted && l.painted.vis === 'player').map(l => l.painted.key); const thorn = VJ.locations.find(l => l.id === 'thornwake-ballroom');
+  k = await keys(); ok(paintedPl.length >= 6 && paintedPl.every(x => k.includes(x)) && !k.includes(thorn.painted.key) && !VJ.locations.some(l => l.keyedMap && k.includes(l.keyedMap)) && !VJ.maps.some(m => m.image && k.includes(m.image)), 'Painted maps show on player-visible places; Thornwake\'s painting and every keyed schematic map stay DM-only');
+  await goSec('_factions'); ok((await ev(hp, () => document.querySelectorAll('.place-card').length)) === 16, 'Factions: 16 public factions (2 DM-only excluded)');
+  await goSec('_timeline'); ok((await ev(hp, () => document.querySelectorAll('.timeline-dl dt').length)) === 3, 'Timeline: only the 3 player-visible events');
+  await goSec('_readaloud'); const nRA = VJ.player.readAloud.filter(r => !r.gate).length; ok((await ev(hp, () => document.querySelectorAll('.ra-card').length)) === nRA, `Read-alouds: ${nRA} player-safe (reveals hidden, rules sidebars DM-only)`);
+  await goSec('_objects'); ok((await keys()).includes(VJ.objects[0].img) && /Oathless Glass/.test(await txt(hp, 'article')), 'Object portraits: the Oathless Glass is shown to players');
+  ok(!(await ev(hp, () => [...document.querySelectorAll('.hb-nav button')].some(b => b.dataset.s === '_rumors'))), 'No adventure teasers until the DM teases one');
+  await hp.setViewport({ width: 1366, height: 768 }); await goSec('_faces'); await hp.screenshot({ path: path.join(__dirname, 'shot-vesperine-player.png') });
+
+  group('Vesperine reveals, per record type');
+  // NPC reveal from the NPC page
+  await tab(v, 'npcs&id=nocturne-vesh'); await v.click('[data-reveal="npc:nocturne-vesh"]'); await sleep(1000);
+  await goSec('_faces'); k = await keys(); const noc = await txt(hp, `[data-face="${PN('nocturne-vesh').t}"]`);
+  ok(k.includes(truePortrait('nocturne-vesh')) && /Lady Nocturne Vesh/.test(noc) && /Black Fan Falls/i.test(noc), 'NPC reveal: true name, true-form portrait and the reveal read-aloud reach the player window');
+  ok(DISG.filter(id => id !== 'nocturne-vesh').every(id => !k.includes(truePortrait(id))), 'Other disguised fey stay in guise');
+  await goSec('_readaloud'); ok(/Black Fan Falls/.test(await txt(hp, 'article')), 'The revealed read-aloud also appears in the player Read-Alouds');
+  // alias reveal (Caelum) from the Player Handbook reveal panel
+  await tab(v, 'handbook'); await v.click('[data-reveal="npc:prince-caelum"]'); await sleep(1000);
+  await goSec('_faces'); const cae = await txt(hp, `[data-face="${PN('prince-caelum').t}"]`);
+  ok(/Cael Rosier/.test(cae) && (await keys()).includes(npc('prince-caelum').art.guise.key), 'Alias reveal (from the reveal panel): Caelum\'s mortal guise name and portrait appear');
+  // revealed-form portrait (Thessaly)
+  await tab(v, 'npcs&id=thessaly-rook'); await v.click('[data-reveal="npc:thessaly-rook"]'); await sleep(1000);
+  await goSec('_faces'); k = await keys(); ok(k.includes(npc('thessaly-rook').art.revealed.key) && !k.includes(npc('thessaly-rook').art.portrait.key), 'Revealed-form portrait replaces the public one only after the reveal (Thessaly)');
+  await v.click('[data-reveal="npc:thessaly-rook"]'); await sleep(800);
+  // read-aloud reveal from the Read-Aloud library (Amaranth)
+  const amRA = VJ.readAloud.find(r => r.vis === 'gated' && r.npcs.includes('amaranth'));
+  await tab(v, 'readaloud&id=' + amRA.id); await v.click('[data-reveal="npc:amaranth"]'); await sleep(1000);
+  await goSec('_readaloud'); ok((await txt(hp, 'article')).toLowerCase().includes(amRA.title.toLowerCase()), 'Read-aloud reveal (from the Read-Aloud library) shows that reveal to players');
+  // adventure teaser
+  const sa1 = VJ.adventures[0]; await tab(v, 'adventures&id=' + sa1.id); await v.click('[data-reveal="tease:' + sa1.id + '"]'); await sleep(1000);
+  await goSec('_rumors'); const rum = await txt(hp, 'article');
+  ok(rum.toLowerCase().includes(sa1.title.toLowerCase()) && rum.includes(sa1.hook.slice(0, 40)) && !rum.includes(sa1.situation_dm.slice(0, 40)), 'Adventure tease: title and hook only, never the DM situation');
+  // pin-up only when chosen (and only once revealed when gated)
+  await tab(v, 'npcs&id=valentin-dusk'); ok((await ev(v, () => document.querySelector('.ld-detail img[data-art]').dataset.art)) === spicyKey('valentin-dusk'), 'DM default for Valentin is the alternate (pin-up) portrait');
+  await goSec('_faces'); ok(!(await keys()).includes(spicyKey('valentin-dusk')), 'Players see the standard portrait');
+  await v.click('[data-nv="spicyPlayer"]'); await sleep(300); await clickSel(v, '.modal [data-ok]'); await sleep(1000);
+  await goSec('_faces'); ok((await keys()).includes(spicyKey('valentin-dusk')), 'The pin-up reaches players only after the DM explicitly chooses it (with confirmation)');
+  await tab(v, 'npcs&id=nocturne-vesh'); await v.click('[data-nv="spicyPlayer"]'); await sleep(300); await clickSel(v, '.modal [data-ok]'); await sleep(1000);
+  await goSec('_faces'); ok((await keys()).includes(spicyKey('nocturne-vesh')), 'A gated pin-up (Nocturne) shows only after reveal + explicit choice');
+  // hide + un-reveal
+  await v.click('[data-nv="hidden"]'); await sleep(900); await goSec('_faces');
+  ok(!(await ev(hp, t => !!document.querySelector(`[data-face="${t}"]`), PN('nocturne-vesh').t)), 'Hide toggle removes an NPC from the player window');
+  await v.click('[data-nv="hidden"]'); await sleep(400); await v.click('[data-reveal="npc:nocturne-vesh"]'); await sleep(1000);
+  all = await collect();
+  const left = FORBID.filter(t => rx(t).test(all)).filter(t => !/amaranth|smiling herald|cael rosier|caelum/i.test(t));
+  ok(left.length === 0 && !all.includes(spicyKey('nocturne-vesh')), 'Un-revealing hides Nocturne again; still no leaks for the fey that remain disguised' + (left.length ? ' LEAKED: ' + left : ''));
+  ok(hp._errors.length === 0, 'No errors in the player window' + (hp._errors.length ? ': ' + hp._errors.slice(0, 2) : ''));
+  await hp.close();
+
+  group('Vesperine re-import by id keeps the DM\'s progress');
+  await ev(v, () => window.DMAtlas.Store.mutate(s => { s.party = [normalizePC({ name: 'Kept Kira' })]; s.notes = 'my notes'; s.npcView = Object.assign({}, s.npcView, { 'sabine-velour': { hidden: true } }); }));
+  const before = await ev(v, () => { const s = window.DMAtlas.Store.fresh(); return JSON.stringify({ p: s.party.map(x => x.name), r: s.reveals, c: s.clock, f: s.cluesFound, v: s.npcView, n: s.notes }); });
+  const mod = JSON.parse(JSON.stringify(VJ)); mod.generated = '2099-01-01T00:00:00Z';
+  mod.npcs.find(n => n.id === 'sabine-velour').publicDescription = 'UPDATED by DnD Bot.';
+  mod.locations = mod.locations.filter(l => l.id !== 'saltgrave-coast');
+  mod.readAloud.push({ id: 'wg-new-test-1', kind: 'read_aloud', title: 'A New Read-Aloud', vis: 'player', html: '<blockquote class="readaloud"><p>New.</p></blockquote>', npcs: [], adventure: null, source: 'test' });
+  const pr = ev(v, t => window.DMAtlas.importCampaignJSON(t, 'v.dmatlas.json'), JSON.stringify(mod)); await sleep(800);
+  const prev = await txt(v, '.modal');
+  ok(/\+1 added/.test(prev) && /~1 changed/.test(prev) && /−1 removed/.test(prev), 'Import preview reports added / changed / removed records by id (+1 / ~1 / −1)');
+  await ev(v, () => { const b = document.querySelector('.modal-bd'); if (b) b.scrollTop = 0; }); await shot(v, 'shot-reimport.png');
+  await clickSel(v, '.modal [data-k="update"]'); const res = await pr; await sleep(500);
+  const after = await ev(v, () => { const s = window.DMAtlas.Store.fresh(); return JSON.stringify({ p: s.party.map(x => x.name), r: s.reveals, c: s.clock, f: s.cluesFound, v: s.npcView, n: s.notes }); });
+  const lib = await ev(v, id => { const c = window.DMAtlas.Library.get(id); return { o: c.overridesBundled, d: c.npcs.find(n => n.id === 'sabine-velour').publicDescription, l: c.locations.length, n: window.DMAtlas.Library.all().filter(x => x.id === id).length }; }, VID);
+  ok(res && lib.o && lib.d === 'UPDATED by DnD Bot.' && lib.l === 49 && lib.n === 1, 'Update in place: same id, records replaced, no duplicate campaign');
+  ok(after === before, 'Party, notes, reveals, clock, found clues and hidden NPCs are preserved');
+  const pr2 = ev(v, t => window.DMAtlas.importCampaignJSON(t, 'v.dmatlas.json'), JSON.stringify(mod)); await sleep(800);
+  ok(/\+0 added/.test(await txt(v, '.modal')) && /~0 changed/.test(await txt(v, '.modal')) && /−0 removed/.test(await txt(v, '.modal')), 'Re-importing the same file is idempotent (+0 / ~0 / −0)');
+  await clickSel(v, '.modal [data-k="update"]'); await pr2; await sleep(300);
+  await ev(v, id => window.DMAtlas.Library.revert(id), VID); await sleep(200);
+  ok(await ev(v, id => !window.DMAtlas.Library.get(id).overridesBundled && window.DMAtlas.Library.get(id).locations.length === 50 && JSON.parse(localStorage.getItem('dmatlas.camp.' + id)).party[0].name === 'Kept Kira', VID), 'Revert to bundled keeps the progress too');
+  ok(v._errors.length === 0, 'No JavaScript errors in the Vesperine run' + (v._errors.length ? ': ' + v._errors.slice(0, 3).join(' | ') : ''));
+  await v.close();
+
+  group('Vesperine art files: opaque names in the repo');
+  const files = []; const walk = d => fs.readdirSync(d, { withFileTypes: true }).forEach(e => e.isDirectory() ? walk(path.join(d, e.name)) : files.push(path.relative(path.join(__dirname, '..'), path.join(d, e.name))));
+  walk(path.join(__dirname, '..', 'art'));
+  const pack = JSON.parse(art); const names = files.concat(Object.keys(pack.images));
+  const bad = names.filter(f => FORBID.some(t => rx(t).test(f)) || /portrait|guise|spicy|monster|solo/.test(f.replace(/^art\/[^/]+\//, '')));
+  ok(files.length === 213 && bad.length === 0 && files.every(f => /^art\/vesperine-and-the-velvet-marches\/v\/[0-9a-f]{20}\.webp$/.test(f)), 'art/ holds 213 opaque files (art/' + VID + '/v/<hash>.webp); art pack keys are opaque; no true names in any path');
+  ok(!fs.existsSync(path.join(__dirname, '..', 'art', OLD)) && !fs.existsSync(path.join(__dirname, '..', 'campaigns', OLD + '.dmatlas-art.json')), 'Old true-name art paths are gone');
 };

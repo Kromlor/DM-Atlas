@@ -45,11 +45,19 @@ const K = { meta: 'dmatlas.meta', library: 'dmatlas.library', camp: id => 'dmatl
 
 /* ---------- campaign library ---------- */
 const Library = {
+  _c: null,
   bundled() { return (window.DM_BUNDLED_CAMPAIGNS || []).map(c => Object.assign({ bundled: true }, c)); },
   imported() { return LS.get(K.library, []) || []; },
-  all() { return this.bundled().concat(this.imported()); },
+  /* A stored copy whose id matches a bundled campaign is an in-place update of it ("override"); the newer one wins,
+     so a later app release with newer bundled data takes over again automatically. */
+  all() {
+    if (this._c) return this._c;
+    const imp = this.imported(); const byId = {}; imp.forEach(c => { byId[c.id] = c; });
+    const list = this.bundled().map(b => { const o = byId[b.id]; if (!o) return b; delete byId[b.id]; return String(o.generated || '') >= String(b.generated || '') ? Object.assign({}, o, { bundled: true, overridesBundled: true, bundledGenerated: b.generated || '' }) : Object.assign({}, b, { staleOverride: o.generated || 'older' }); });
+    return (this._c = list.concat(imp.filter(c => byId[c.id])));
+  },
   get(id) { if (!id) return null; return this.all().find(c => c.id === id) || null; },
-  saveImported(list) { return LS.set(K.library, list); },
+  saveImported(list) { this._c = null; const ok = LS.set(K.library, list); this._c = null; return ok; },
   add(doc) {
     const list = this.imported();
     let id = doc.id || slug(doc.title);
@@ -59,9 +67,25 @@ const Library = {
     list.push(doc);
     return this.saveImported(list) ? doc : null;
   },
+  /* In-place update by id: replaces the stored copy (or stores an override of a bundled campaign). The DM's
+     per-campaign state lives under the same id and is untouched. */
+  upsert(doc) {
+    const list = this.imported().filter(c => c.id !== doc.id); doc.importedAt = Date.now(); delete doc.bundled; delete doc.overridesBundled; delete doc.bundledGenerated; delete doc.staleOverride;
+    list.push(doc); return this.saveImported(list) ? doc : null;
+  },
+  /* Drop an imported update of a bundled campaign (keeps the DM's progress). */
+  revert(id) { return this.saveImported(this.imported().filter(c => c.id !== id)); },
   update(doc) { const list = this.imported(); const i = list.findIndex(c => c.id === doc.id); if (i < 0) return false; list[i] = doc; return this.saveImported(list); },
-  remove(id) { this.saveImported(this.imported().filter(c => c.id !== id)); LS.del(K.camp(id)); LS.del(K.snaps(id)); }
+  remove(id) { this.saveImported(this.imported().filter(c => c.id !== id)); LS.del(K.camp(id)); LS.del(K.snaps(id)); },
+  /* Bundled campaigns that changed id keep the DM's saved progress (state, snapshots, active choice). */
+  migrateIds() {
+    this.bundled().forEach(c => (c.previousIds || []).forEach(old => {
+      if (!LS.get(K.camp(c.id), null) && LS.get(K.camp(old), null)) { const st = LS.get(K.camp(old), null); st.campaignId = c.id; LS.set(K.camp(c.id), st); LS.del(K.camp(old)); const sn = LS.get(K.snaps(old), null); if (sn) { LS.set(K.snaps(c.id), sn); LS.del(K.snaps(old)); } }
+      const m = LS.get(K.meta, null); if (m && m.activeCampaignId === old) { m.activeCampaignId = c.id; LS.set(K.meta, m); }
+    }));
+  }
 };
+window.addEventListener('storage', e => { if (e.key === K.library) Library._c = null; });
 
 /* ---------- meta (per browser) ---------- */
 const Meta = {
