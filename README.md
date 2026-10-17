@@ -7,6 +7,7 @@ You can also open `index.html` directly in Chrome or Edge. It needs no install a
 DM Atlas starts with **No campaign selected**. Pick a campaign on the Campaigns screen.
 
 ## Bundled campaigns
+- **Aurelion — The Door Beneath the Castle** — `campaigns/aurelion-the-door-beneath-the-castle.dmatlas.json`. Includes 47 scenes, five NPCs, seven reveal maps, corrected checks, items and the Ember-Root Crawler stat block. **Campaign guide → Run Aurelion** provides scene navigation, clue/latch/evidence/consequence tracking, 18 player visuals and all 149 optimized pages from the four source books. Player visuals and map tiles appear only after the DM explicitly reveals them; DM book pages and handout pages containing DM instructions are never shown in that display. Current scene, notes, flags and reveal selection use the existing per-campaign saves. The Crawler can be added through the Bestiary or the D-33 encounter; its attacks and fire resistance populate the tracker. Recharge and retreat remain DM reminders.
 - **Hollowmere Year One** — `campaigns/hollowmere-year-one.dmatlas.json`.
 - **Vesperine & the Velvet Marches** (world: Carnelia; gateway: the Oathless Glass; main mystery: *The Black Kiss*; by DnD Bot). Campaign id `vesperine-and-the-velvet-marches`, file `campaigns/vesperine-and-the-velvet-marches.dmatlas.json`. It is built from DnD Bot's canonical **DM Atlas export** (`/workspace/dnd-world/dm-atlas-export/`) and uses the export's record ids. It includes:
   - 65 NPCs, 50 locations and 18 factions, cross-linked. There are 20 maps: ASCII maps, plus painted player-view maps with no labels, plus keyed schematic maps that are always DM-only.
@@ -22,7 +23,7 @@ DM Atlas starts with **No campaign selected**. Pick a campaign on the Campaigns 
   - The 5-adventure solo gamebook reader (37 entries, from `solo-entry-adventures.md`).
   - Progress saved under the old id `vesperine-velvet-marches` moves to the new id automatically.
 
-Both campaigns are built into `index.html`, and both files can be re-imported.
+All three campaigns are built into `index.html`, and their campaign JSON files can be re-imported.
 
 ## Visibility: player-safe / hidden until revealed / DM-only
 Every export record (or field) is `player`, `gated` or `dm_only`. The importer precomputes a player-safe projection, and the player window reads **only** that projection plus whatever you have revealed.
@@ -72,3 +73,10 @@ Run `python3 -m http.server 8765` in this folder, then `NODE_PATH=/tmp/pt/node_m
 
 ## Multi-window sync
 Multi-window sync (pop-out panels and the player window) is dependable only from an http(s) address, such as the live site or `python -m http.server 8000` followed by `http://localhost:8000/`. On file:// it is attempted but not guaranteed.
+
+## Rebuilding Aurelion
+
+Run `python3 tools/import_aurelion.py`, then `python3 tools/build.py`.
+The importer reads `campaigns/aurelion-the-door-beneath-the-castle/source.json`; art is under `art/aurelion-the-door-beneath-the-castle/`. Keep that folder beside `index.html` for offline images. Other campaigns and their saves are not replaced. Use the original PDFs at 100% / Actual Size for precise physical map/token printing; these images are optimized for screen use.
+
+Aurelion's additional DOM checks run with `node test/aurelion_dom.mjs` after installing `happy-dom`, or set `HAPPY_DOM_MODULE` to its module path. They cover all three campaign entries, preservation of existing saves, 47 scene views, 149 image paths, corrected Crawler attacks, campaign export data, and player reveal restrictions. These are DOM checks, not a visual browser-layout test.
